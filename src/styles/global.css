@@ -1,0 +1,47 @@
+@import "tailwindcss";
+
+@theme {
+    --font-sans: 'Inter', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+    /* Более глубокие, современные цвета (без синевы) */
+    --color-ink-950: #09090b;
+    --color-ink-900: #121214;
+    --color-ink-800: #18181b;
+    --color-ink-700: #27272a;
+    --color-ink-200: #a1a1aa;
+    --color-ink-50: #fafafa;
+
+    /* Изумрудный (Emerald) — символизирует успешную валидацию */
+    --color-accent: #10b981;
+    --color-accent-light: #34d399;
+}
+
+@layer base {
+    :root {
+        --bg-main: var(--color-ink-950);
+        --text-main: var(--color-ink-50);
+        --text-muted: var(--color-ink-200);
+        --border-color: rgba(255, 255, 255, 0.1);
+        --card-bg: rgba(255, 255, 255, 0.03);
+    }
+
+    html.light {
+        --bg-main: #fafafa;
+        --text-main: #09090b;
+        --text-muted: #52525b;
+        --border-color: rgba(0, 0, 0, 0.1);
+        --card-bg: #ffffff;
+    }
+
+    body {
+        background-color: var(--bg-main);
+        color: var(--text-main);
+        font-family: var(--font-sans);
+        -webkit-font-smoothing: antialiased;
+    }
+
+    code, pre {
+        font-family: var(--font-mono);
+    }
+}

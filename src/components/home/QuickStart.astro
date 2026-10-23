@@ -1,0 +1,96 @@
+---
+// src/components/home/QuickStart.astro
+---
+
+<section id="quickstart" class="relative py-24 border-t" style="border-color: var(--border-color);">
+  <div class="max-w-[1000px] mx-auto px-6">
+    <div class="mb-12 text-center">
+      <div class="text-xs font-mono text-accent tracking-widest mb-3 uppercase">01 / Quick Start</div>
+      <h2 class="text-3xl sm:text-4xl font-bold tracking-tight mb-4">Начните за 2 минуты</h2>
+      <p class="text-[var(--text-muted)]">Соберите локально и запустите. Без интернета после сборки.</p>
+    </div>
+
+    <div class="rounded-2xl border overflow-hidden" style="border-color: var(--border-color); background-color: var(--card-bg);">
+
+      <!-- Табы -->
+      <div class="flex items-center border-b bg-black/5 dark:bg-white/5 px-2 pt-2" style="border-color: var(--border-color);">
+        <button class="tab-btn active px-6 py-3 text-sm font-medium rounded-t-lg transition-colors border-b-2 border-accent text-accent bg-[var(--bg-main)]" data-tab="cli">CLI</button>
+        <button class="tab-btn px-6 py-3 text-sm font-medium text-[var(--text-muted)] hover:text-[var(--text-main)] border-b-2 border-transparent transition-colors" data-tab="docker">Docker</button>
+        <button class="tab-btn px-6 py-3 text-sm font-medium text-[var(--text-muted)] hover:text-[var(--text-main)] border-b-2 border-transparent transition-colors" data-tab="rest">REST API</button>
+      </div>
+
+      <div class="p-6 relative">
+        <!-- CLI -->
+        <div class="tab-content block" data-content="cli">
+          <div class="relative group">
+            <button class="copy-btn absolute top-3 right-3 px-2.5 py-1.5 text-xs font-mono text-[#a1a1aa] bg-white/5 hover:bg-white/10 rounded transition opacity-0 group-hover:opacity-100 border border-white/10" data-copy>Copy</button>
+            <pre class="text-[13px] font-mono text-[#fafafa] bg-[#0c0c0e] p-5 rounded-xl border border-white/10 overflow-x-auto leading-relaxed"><code class="language-bash">git clone https://github.com/Validum-Tech/validum.git
+cd validum && ./gradlew :validum-cli:shadowJar
+
+java -jar validum-cli/build/libs/validum.jar \
+  generate individual --count 100 --seed 42 --format csv > profiles.csv</code></pre>
+          </div>
+        </div>
+
+        <!-- Docker -->
+        <div class="tab-content hidden" data-content="docker">
+          <div class="relative group">
+            <button class="copy-btn absolute top-3 right-3 px-2.5 py-1.5 text-xs font-mono text-[#a1a1aa] bg-white/5 hover:bg-white/10 rounded transition opacity-0 group-hover:opacity-100 border border-white/10" data-copy>Copy</button>
+            <pre class="text-[13px] font-mono text-[#fafafa] bg-[#0c0c0e] p-5 rounded-xl border border-white/10 overflow-x-auto leading-relaxed"><code class="language-bash">git clone https://github.com/Validum-Tech/validum.git
+cd validum
+docker build -f validum-api/Dockerfile -t validum-api .
+docker run -d -p 8080:8080 validum-api</code></pre>
+          </div>
+        </div>
+
+        <!-- REST -->
+        <div class="tab-content hidden" data-content="rest">
+          <div class="relative group">
+            <button class="copy-btn absolute top-3 right-3 px-2.5 py-1.5 text-xs font-mono text-[#a1a1aa] bg-white/5 hover:bg-white/10 rounded transition opacity-0 group-hover:opacity-100 border border-white/10" data-copy>Copy</button>
+            <pre class="text-[13px] font-mono text-[#fafafa] bg-[#0c0c0e] p-5 rounded-xl border border-white/10 overflow-x-auto leading-relaxed"><code class="language-bash">curl -X POST http://localhost:8080/api/v1/generate/individual \
+  -H "Content-Type: application/json" \
+  -d '&#123;"seed": 42, "age": 35, "region": "MOSCOW"&#125;'</code></pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tab = btn.dataset.tab;
+
+      document.querySelectorAll('.tab-btn').forEach(b => {
+        b.classList.remove('active', 'text-accent', 'border-accent', 'bg-[var(--bg-main)]');
+        b.classList.add('text-[var(--text-muted)]', 'border-transparent');
+      });
+
+      btn.classList.add('active', 'text-accent', 'border-accent', 'bg-[var(--bg-main)]');
+      btn.classList.remove('text-[var(--text-muted)]', 'border-transparent');
+
+      document.querySelectorAll('.tab-content').forEach(c => {
+        if (c.dataset.content === tab) {
+          c.classList.remove('hidden');
+          c.classList.add('block');
+        } else {
+          c.classList.add('hidden');
+          c.classList.remove('block');
+        }
+      });
+    });
+  });
+
+  document.querySelectorAll('[data-copy]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const code = btn.parentElement.querySelector('code');
+      if (code) {
+        navigator.clipboard.writeText(code.innerText).then(() => {
+          btn.innerText = 'Copied!';
+          setTimeout(() => { btn.innerText = 'Copy'; }, 2000);
+        });
+      }
+    });
+  });
+</script>

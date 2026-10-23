@@ -1,0 +1,544 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Документация">
+  <div class="max-w-[1200px] mx-auto px-6 py-12 lg:py-20">
+    <div class="grid lg:grid-cols-12 gap-12">
+
+      <!-- ЛЕВЫЙ САЙДБАР -->
+      <aside class="lg:col-span-3 hidden lg:block">
+        <div class="sticky top-24 space-y-8">
+
+          <div>
+            <div class="text-xs font-mono text-[var(--text-muted)] uppercase tracking-widest mb-3">Начало работы</div>
+            <nav class="flex flex-col space-y-1 border-l border-[var(--border-color)]">
+              <a href="#install" class="doc-link px-4 py-2 text-sm text-accent border-l-2 border-accent -ml-[1px] bg-accent/5 font-medium transition-colors">Установка</a>
+              <a href="#first-request" class="doc-link px-4 py-2 text-sm text-[var(--text-muted)] hover:text-[var(--text-main)] border-l-2 border-transparent -ml-[1px] transition-colors">Первый запрос</a>
+              <a href="#concepts" class="doc-link px-4 py-2 text-sm text-[var(--text-muted)] hover:text-[var(--text-main)] border-l-2 border-transparent -ml-[1px] transition-colors">Ключевые концепции</a>
+            </nav>
+          </div>
+
+          <div>
+            <div class="text-xs font-mono text-[var(--text-muted)] uppercase tracking-widest mb-3">Гайды</div>
+            <nav class="flex flex-col space-y-1 border-l border-[var(--border-color)]">
+              <a href="#guide-cascades" class="doc-link px-4 py-2 text-sm text-[var(--text-muted)] hover:text-[var(--text-main)] border-l-2 border-transparent -ml-[1px] transition-colors">Каскадные дефолты</a>
+              <a href="#guide-bank" class="doc-link px-4 py-2 text-sm text-[var(--text-muted)] hover:text-[var(--text-main)] border-l-2 border-transparent -ml-[1px] transition-colors">Выбор банка</a>
+              <a href="#guide-batch" class="doc-link px-4 py-2 text-sm text-[var(--text-muted)] hover:text-[var(--text-main)] border-l-2 border-transparent -ml-[1px] transition-colors">Пакетная генерация</a>
+              <a href="#guide-allure" class="doc-link px-4 py-2 text-sm text-[var(--text-muted)] hover:text-[var(--text-main)] border-l-2 border-transparent -ml-[1px] transition-colors">JUnit 5 + Allure</a>
+              <a href="#guide-ed807" class="doc-link px-4 py-2 text-sm text-[var(--text-muted)] hover:text-[var(--text-main)] border-l-2 border-transparent -ml-[1px] transition-colors">Справочник ЦБ</a>
+            </nav>
+          </div>
+
+          <div>
+            <div class="text-xs font-mono text-[var(--text-muted)] uppercase tracking-widest mb-3">API Reference</div>
+            <nav class="flex flex-col space-y-1 border-l border-[var(--border-color)]">
+              <a href="#ref-generate" class="doc-link px-4 py-2 text-sm text-[var(--text-muted)] hover:text-[var(--text-main)] border-l-2 border-transparent -ml-[1px] transition-colors">Генерация</a>
+              <a href="#ref-batch" class="doc-link px-4 py-2 text-sm text-[var(--text-muted)] hover:text-[var(--text-main)] border-l-2 border-transparent -ml-[1px] transition-colors">Батчи</a>
+              <a href="#ref-validate" class="doc-link px-4 py-2 text-sm text-[var(--text-muted)] hover:text-[var(--text-main)] border-l-2 border-transparent -ml-[1px] transition-colors">Валидация</a>
+              <a href="#ref-cli" class="doc-link px-4 py-2 text-sm text-[var(--text-muted)] hover:text-[var(--text-main)] border-l-2 border-transparent -ml-[1px] transition-colors">CLI</a>
+              <a href="#ref-java" class="doc-link px-4 py-2 text-sm text-[var(--text-muted)] hover:text-[var(--text-main)] border-l-2 border-transparent -ml-[1px] transition-colors">Java-библиотека</a>
+            </nav>
+          </div>
+
+        </div>
+      </aside>
+
+      <!-- КОНТЕНТ -->
+      <article class="lg:col-span-9">
+
+        <!-- INTRO -->
+        <div class="mb-16">
+          <div class="text-xs font-mono text-accent tracking-widest mb-2 uppercase">Документация</div>
+          <h1 class="text-4xl font-bold tracking-tight mb-4">Validum Documentation</h1>
+          <p class="text-lg text-[var(--text-muted)] leading-relaxed">
+            Генератор валидных тестовых данных для российских АБС. Self-hosted, zero-dependency core,
+            детерминированные алгоритмы без LLM.
+          </p>
+        </div>
+
+        <div class="h-px w-full bg-[var(--border-color)] my-12"></div>
+
+        <!-- ================= GETTING STARTED ================= -->
+        <section id="install" class="mb-16 scroll-mt-24">
+          <h2 class="text-3xl font-semibold mb-6 flex items-center gap-3">
+            <span class="text-accent font-mono text-xl">01</span> Установка
+          </h2>
+          <p class="text-[var(--text-muted)] mb-6">
+            Validum состоит из 4 модулей: <code class="bg-white/5 px-1.5 py-0.5 rounded text-accent">validum-core</code> (zero-dep),
+            <code class="bg-white/5 px-1.5 py-0.5 rounded text-accent">validum-api</code> (Spring Boot),
+            <code class="bg-white/5 px-1.5 py-0.5 rounded text-accent">validum-cli</code> (Picocli),
+            <code class="bg-white/5 px-1.5 py-0.5 rounded text-accent">validum-allure</code> (JUnit 5).
+          </p>
+
+          <h3 class="text-xl font-semibold mb-3">Docker (рекомендуется)</h3>
+          <p class="text-sm text-[var(--text-muted)] mb-3">Не требует JDK. Образ ~250 МБ. Мультистейдж сборка.</p>
+          <div class="code-block mb-4">
+            <pre><code class="language-bash">git clone https://github.com/Validum-Tech/validum.git
+cd validum
+docker build -f validum-api/Dockerfile -t validum-api .
+docker run -d -p 8080:8080 --name validum validum-api
+
+# Проверка
+curl http://localhost:8080/actuator/health</code></pre>
+          </div>
+
+          <h3 class="text-xl font-semibold mb-3">CLI (fat JAR)</h3>
+          <p class="text-sm text-[var(--text-muted)] mb-3">Работает offline. Только JDK 21+. ~5 МБ.</p>
+          <div class="code-block mb-4">
+            <pre><code class="language-bash">./gradlew :validum-cli:shadowJar
+java -jar validum-cli/build/libs/validum.jar --help</code></pre>
+          </div>
+
+          <h3 class="text-xl font-semibold mb-3">Java-библиотека (Maven)</h3>
+          <p class="text-sm text-[var(--text-muted)] mb-3">
+            Публикация в Maven Central запланирована (P1.1). Пока — локальная сборка:
+          </p>
+          <div class="code-block mb-4">
+            <pre><code class="language-bash">./gradlew :validum-core:publishToMavenLocal</code></pre>
+          </div>
+        </section>
+
+        <section id="first-request" class="mb-16 scroll-mt-24">
+          <h2 class="text-3xl font-semibold mb-6 flex items-center gap-3">
+            <span class="text-accent font-mono text-xl">02</span> Первый запрос
+          </h2>
+          <p class="text-[var(--text-muted)] mb-4">
+            Сгенерируйте профиль физлица с фиксированным seed для воспроизводимости:
+          </p>
+          <div class="code-block mb-6">
+            <pre><code class="language-bash">curl -X POST http://localhost:8080/api/v1/generate/individual \
+  -H "Content-Type: application/json" \
+  -d '&#123;"seed": 42, "age": 35, "region": "MOSCOW"&#125;'</code></pre>
+          </div>
+
+          <p class="text-[var(--text-muted)] mb-3">Ответ:</p>
+          <div class="code-block mb-4">
+            <pre><code class="language-json">&#123;
+  "fullName": "Зайцев Григорий Григорьевич",
+  "gender": "MALE",
+  "birthDate": "1990-05-15",
+  "age": 35,
+  "familyStatus": "Женат/Замужем",
+  "passport": &#123;
+    "series": "4515",
+    "number": "654321",
+    "issuedBy": "Отделением УФМС России по г. Москве",
+    "issueDate": "2010-05-15",
+    "departmentCode": "770-001",
+    "type": "RF",
+    "country": "RU"
+  &#125;,
+  "inn": "427624447300",
+  "snils": "11223344595",
+  "registrationAddress": &#123;
+    "postalCode": "125009",
+    "city": "Москва",
+    "street": "Тверская",
+    "formatted": "125009,Москва г,,,,,,Тверская ул,1, ,"
+  &#125;,
+  "bank": &#123;
+    "bik": "044525225",
+    "name": "ПАО Сбербанк",
+    "corrAccount": "30101810400000000225"
+  &#125;,
+  "account": "40817810500000012345"
+&#125;</code></pre>
+          </div>
+        </section>
+
+        <section id="concepts" class="mb-16 scroll-mt-24">
+          <h2 class="text-3xl font-semibold mb-6 flex items-center gap-3">
+            <span class="text-accent font-mono text-xl">03</span> Ключевые концепции
+          </h2>
+
+          <div class="space-y-4">
+            <div class="p-5 rounded-xl border" style="border-color: var(--border-color); background-color: var(--card-bg);">
+              <h3 class="font-semibold mb-2">Детерминизм</h3>
+              <p class="text-sm text-[var(--text-muted)]">
+                Один и тот же <code class="bg-white/5 px-1 py-0.5 rounded text-accent">seed</code> → идентичный результат.
+                Это позволяет воспроизводить баги, фиксировать данные в git и проходить аудит.
+              </p>
+            </div>
+            <div class="p-5 rounded-xl border" style="border-color: var(--border-color); background-color: var(--card-bg);">
+              <h3 class="font-semibold mb-2">Валидность по умолчанию</h3>
+              <p class="text-sm text-[var(--text-muted)]">
+                Все контрольные суммы сходятся: ИНН (ФНС), СНИЛС (ПФР), счёт (809-П), ОГРН (ФНС),
+                КПП, ОКПО (Росстат). Порча — только явно через <code class="bg-white/5 px-1 py-0.5 rounded text-accent">corrupt</code>.
+              </p>
+            </div>
+            <div class="p-5 rounded-xl border" style="border-color: var(--border-color); background-color: var(--card-bg);">
+              <h3 class="font-semibold mb-2">Zero-dependency core</h3>
+              <p class="text-sm text-[var(--text-muted)]">
+                <code class="bg-white/5 px-1 py-0.5 rounded text-accent">validum-core</code> не тянет ни одной
+                сторонней библиотеки. Только JDK 21. Аудируется за час.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <div class="h-px w-full bg-[var(--border-color)] my-12"></div>
+
+        <!-- ================= GUIDES ================= -->
+        <div class="mb-12">
+          <div class="text-xs font-mono text-accent tracking-widest mb-2 uppercase">Гайды</div>
+          <h1 class="text-3xl font-bold tracking-tight">Практические сценарии</h1>
+        </div>
+
+        <section id="guide-cascades" class="mb-16 scroll-mt-24">
+          <h2 class="text-2xl font-semibold mb-4">Каскадные дефолты</h2>
+          <p class="text-[var(--text-muted)] mb-4">
+            Задаёте один параметр — система сама досчитывает связанные поля.
+          </p>
+          <div class="overflow-x-auto rounded-xl border mb-4" style="border-color: var(--border-color);">
+            <table class="w-full text-sm">
+              <thead class="bg-white/5 border-b" style="border-color: var(--border-color);">
+                <tr>
+                  <th class="p-3 text-left font-medium text-[var(--text-muted)] text-xs uppercase">Триггер</th>
+                  <th class="p-3 text-left font-medium text-[var(--text-muted)] text-xs uppercase">Что досчитывается</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="border-b" style="border-color: var(--border-color);">
+                  <td class="p-3 font-mono text-accent text-xs">age=16</td>
+                  <td class="p-3 text-[var(--text-muted)]">Паспорт выдан в 14, familyStatus=SINGLE</td>
+                </tr>
+                <tr class="border-b" style="border-color: var(--border-color);">
+                  <td class="p-3 font-mono text-accent text-xs">age=50</td>
+                  <td class="p-3 text-[var(--text-muted)]">Бессрочный паспорт, выдан в 45</td>
+                </tr>
+                <tr class="border-b" style="border-color: var(--border-color);">
+                  <td class="p-3 font-mono text-accent text-xs">region=MOSCOW</td>
+                  <td class="p-3 text-[var(--text-muted)]">КПП на 77, серия паспорта 77xx, адрес в Москве</td>
+                </tr>
+                <tr class="border-b" style="border-color: var(--border-color);">
+                  <td class="p-3 font-mono text-accent text-xs">categoryClient="ЗАРПЛАТНИК"</td>
+                  <td class="p-3 text-[var(--text-muted)]">accountPackage="ЗАРПЛАТНЫЙ"</td>
+                </tr>
+                <tr class="border-b" style="border-color: var(--border-color);">
+                  <td class="p-3 font-mono text-accent text-xs">organizationType=SE</td>
+                  <td class="p-3 text-[var(--text-muted)]">OKOPF=61, OKFS=14, budget="Бюджетная"</td>
+                </tr>
+                <tr>
+                  <td class="p-3 font-mono text-accent text-xs">residencyCountry=TJ</td>
+                  <td class="p-3 text-[var(--text-muted)]">FOREIGN паспорт, гражданство TJ</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="guide-bank" class="mb-16 scroll-mt-24">
+          <h2 class="text-2xl font-semibold mb-4">Явный выбор банка</h2>
+          <p class="text-[var(--text-muted)] mb-4">
+            По умолчанию банк случайный из справочника. Задайте <code class="bg-white/5 px-1.5 py-0.5 rounded text-accent">bik</code> для фиксации.
+          </p>
+          <div class="code-block mb-4">
+            <pre><code class="language-bash">curl -X POST http://localhost:8080/api/v1/generate/individual \
+  -H "Content-Type: application/json" \
+  -d '&#123;"seed": 42, "bik": "044525225"&#125;'</code></pre>
+          </div>
+          <p class="text-sm text-[var(--text-muted)]">
+            Невалидный БИК → <code class="bg-white/5 px-1.5 py-0.5 rounded text-red-400">HTTP 400</code>
+            с понятным сообщением. Никакого отката на случайный.
+          </p>
+        </section>
+
+        <section id="guide-batch" class="mb-16 scroll-mt-24">
+          <h2 class="text-2xl font-semibold mb-4">Пакетная генерация</h2>
+          <p class="text-[var(--text-muted)] mb-4">
+            До 10 000 профилей за запрос. Первый использует seed, второй seed+1 и т.д.
+          </p>
+          <div class="code-block mb-4">
+            <pre><code class="language-bash">curl -X POST http://localhost:8080/api/v1/generate/individual/batch \
+  -H "Content-Type: application/json" \
+  -d '&#123;"count": 100, "seed": 42, "region": "MOSCOW"&#125;'</code></pre>
+          </div>
+          <p class="text-sm text-[var(--text-muted)]">
+            Экспорт: <code class="bg-white/5 px-1.5 py-0.5 rounded text-accent">?format=json|json-array|csv</code>.
+            CSV — с UTF-8 BOM для Excel.
+          </p>
+        </section>
+
+        <section id="guide-allure" class="mb-16 scroll-mt-24">
+          <h2 class="text-2xl font-semibold mb-4">JUnit 5 + Allure</h2>
+          <p class="text-[var(--text-muted)] mb-4">
+            Автоматически прикладывает профиль в Allure-отчёт.
+          </p>
+          <div class="code-block mb-4">
+            <pre><code class="language-java">@ExtendWith(ValidumExtension.class)
+class ClientTest &#123;
+
+    @Test
+    @ValidumSeed(42)
+    void createClient() &#123;
+        // Профиль с seed=42 уже в Allure-attachment
+    &#125;
+
+    @Test
+    @ValidumGenerate(seed = 42, age = 16, region = "MOSCOW")
+    void minorClient() &#123; /* ... */ &#125;
+&#125;</code></pre>
+          </div>
+        </section>
+
+        <section id="guide-ed807" class="mb-16 scroll-mt-24">
+          <h2 class="text-2xl font-semibold mb-4">Полный справочник ЦБ</h2>
+          <p class="text-[var(--text-muted)] mb-4">
+            По умолчанию встроен топ-30. Для полного ED807 (370 банков):
+          </p>
+          <div class="code-block mb-4">
+            <pre><code class="language-bash">java -jar validum.jar fetch-bik -o data/ED807.xml
+
+# В банковском контуре без интернета:
+java -jar validum.jar fetch-bik --offline
+
+# Примонтировать при запуске API
+docker run -d -p 8080:8080 \
+  -v $(pwd)/data/ED807.xml:/app/data/ED807.xml:ro \
+  -e VALIDUM_BIK_FILE=/app/data/ED807.xml \
+  validum-api</code></pre>
+          </div>
+        </section>
+
+        <div class="h-px w-full bg-[var(--border-color)] my-12"></div>
+
+        <!-- ================= API REFERENCE ================= -->
+        <div class="mb-12">
+          <div class="text-xs font-mono text-accent tracking-widest mb-2 uppercase">API Reference</div>
+          <h1 class="text-3xl font-bold tracking-tight">Полный справочник</h1>
+        </div>
+
+        <section id="ref-generate" class="mb-16 scroll-mt-24">
+          <h2 class="text-2xl font-semibold mb-4">Генерация — 3 эндпоинта</h2>
+          <div class="overflow-x-auto rounded-xl border mb-6" style="border-color: var(--border-color);">
+            <table class="w-full text-sm">
+              <thead class="bg-white/5 border-b" style="border-color: var(--border-color);">
+                <tr>
+                  <th class="p-3 text-left text-xs uppercase text-[var(--text-muted)]">Метод</th>
+                  <th class="p-3 text-left text-xs uppercase text-[var(--text-muted)]">Путь</th>
+                  <th class="p-3 text-left text-xs uppercase text-[var(--text-muted)]">Описание</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="border-b" style="border-color: var(--border-color);">
+                  <td class="p-3"><span class="px-2 py-0.5 rounded bg-accent/10 text-accent text-xs font-mono">POST</span></td>
+                  <td class="p-3 font-mono text-xs">/api/v1/generate/individual</td>
+                  <td class="p-3 text-[var(--text-muted)]">Профиль ФЛ</td>
+                </tr>
+                <tr class="border-b" style="border-color: var(--border-color);">
+                  <td class="p-3"><span class="px-2 py-0.5 rounded bg-accent/10 text-accent text-xs font-mono">POST</span></td>
+                  <td class="p-3 font-mono text-xs">/api/v1/generate/ip</td>
+                  <td class="p-3 text-[var(--text-muted)]">Профиль ИП</td>
+                </tr>
+                <tr>
+                  <td class="p-3"><span class="px-2 py-0.5 rounded bg-accent/10 text-accent text-xs font-mono">POST</span></td>
+                  <td class="p-3 font-mono text-xs">/api/v1/generate/organization</td>
+                  <td class="p-3 text-[var(--text-muted)]">Профиль ЮЛ (7 ОПФ)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h3 class="text-lg font-semibold mb-2">Параметры ФЛ</h3>
+          <div class="overflow-x-auto rounded-xl border mb-4" style="border-color: var(--border-color);">
+            <table class="w-full text-xs">
+              <thead class="bg-white/5"><tr>
+                <th class="p-2 text-left font-medium text-[var(--text-muted)]">Поле</th>
+                <th class="p-2 text-left font-medium text-[var(--text-muted)]">Тип</th>
+                <th class="p-2 text-left font-medium text-[var(--text-muted)]">Описание</th>
+              </tr></thead>
+              <tbody>
+                <tr class="border-t" style="border-color: var(--border-color);"><td class="p-2 font-mono text-accent">seed</td><td class="p-2 text-[var(--text-muted)]">long</td><td class="p-2 text-[var(--text-muted)]">Воспроизводимость</td></tr>
+                <tr class="border-t" style="border-color: var(--border-color);"><td class="p-2 font-mono text-accent">age</td><td class="p-2 text-[var(--text-muted)]">int</td><td class="p-2 text-[var(--text-muted)]">Возраст</td></tr>
+                <tr class="border-t" style="border-color: var(--border-color);"><td class="p-2 font-mono text-accent">gender</td><td class="p-2 text-[var(--text-muted)]">enum</td><td class="p-2 text-[var(--text-muted)]">MALE / FEMALE</td></tr>
+                <tr class="border-t" style="border-color: var(--border-color);"><td class="p-2 font-mono text-accent">region</td><td class="p-2 text-[var(--text-muted)]">enum</td><td class="p-2 text-[var(--text-muted)]">MOSCOW, SPB, ... (16 регионов)</td></tr>
+                <tr class="border-t" style="border-color: var(--border-color);"><td class="p-2 font-mono text-accent">bik</td><td class="p-2 text-[var(--text-muted)]">string</td><td class="p-2 text-[var(--text-muted)]">9 цифр, не найден → 400</td></tr>
+                <tr class="border-t" style="border-color: var(--border-color);"><td class="p-2 font-mono text-accent">corrupt</td><td class="p-2 text-[var(--text-muted)]">array</td><td class="p-2 text-[var(--text-muted)]">INN, SNILS</td></tr>
+                <tr class="border-t" style="border-color: var(--border-color);"><td class="p-2 font-mono text-accent">residencyCountry</td><td class="p-2 text-[var(--text-muted)]">string</td><td class="p-2 text-[var(--text-muted)]">TJ, KZ, UZ, ... (10 стран)</td></tr>
+                <tr class="border-t" style="border-color: var(--border-color);"><td class="p-2 font-mono text-accent">terrorist</td><td class="p-2 text-[var(--text-muted)]">boolean</td><td class="p-2 text-[var(--text-muted)]">Флаг террориста</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="ref-batch" class="mb-16 scroll-mt-24">
+          <h2 class="text-2xl font-semibold mb-4">Батчи — 3 эндпоинта</h2>
+          <div class="code-block mb-4">
+            <pre><code class="language-bash">POST /api/v1/generate/individual/batch
+POST /api/v1/generate/ip/batch
+POST /api/v1/generate/organization/batch
+
+# Параметры:
+#   count  1..10000
+#   seed   базовый seed
+#   format json | json-array | csv</code></pre>
+          </div>
+        </section>
+
+        <section id="ref-validate" class="mb-16 scroll-mt-24">
+          <h2 class="text-2xl font-semibold mb-4">Валидация — 8 эндпоинтов</h2>
+          <div class="overflow-x-auto rounded-xl border" style="border-color: var(--border-color);">
+            <table class="w-full text-sm">
+              <thead class="bg-white/5 border-b" style="border-color: var(--border-color);">
+                <tr>
+                  <th class="p-3 text-left text-xs uppercase text-[var(--text-muted)]">Эндпоинт</th>
+                  <th class="p-3 text-left text-xs uppercase text-[var(--text-muted)]">Что проверяет</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="border-b" style="border-color: var(--border-color);"><td class="p-3 font-mono text-accent text-xs">/validate/inn</td><td class="p-3 text-[var(--text-muted)]">ИНН ФЛ (12) / ЮЛ (10), ФНС</td></tr>
+                <tr class="border-b" style="border-color: var(--border-color);"><td class="p-3 font-mono text-accent text-xs">/validate/snils</td><td class="p-3 text-[var(--text-muted)]">СНИЛС, ПФР</td></tr>
+                <tr class="border-b" style="border-color: var(--border-color);"><td class="p-3 font-mono text-accent text-xs">/validate/ogrn</td><td class="p-3 text-[var(--text-muted)]">ОГРН (13) / ОГРНИП (15)</td></tr>
+                <tr class="border-b" style="border-color: var(--border-color);"><td class="p-3 font-mono text-accent text-xs">/validate/ogrnip</td><td class="p-3 text-[var(--text-muted)]">Только ОГРНИП (15)</td></tr>
+                <tr class="border-b" style="border-color: var(--border-color);"><td class="p-3 font-mono text-accent text-xs">/validate/kpp</td><td class="p-3 text-[var(--text-muted)]">КПП (4 группы ≠ 0)</td></tr>
+                <tr class="border-b" style="border-color: var(--border-color);"><td class="p-3 font-mono text-accent text-xs">/validate/okpo</td><td class="p-3 text-[var(--text-muted)]">ОКПО ЮЛ (8) / ИП (10), Росстат</td></tr>
+                <tr class="border-b" style="border-color: var(--border-color);"><td class="p-3 font-mono text-accent text-xs">/validate/bik</td><td class="p-3 text-[var(--text-muted)]">БИК + справочник ЦБ</td></tr>
+                <tr><td class="p-3 font-mono text-accent text-xs">/validate/account</td><td class="p-3 text-[var(--text-muted)]">Счёт 20 цифр, 809-П</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="ref-cli" class="mb-16 scroll-mt-24">
+          <h2 class="text-2xl font-semibold mb-4">CLI — 5 команд</h2>
+          <div class="code-block">
+            <pre><code class="language-bash"># Генерация
+validum generate individual --seed 42 --count 100 --format csv -o profiles.csv
+validum generate ip --seed 1 --count 10 --bik 044525225
+validum generate organization --type SE --region MOSCOW --count 5
+
+# Валидация (exit 0 = valid, exit 1 = invalid)
+validum validate inn 7707083893
+validum validate snils 11223344595
+validum validate ogrn 1027700132195
+validum validate ogrnip 304500116000157
+validum validate account 40817051000000000953
+validum validate kpp 773601001
+validum validate okpo 12345676
+validum validate bik 044525225
+
+# Справочник
+validum fetch-bik -o data/ED807.xml
+validum fetch-bik --offline
+
+# Утилиты
+validum scenarios
+validum version</code></pre>
+          </div>
+        </section>
+
+        <section id="ref-java" class="mb-16 scroll-mt-24">
+          <h2 class="text-2xl font-semibold mb-4">Java-библиотека</h2>
+          <p class="text-[var(--text-muted)] mb-4">Публичные фасады и билдеры из <code class="bg-white/5 px-1 py-0.5 rounded text-accent">ru.validum.core</code>.</p>
+
+          <h3 class="text-lg font-semibold mb-2">ФЛ — фасады</h3>
+          <div class="code-block mb-6">
+            <pre><code class="language-java">IndividualProfile adult = IndividualScenarios.createAdultResidentWithAccount(42L);
+IndividualProfile pensioner = IndividualScenarios.createPensionerMale(42L);
+IndividualProfile salary = IndividualScenarios.createSalaryClient(42L);
+IndividualProfile tajik = IndividualScenarios.createNonResident(Country.TJ, 42L);</code></pre>
+          </div>
+
+          <h3 class="text-lg font-semibold mb-2">ФЛ — билдер с каскадами</h3>
+          <div class="code-block mb-6">
+            <pre><code class="language-java">IndividualProfile p = IndividualProfileGenerator.builder()
+    .seed(42L)
+    .age(16)
+    .region(Region.MOSCOW)
+    .bik("044525225")
+    .corrupt(CorruptField.INN)
+    .build()
+    .generate();</code></pre>
+          </div>
+
+          <h3 class="text-lg font-semibold mb-2">ИП — композиция над ФЛ</h3>
+          <div class="code-block mb-6">
+            <pre><code class="language-java">IpProfile ip = IpProfileGenerator.generate(
+    IndividualProfileGenerator.builder()
+        .seed(42L).age(35).bik("044525225").build(),
+    42L
+);</code></pre>
+          </div>
+
+          <h3 class="text-lg font-semibold mb-2">ЮЛ — 7 ОПФ</h3>
+          <div class="code-block mb-6">
+            <pre><code class="language-java">OrganizationProfile gup = OrganizationProfileGenerator.builder()
+    .seed(42L)
+    .organizationType(OrganizationType.SE)
+    .region(Region.MOSCOW)
+    .build()
+    .generate();</code></pre>
+          </div>
+
+          <h3 class="text-lg font-semibold mb-2">Экспорт в CSV</h3>
+          <div class="code-block mb-6">
+            <pre><code class="language-java">String csv = CsvExporter.toCsv(
+    IndividualProfileFlattener.flattenAll(List.of(adult))
+);</code></pre>
+          </div>
+
+          <h3 class="text-lg font-semibold mb-2">Валидаторы — 8 штук</h3>
+          <div class="code-block">
+            <pre><code class="language-java">InnValidator.isValidIndividual("500100732259");   // ФНС
+InnValidator.isValidLegalEntity("7707083893");
+SnilsValidator.isValid("11223344595");             // ПФР
+OgrnValidator.isValidLegalEntity("1027700132195"); // ФНС
+OgrnipValidator.isValid("304500116000157");
+KppValidator.isValid("773601001");
+OkpoValidator.isValid("12345676");                 // Росстат
+BikValidator.isValid("044525225");                 // ЦБ
+AccountValidator.isValidRub("40817051000000000953"); // 809-П</code></pre>
+          </div>
+        </section>
+
+      </article>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  section h2, section h3 { scroll-margin-top: 6rem; }
+  .copy-btn { font-family: var(--font-mono); }
+</style>
+
+<script>
+  // Copy
+  document.querySelectorAll('pre').forEach(pre => {
+    const btn = document.createElement('button');
+    btn.className = 'copy-btn absolute top-2 right-2 px-2 py-1 text-xs text-[#a1a1aa] bg-white/5 hover:bg-white/10 rounded transition opacity-0 group-hover:opacity-100';
+    btn.innerText = 'Copy';
+    btn.addEventListener('click', () => {
+      const code = pre.querySelector('code');
+      if (code) {
+        navigator.clipboard.writeText(code.innerText).then(() => {
+          btn.innerText = 'Copied!';
+          setTimeout(() => btn.innerText = 'Copy', 2000);
+        });
+      }
+    });
+    pre.style.position = 'relative';
+    pre.classList.add('group');
+    pre.appendChild(btn);
+  });
+
+  // Скроллспай
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.intersectionRatio > 0) {
+        const id = entry.target.getAttribute('id');
+        document.querySelectorAll('.doc-link').forEach(link => {
+          if (link.getAttribute('href') === `#${id}`) {
+            link.classList.add('text-accent', 'border-accent', 'bg-accent/5', 'font-medium');
+            link.classList.remove('text-[var(--text-muted)]', 'border-transparent');
+          } else {
+            link.classList.remove('text-accent', 'border-accent', 'bg-accent/5', 'font-medium');
+            link.classList.add('text-[var(--text-muted)]', 'border-transparent');
+          }
+        });
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+
+  document.querySelectorAll('section[id]').forEach(s => observer.observe(s));
+</script>

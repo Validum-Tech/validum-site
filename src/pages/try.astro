@@ -1,0 +1,35 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import TryForm from '../components/TryForm';
+---
+
+<BaseLayout title="Try it — Validum">
+  <div class="max-w-[1000px] mx-auto px-6 py-16 lg:py-24">
+
+    <div class="mb-12 text-center">
+      <div class="text-xs font-mono text-accent tracking-widest mb-2 uppercase">Playground</div>
+      <h1 class="text-4xl sm:text-5xl font-bold tracking-tight mb-4">Попробуйте в деле</h1>
+      <p class="text-lg text-[var(--text-muted)] max-w-2xl mx-auto">
+        Выберите параметры профиля и посмотрите, как выглядит ответ нашего REST API.
+        В этом демо используется <strong>Mock-ответ</strong> без реального запроса к серверу.
+      </p>
+    </div>
+
+    <TryForm client:load />
+
+    <div class="mt-12 p-5 rounded-xl border border-accent/20 bg-accent/5 flex items-start gap-4">
+      <div class="text-accent flex-shrink-0 mt-0.5">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+      </div>
+      <div>
+        <h3 class="font-semibold mb-1">Хотите реальный API?</h3>
+        <p class="text-sm text-[var(--text-muted)]">
+          Этот интерфейс — только витрина. Чтобы получать реальные данные со всеми контрольными суммами,
+          запустите Validum локально одной командой <code class="bg-white/10 px-1.5 py-0.5 rounded text-white">docker compose up</code>
+          или через CLI. Инструкция в <a href="/docs" class="text-accent hover:underline">документации</a>.
+        </p>
+      </div>
+    </div>
+
+  </div>
+</BaseLayout>
