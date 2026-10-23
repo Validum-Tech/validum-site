@@ -6,6 +6,36 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     <div class="max-w-[1200px] mx-auto px-6 py-12 lg:py-20">
         <div class="grid lg:grid-cols-12 gap-12">
 
+            <!-- Мобильное содержание (виден только на < lg) -->
+            <details class="lg:hidden mb-8 rounded-xl border border-line bg-surface-2">
+                <summary class="cursor-pointer p-4 font-semibold text-fg flex items-center justify-between select-none list-none">
+                    <span>Содержание</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-fg-muted transition-transform [details[open]_&]:rotate-180">
+                        <path d="m6 9 6 6 6-6"/>
+                    </svg>
+                </summary>
+                <nav class="px-4 pb-4 flex flex-col gap-1 text-sm">
+                    <div class="text-xs font-mono text-fg-muted uppercase tracking-widest mt-2 mb-1">Начало работы</div>
+                    <a href="#install" class="py-1.5 text-fg-muted hover:text-accent transition-colors">Установка</a>
+                    <a href="#first-request" class="py-1.5 text-fg-muted hover:text-accent transition-colors">Первый запрос</a>
+                    <a href="#concepts" class="py-1.5 text-fg-muted hover:text-accent transition-colors">Ключевые концепции</a>
+
+                    <div class="text-xs font-mono text-fg-muted uppercase tracking-widest mt-4 mb-1">Гайды</div>
+                    <a href="#guide-cascades" class="py-1.5 text-fg-muted hover:text-accent transition-colors">Каскадные дефолты</a>
+                    <a href="#guide-bank" class="py-1.5 text-fg-muted hover:text-accent transition-colors">Выбор банка</a>
+                    <a href="#guide-batch" class="py-1.5 text-fg-muted hover:text-accent transition-colors">Пакетная генерация</a>
+                    <a href="#guide-allure" class="py-1.5 text-fg-muted hover:text-accent transition-colors">JUnit 5 + Allure</a>
+                    <a href="#guide-ed807" class="py-1.5 text-fg-muted hover:text-accent transition-colors">Справочник ЦБ</a>
+
+                    <div class="text-xs font-mono text-fg-muted uppercase tracking-widest mt-4 mb-1">Справочник API</div>
+                    <a href="#ref-generate" class="py-1.5 text-fg-muted hover:text-accent transition-colors">Генерация</a>
+                    <a href="#ref-batch" class="py-1.5 text-fg-muted hover:text-accent transition-colors">Батчи</a>
+                    <a href="#ref-validate" class="py-1.5 text-fg-muted hover:text-accent transition-colors">Валидация</a>
+                    <a href="#ref-cli" class="py-1.5 text-fg-muted hover:text-accent transition-colors">CLI</a>
+                    <a href="#ref-java" class="py-1.5 text-fg-muted hover:text-accent transition-colors">Java-библиотека</a>
+                </nav>
+            </details>
+
             <aside class="lg:col-span-3 hidden lg:block">
                 <div class="sticky top-24 space-y-8">
 
@@ -43,11 +73,11 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
                 </div>
             </aside>
 
-            <article class="lg:col-span-9">
+            <article class="lg:col-span-9 min-w-0">
 
                 <div class="mb-16">
                     <div class="text-xs font-mono text-accent tracking-widest mb-2 uppercase">Документация</div>
-                    <h1 class="text-4xl font-bold tracking-tight mb-4">Документация Validum</h1>
+                    <h1 class="text-4xl font-bold tracking-tight mb-4">Validum Documentation</h1>
                     <p class="text-lg text-fg-muted leading-relaxed">
                         Генератор валидных тестовых данных для российских АБС. Self-hosted, zero-dependency core,
                         детерминированные алгоритмы без LLM.
@@ -511,6 +541,7 @@ AccountValidator.isValidRub("40817051000000000953"); // 809-П</code></pre>
         font-size: inherit;
         border-radius: 0;
     }
+    summary::-webkit-details-marker { display: none; }
 </style>
 
 <script>
@@ -524,6 +555,8 @@ AccountValidator.isValidRub("40817051000000000953"); // 809-П</code></pre>
                 navigator.clipboard.writeText(code.innerText).then(() => {
                     btn.innerText = 'Copied!';
                     setTimeout(() => btn.innerText = 'Copy', 2000);
+                }).catch(() => {
+                    /* Clipboard API недоступен — игнорируем */
                 });
             }
         });
@@ -550,4 +583,12 @@ AccountValidator.isValidRub("40817051000000000953"); // 809-П</code></pre>
     }, { rootMargin: '-20% 0px -70% 0px' });
 
     document.querySelectorAll<HTMLElement>('section[id]').forEach(s => observer.observe(s));
+
+    // Автоматически закрывать мобильное содержание после клика по ссылке
+    document.querySelectorAll<HTMLAnchorElement>('details nav a').forEach(link => {
+        link.addEventListener('click', () => {
+            const details = link.closest('details');
+            if (details) details.open = false;
+        });
+    });
 </script>
