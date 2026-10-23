@@ -45,59 +45,38 @@ const currentPath = Astro.url.pathname;
     <div class="flex items-center gap-2">
       <a href="https://github.com/Validum-Tech/validum" target="_blank" class="hidden sm:inline text-sm text-fg-muted hover:text-fg transition">GitHub ↗</a>
 
-      <button
-          id="mobile-menu-toggle"
-          type="button"
-          class="md:hidden p-2 -mr-2 text-fg-muted hover:text-fg transition"
-          aria-label="Открыть меню"
-          aria-expanded="false"
-          aria-controls="mobile-menu"
-      >
-        <svg id="menu-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/>
-        </svg>
-        <svg id="close-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden">
-          <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
-        </svg>
-      </button>
+      <details class="md:hidden relative group">
+        <summary class="list-none cursor-pointer p-2 -mr-2 text-fg-muted hover:text-fg transition" aria-label="Меню">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-open:hidden">
+            <line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/>
+          </svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden group-open:block">
+            <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+          </svg>
+        </summary>
+        <nav class="absolute right-0 top-full mt-2 w-64 bg-surface-0 border border-line rounded-lg shadow-lg p-2 z-50 flex flex-col">
+          {navLinks.map(link => (
+              <a
+                  href={link.href}
+                  class:list={[
+                    "text-sm py-2.5 px-3 rounded-md transition-colors",
+                    currentPath === link.href ? "text-accent bg-accent/5 font-medium" : "text-fg-muted hover:text-fg hover:bg-surface-3"
+                  ]}
+              >
+                {link.label}
+              </a>
+          ))}
+          <a href="https://github.com/Validum-Tech/validum" target="_blank" class="text-sm py-2.5 px-3 rounded-md text-fg-muted hover:text-fg hover:bg-surface-3 transition-colors border-t border-line mt-1 pt-3">
+            GitHub ↗
+          </a>
+        </nav>
+      </details>
     </div>
 
   </div>
-
-  <div id="mobile-menu" class="hidden md:hidden border-t border-line bg-surface-0">
-    <nav class="max-w-[1200px] mx-auto px-6 py-4 flex flex-col">
-      {navLinks.map(link => (
-          <a
-              href={link.href}
-              class:list={[
-                "text-sm py-3 border-b border-line last:border-b-0 transition-colors",
-                currentPath === link.href ? "text-accent font-medium" : "text-fg-muted hover:text-fg"
-              ]}
-          >
-            {link.label}
-          </a>
-      ))}
-      <a href="https://github.com/Validum-Tech/validum" target="_blank" class="text-sm py-3 text-fg-muted hover:text-fg transition-colors">
-        GitHub ↗
-      </a>
-    </nav>
-  </div>
 </header>
 
-<script>
-  const toggle = document.getElementById('mobile-menu-toggle') as HTMLButtonElement | null;
-  const menu = document.getElementById('mobile-menu');
-  const menuIcon = document.getElementById('menu-icon');
-  const closeIcon = document.getElementById('close-icon');
-
-  if (toggle && menu && menuIcon && closeIcon) {
-    toggle.addEventListener('click', () => {
-      const isOpen = !menu.classList.contains('hidden');
-      menu.classList.toggle('hidden');
-      menuIcon.classList.toggle('hidden');
-      closeIcon.classList.toggle('hidden');
-      toggle.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
-      toggle.setAttribute('aria-label', isOpen ? 'Открыть меню' : 'Закрыть меню');
-    });
-  }
-</script>
+<style>
+  summary::-webkit-details-marker { display: none; }
+  summary { list-style: none; }
+</style>
