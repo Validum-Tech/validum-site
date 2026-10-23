@@ -12,45 +12,45 @@ const items = [
 ];
 ---
 
-<BaseLayout title="Roadmap">
+<BaseLayout title="Планы развития">
   <div class="max-w-[900px] mx-auto px-6 py-16 lg:py-24">
     <div class="mb-16">
-      <div class="text-xs font-mono text-accent tracking-widest mb-2 uppercase">Roadmap</div>
+      <div class="text-xs font-mono text-accent tracking-widest mb-2 uppercase">Дорожная карта</div>
       <h1 class="text-4xl sm:text-5xl font-bold tracking-tight mb-4">Что сделано, что дальше</h1>
-      <p class="text-lg text-[var(--text-muted)]">Открытый roadmap. Без обещаний «в Q3». Только факты.</p>
+      <p class="text-lg text-fg-muted">Открытый план развития. Без обещаний «в Q3». Только факты.</p>
     </div>
 
     <div class="space-y-3">
       {items.map(item => (
-        <div class:list={["p-6 rounded-xl border flex items-start gap-4", item.status === 'next' ? 'border-accent/40 bg-accent/5' : '']} style={item.status !== 'next' ? 'border-color: var(--border-color); background-color: var(--card-bg);' : ''}>
+          <div class:list={["p-6 rounded-xl border flex items-start gap-4", item.status === 'next' ? 'border-accent/40 bg-accent/5' : 'border-line bg-surface-2']}>
 
-          <div class:list={["w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 border",
-            item.status === 'done' ? 'bg-accent/20 border-accent/40 text-accent' :
-            item.status === 'next' ? 'bg-accent border-accent text-ink-950 animate-pulse' :
-            'bg-white/5 border-white/10 text-[var(--text-muted)]']}>
-            {item.status === 'done' ? (
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            ) : item.status === 'next' ? (
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-            ) : (
-              <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-            )}
-          </div>
+            <div class:list={["w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 border",
+              item.status === 'done' ? 'bg-accent/20 border-accent/40 text-accent' :
+                  item.status === 'next' ? 'bg-accent border-accent text-accent-fg animate-pulse' :
+                      'bg-surface-2 border-line text-fg-muted']}>
+              {item.status === 'done' ? (
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              ) : item.status === 'next' ? (
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              ) : (
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              )}
+            </div>
 
-          <div class="flex-1">
-            <div class="flex items-center gap-3 mb-2 flex-wrap">
+            <div class="flex-1">
+              <div class="flex items-center gap-3 mb-2 flex-wrap">
               <span class:list={["text-[10px] font-mono px-2 py-0.5 rounded border uppercase tracking-wider",
                 item.status === 'done' ? 'text-accent border-accent/30 bg-accent/10' :
-                item.status === 'next' ? 'text-ink-950 border-accent bg-accent' :
-                'text-[var(--text-muted)] border-[var(--border-color)]']}>
-                {item.status === 'done' ? 'Done' : item.status === 'next' ? 'Next' : 'Planned'}
+                    item.status === 'next' ? 'text-accent-fg border-accent bg-accent' :
+                        'text-fg-muted border-line']}>
+                {item.status === 'done' ? 'Готово' : item.status === 'next' ? 'Дальше' : 'План'}
               </span>
-              <span class="text-xs font-mono text-[var(--text-muted)]">{item.tag}</span>
+                <span class="text-xs font-mono text-fg-muted">{item.tag}</span>
+              </div>
+              <h3 class="text-lg font-semibold mb-1">{item.title}</h3>
+              <p class="text-sm text-fg-muted">{item.desc}</p>
             </div>
-            <h3 class="text-lg font-semibold mb-1">{item.title}</h3>
-            <p class="text-sm text-[var(--text-muted)]">{item.desc}</p>
           </div>
-        </div>
       ))}
     </div>
   </div>

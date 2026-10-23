@@ -1,42 +1,87 @@
 @import "tailwindcss";
 
+/* Тема одна (тёмная). .dark на <html> — статический.
+   @custom-variant нужен, чтобы dark:-утилиты (если появятся) привязывались к классу. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
     --font-sans: 'Inter', system-ui, sans-serif;
     --font-mono: 'JetBrains Mono', ui-monospace, monospace;
-
-    /* Более глубокие, современные цвета (без синевы) */
-    --color-ink-950: #09090b;
-    --color-ink-900: #121214;
-    --color-ink-800: #18181b;
-    --color-ink-700: #27272a;
-    --color-ink-200: #a1a1aa;
-    --color-ink-50: #fafafa;
-
-    /* Изумрудный (Emerald) — символизирует успешную валидацию */
-    --color-accent: #10b981;
-    --color-accent-light: #34d399;
 }
 
+/* ============================================================================
+   DESIGN TOKENS — единственное место, где задаются цвета и тени.
+   Меняешь здесь → меняется весь сайт.
+   ============================================================================ */
 @layer base {
     :root {
-        --bg-main: var(--color-ink-950);
-        --text-main: var(--color-ink-50);
-        --text-muted: var(--color-ink-200);
-        --border-color: rgba(255, 255, 255, 0.1);
-        --card-bg: rgba(255, 255, 255, 0.03);
+        /* --- Palette (сырые цвета) --- */
+        --palette-ink-950: #09090b;
+        --palette-ink-900: #121214;
+        --palette-ink-800: #18181b;
+        --palette-ink-700: #27272a;
+        --palette-ink-200: #a1a1aa;
+        --palette-ink-100: #d4d4d8;
+        --palette-ink-50:  #fafafa;
+
+        --palette-emerald-500: #10b981;
+        --palette-emerald-400: #34d399;
+        --palette-emerald-600: #059669;
+
+        --palette-red-500: #ef4444;
+        --palette-red-400: #f87171;
+
+        /* --- Semantic surfaces --- */
+        --surface-0: var(--palette-ink-950);      /* фон страницы */
+        --surface-1: rgba(255, 255, 255, 0.02);   /* подложки (footer, thead) */
+        --surface-2: rgba(255, 255, 255, 0.03);   /* карточки */
+        --surface-3: rgba(255, 255, 255, 0.06);   /* hover */
+        --surface-code: var(--palette-ink-950);   /* блоки кода */
+
+        /* --- Foreground --- */
+        --fg:         var(--palette-ink-50);
+        --fg-muted:   var(--palette-ink-200);
+        --fg-subtle:  rgba(255, 255, 255, 0.35);
+
+        /* --- Borders --- */
+        --line:        rgba(255, 255, 255, 0.10);
+        --line-strong: rgba(255, 255, 255, 0.18);
+
+        /* --- Accent --- */
+        --accent:       var(--palette-emerald-500);
+        --accent-light: var(--palette-emerald-400);
+        --accent-dark:  var(--palette-emerald-600);
+        --accent-fg:    var(--palette-ink-950);   /* текст на accent */
+
+        /* --- Status: danger --- */
+        --danger:         var(--palette-red-500);
+        --danger-light:   var(--palette-red-400);
+        --danger-surface: rgba(239, 68, 68, 0.08);
+        --danger-border:  rgba(239, 68, 68, 0.30);
+
+        /* --- Status: success --- */
+        --success:         var(--palette-emerald-500);
+        --success-light:   var(--palette-emerald-400);
+        --success-surface: rgba(16, 185, 129, 0.08);
+        --success-border:  rgba(16, 185, 129, 0.30);
+
+        /* --- Glows --- */
+        --glow-accent-sm:  0 0 15px rgba(16, 185, 129, 0.40);
+        --glow-accent-md:  0 0 25px rgba(16, 185, 129, 0.30);
+        --glow-accent-lg:  0 0 40px rgba(16, 185, 129, 0.50);
+        --glow-accent-xl:  0 0 50px rgba(16, 185, 129, 0.60);
+        --glow-danger-sm:  0 0 25px rgba(239, 68, 68, 0.15);
+        --glow-success-sm: 0 0 30px rgba(16, 185, 129, 0.20);
+        --glow-success-lg: 0 0 50px rgba(16, 185, 129, 0.40);
     }
 
-    html.light {
-        --bg-main: #fafafa;
-        --text-main: #09090b;
-        --text-muted: #52525b;
-        --border-color: rgba(0, 0, 0, 0.1);
-        --card-bg: #ffffff;
+    html {
+        color-scheme: dark;
     }
 
     body {
-        background-color: var(--bg-main);
-        color: var(--text-main);
+        background-color: var(--surface-0);
+        color: var(--fg);
         font-family: var(--font-sans);
         -webkit-font-smoothing: antialiased;
     }
@@ -44,4 +89,60 @@
     code, pre {
         font-family: var(--font-mono);
     }
+
+    /* Inline-code (везде, кроме блоков <pre>) */
+    :not(pre) > code {
+        background-color: var(--surface-3);
+        color: var(--accent);
+        padding: 0.125rem 0.375rem;
+        border-radius: 0.25rem;
+        font-size: 0.875em;
+    }
+}
+
+/* ============================================================================
+   TAILWIND BRIDGE — превращает токены в утилиты.
+   ============================================================================ */
+@theme inline {
+    /* Surfaces */
+    --color-surface-0: var(--surface-0);
+    --color-surface-1: var(--surface-1);
+    --color-surface-2: var(--surface-2);
+    --color-surface-3: var(--surface-3);
+    --color-code:      var(--surface-code);
+
+    /* Foreground */
+    --color-fg:        var(--fg);
+    --color-fg-muted:  var(--fg-muted);
+    --color-fg-subtle: var(--fg-subtle);
+
+    /* Borders */
+    --color-line:        var(--line);
+    --color-line-strong: var(--line-strong);
+
+    /* Accent */
+    --color-accent:       var(--accent);
+    --color-accent-light: var(--accent-light);
+    --color-accent-dark:  var(--accent-dark);
+    --color-accent-fg:    var(--accent-fg);
+
+    /* Status */
+    --color-danger:         var(--danger);
+    --color-danger-light:   var(--danger-light);
+    --color-danger-surface: var(--danger-surface);
+    --color-danger-border:  var(--danger-border);
+
+    --color-success:         var(--success);
+    --color-success-light:   var(--success-light);
+    --color-success-surface: var(--success-surface);
+    --color-success-border:  var(--success-border);
+
+    /* Shadows */
+    --shadow-glow-accent-sm:  var(--glow-accent-sm);
+    --shadow-glow-accent-md:  var(--glow-accent-md);
+    --shadow-glow-accent-lg:  var(--glow-accent-lg);
+    --shadow-glow-accent-xl:  var(--glow-accent-xl);
+    --shadow-glow-danger-sm:  var(--glow-danger-sm);
+    --shadow-glow-success-sm: var(--glow-success-sm);
+    --shadow-glow-success-lg: var(--glow-success-lg);
 }

@@ -2,15 +2,14 @@
 // src/components/Footer.astro
 ---
 
-<footer class="border-t py-16" style="border-color: var(--border-color); background-color: rgba(0,0,0,0.2);">
+<footer class="border-t border-line py-16 bg-surface-1">
   <div class="max-w-[1200px] mx-auto px-6">
     <div class="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
 
-      <!-- Лого и описание -->
       <div class="md:col-span-2">
         <a href="/" class="flex items-center gap-2.5 mb-4 group">
-          <div class="w-8 h-8 rounded-full border border-[var(--color-accent)] flex items-center justify-center transition group-hover:shadow-[0_0_15px_rgba(16,185,129,0.4)] bg-[#050505]">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter" class="text-[var(--color-accent)]">
+          <div class="w-8 h-8 rounded-full border border-accent flex items-center justify-center transition group-hover:shadow-glow-accent-sm bg-surface-0">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter" class="text-accent">
               <path d="M9 13l3 7 3-7" stroke-width="2.5"/>
               <path d="M9 13L5 9" /><path d="M7 11L3 7" />
               <path d="M5 9L5 4L7 4" /><path d="M3 7L3 3L5 3" />
@@ -20,35 +19,33 @@
           </div>
           <span class="font-semibold text-lg tracking-tight">Validum</span>
         </a>
-        <p class="text-sm text-[var(--text-muted)] leading-relaxed max-w-xs">
+        <p class="text-sm text-fg-muted leading-relaxed max-w-xs">
           Open-source генератор валидных тестовых данных для российских АБС, банков и финтех-стартапов.
         </p>
       </div>
 
-      <!-- Ссылки: Продукт -->
       <div>
-        <div class="text-xs font-mono text-[var(--text-muted)] uppercase tracking-widest mb-4">Продукт</div>
+        <div class="text-xs font-mono text-fg-muted uppercase tracking-widest mb-4">Продукт</div>
         <ul class="space-y-3 text-sm">
-          <li><a href="#quickstart" class="text-[var(--text-main)] hover:text-accent transition">Быстрый старт</a></li>
-          <li><a href="/docs" class="text-[var(--text-main)] hover:text-accent transition">Документация</a></li>
-          <li><a href="/roadmap" class="text-[var(--text-main)] hover:text-accent transition">Roadmap</a></li>
-          <li><a href="/changelog" class="text-[var(--text-main)] hover:text-accent transition">Changelog</a></li>
+          <li><a href="/#quickstart" class="text-fg hover:text-accent transition">Быстрый старт</a></li>
+          <li><a href="/docs" class="text-fg hover:text-accent transition">Документация</a></li>
+          <li><a href="/roadmap" class="text-fg hover:text-accent transition">Планы</a></li>
+          <li><a href="/changelog" class="text-fg hover:text-accent transition">Изменения</a></li>
         </ul>
       </div>
 
-      <!-- Ссылки: Ресурсы -->
       <div>
-        <div class="text-xs font-mono text-[var(--text-muted)] uppercase tracking-widest mb-4">Ресурсы</div>
+        <div class="text-xs font-mono text-fg-muted uppercase tracking-widest mb-4">Ресурсы</div>
         <ul class="space-y-3 text-sm">
-          <li><a href="https://github.com/Validum-Tech/validum" target="_blank" class="text-[var(--text-main)] hover:text-accent transition flex items-center gap-1">GitHub <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg></a></li>
-          <li><a href="/security" class="text-[var(--text-main)] hover:text-accent transition">Безопасность</a></li>
-          <li><a href="https://github.com/Validum-Tech/validum/blob/main/LICENSE" target="_blank" class="text-[var(--text-main)] hover:text-accent transition flex items-center gap-1">License (Apache 2.0) <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg></a></li>
+          <li><a href="https://github.com/Validum-Tech/validum" target="_blank" class="text-fg hover:text-accent transition flex items-center gap-1">GitHub <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg></a></li>
+          <li><a href="/security" class="text-fg hover:text-accent transition">Безопасность</a></li>
+          <li><a href="https://github.com/Validum-Tech/validum/blob/main/LICENSE" target="_blank" class="text-fg hover:text-accent transition flex items-center gap-1">Лицензия (Apache 2.0) <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" x2="21" y1="14" y2="3"/></svg></a></li>
         </ul>
       </div>
 
     </div>
 
-    <div class="pt-8 border-t flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-mono text-[var(--text-muted)]" style="border-color: var(--border-color);">
+    <div class="pt-8 border-t border-line flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-mono text-fg-muted">
       <div>© 2026 Validum. Все права защищены.</div>
       <div class="flex gap-6">
         <span>Java 21 LTS</span>

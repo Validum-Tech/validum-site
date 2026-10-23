@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type ChangeEvent } from 'react';
 
 type OutputTab = 'json' | 'java' | 'curl' | 'cli';
 
@@ -19,7 +19,7 @@ export default function TryForm() {
 
     const [result, setResult] = useState<any>(null);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value, type } = e.target;
         const val = type === 'checkbox' ? (e.target as HTMLInputElement).checked : value;
         setFormData(prev => ({ ...prev, [name]: val }));
@@ -27,23 +27,15 @@ export default function TryForm() {
 
     const handleGenerate = () => {
         setIsGenerating(true);
-
-        // Имитация задержки API
         setTimeout(() => {
             let mock: any;
-
             if (formData.type === 'individual') {
                 const isMinor = formData.age < 18;
                 const isSenior = formData.age >= 45;
                 const isExchanged = formData.passportWasExchanged;
-
-                // Каскады
                 const familyStatus = isMinor ? 'SINGLE' : 'MARRIED';
                 const issueAge = isSenior ? 45 : (isExchanged && formData.age >= 20 ? 20 : 14);
-
-                // Серия паспорта из региона
                 const regionCode = formData.region === 'MOSCOW' ? '77' : formData.region === 'SPB' ? '78' : '66';
-
                 mock = {
                     fullName: formData.gender === 'MALE' ? "Зайцев Григорий Григорьевич" : "Зайцева Галина Григорьевна",
                     gender: formData.gender,
@@ -74,21 +66,9 @@ export default function TryForm() {
                 };
             } else if (formData.type === 'organization') {
                 const isBudget = formData.organizationType === 'SE' || formData.organizationType === 'ME';
-                const okopf =
-                    formData.organizationType === 'LLC' ? '65' :
-                        formData.organizationType === 'JSC' || formData.organizationType === 'PJSC' ? '47' :
-                            formData.organizationType === 'NCO' ? '85' :
-                                formData.organizationType === 'FOUNDATION' ? '88' :
-                                    formData.organizationType === 'SE' ? '61' : '62';
+                const okopf = formData.organizationType === 'LLC' ? '65' : formData.organizationType === 'JSC' || formData.organizationType === 'PJSC' ? '47' : formData.organizationType === 'NCO' ? '85' : formData.organizationType === 'FOUNDATION' ? '88' : formData.organizationType === 'SE' ? '61' : '62';
                 const okfs = isBudget ? (formData.organizationType === 'SE' ? '14' : '13') : '16';
-                const prefix =
-                    formData.organizationType === 'LLC' ? 'ООО' :
-                        formData.organizationType === 'JSC' ? 'АО' :
-                            formData.organizationType === 'PJSC' ? 'ПАО' :
-                                formData.organizationType === 'NCO' ? 'НКО' :
-                                    formData.organizationType === 'FOUNDATION' ? 'Фонд' :
-                                        formData.organizationType === 'SE' ? 'ГУП' : 'МУП';
-
+                const prefix = formData.organizationType === 'LLC' ? 'ООО' : formData.organizationType === 'JSC' ? 'АО' : formData.organizationType === 'PJSC' ? 'ПАО' : formData.organizationType === 'NCO' ? 'НКО' : formData.organizationType === 'FOUNDATION' ? 'Фонд' : formData.organizationType === 'SE' ? 'ГУП' : 'МУП';
                 mock = {
                     organizationName: `${prefix} «Ромашка»`,
                     organizationType: formData.organizationType,
@@ -100,9 +80,7 @@ export default function TryForm() {
                     okfs: okfs,
                     budget: isBudget ? 'Бюджетная организация' : 'Небюджетная организация',
                     swift: "SABRRUMMXXX",
-                    registrationAddress: {
-                        city: formData.region === 'MOSCOW' ? "Москва" : "Санкт-Петербург"
-                    },
+                    registrationAddress: { city: formData.region === 'MOSCOW' ? "Москва" : "Санкт-Петербург" },
                     email: "client12345@test.ru"
                 };
             } else {
@@ -117,13 +95,10 @@ export default function TryForm() {
                     account: "40802810500000012345"
                 };
             }
-
             setResult(mock);
             setIsGenerating(false);
         }, 400);
     };
-
-    // ── Генерация кода ───────────────────────────────────────────────────────
 
     const getJson = () => JSON.stringify(result, null, 2);
 
@@ -177,11 +152,7 @@ IpProfile ip = IpProfileGenerator.generate(
     };
 
     const getCurl = () => {
-        const endpoint =
-            formData.type === 'individual' ? '/api/v1/generate/individual' :
-                formData.type === 'organization' ? '/api/v1/generate/organization' :
-                    '/api/v1/generate/ip';
-
+        const endpoint = formData.type === 'individual' ? '/api/v1/generate/individual' : formData.type === 'organization' ? '/api/v1/generate/organization' : '/api/v1/generate/ip';
         const payload: any = { seed: formData.seed };
         if (formData.type !== 'organization') {
             payload.gender = formData.gender;
@@ -189,13 +160,8 @@ IpProfile ip = IpProfileGenerator.generate(
             payload.categoryClient = formData.categoryClient;
         }
         payload.region = formData.region;
-        if (formData.type === 'individual') {
-            payload.passportWasExchanged = formData.passportWasExchanged;
-        }
-        if (formData.type === 'organization') {
-            payload.organizationType = formData.organizationType;
-        }
-
+        if (formData.type === 'individual') payload.passportWasExchanged = formData.passportWasExchanged;
+        if (formData.type === 'organization') payload.organizationType = formData.organizationType;
         return `curl -X POST http://localhost:8080${endpoint} \\
   -H "Content-Type: application/json" \\
   -d '${JSON.stringify(payload)}'`;
@@ -223,7 +189,10 @@ IpProfile ip = IpProfileGenerator.generate(
     };
 
     const copyToClipboard = (text: string) => {
-        navigator.clipboard.writeText(text);
+        navigator.clipboard.writeText(text).catch(() => {
+            // Clipboard API недоступен (http://, нет разрешения).
+            // Молча игнорируем — пользователь увидит, что текст не скопировался.
+        });
     };
 
     const getHint = () => {
@@ -238,21 +207,19 @@ IpProfile ip = IpProfileGenerator.generate(
     return (
         <div className="grid lg:grid-cols-12 gap-8">
 
-            {/* ЛЕВАЯ КОЛОНКА: Параметры */}
             <div className="lg:col-span-5 space-y-6">
-                <div className="p-6 rounded-2xl border" style={{ borderColor: 'var(--border-color)', backgroundColor: 'var(--card-bg)' }}>
+                <div className="p-6 rounded-2xl border border-line bg-surface-2">
                     <div className="flex justify-between items-center mb-6">
-                        <h2 className="text-xl font-semibold">Параметры</h2>
+                        <h2 className="text-xl font-semibold text-fg">Параметры</h2>
                         <span className="px-2 py-1 bg-accent/10 text-accent border border-accent/20 rounded text-[10px] font-mono">
-              MOCK MODE
-            </span>
+                            MOCK-РЕЖИМ
+                        </span>
                     </div>
 
                     <div className="space-y-4">
-
                         <div>
-                            <label className="block text-xs font-mono text-[var(--text-muted)] uppercase mb-2">Тип субъекта</label>
-                            <select name="type" value={formData.type} onChange={handleChange} className="w-full bg-[#0c0c0e] border border-white/10 rounded-lg p-3 text-sm font-mono text-white focus:border-accent outline-none">
+                            <label className="block text-xs font-mono text-fg-muted uppercase mb-2">Тип субъекта</label>
+                            <select name="type" value={formData.type} onChange={handleChange} className="w-full bg-surface-0 border border-line rounded-lg p-3 text-sm font-mono text-fg focus:border-accent outline-none">
                                 <option value="individual">Физлицо (IndividualProfile)</option>
                                 <option value="ip">ИП (IpProfile)</option>
                                 <option value="organization">Юрлицо (OrganizationProfile)</option>
@@ -261,18 +228,18 @@ IpProfile ip = IpProfileGenerator.generate(
 
                         <div className="grid grid-cols-2 gap-4">
                             <div>
-                                <label className="block text-xs font-mono text-[var(--text-muted)] uppercase mb-2">Seed</label>
-                                <input type="number" name="seed" value={formData.seed} onChange={handleChange} className="w-full bg-[#0c0c0e] border border-white/10 rounded-lg p-3 text-sm font-mono text-white focus:border-accent outline-none" />
+                                <label className="block text-xs font-mono text-fg-muted uppercase mb-2">Seed</label>
+                                <input type="number" name="seed" value={formData.seed} onChange={handleChange} className="w-full bg-surface-0 border border-line rounded-lg p-3 text-sm font-mono text-fg focus:border-accent outline-none" />
                             </div>
                             {formData.type !== 'organization' ? (
                                 <div>
-                                    <label className="block text-xs font-mono text-[var(--text-muted)] uppercase mb-2">Возраст</label>
-                                    <input type="number" name="age" value={formData.age} onChange={handleChange} className="w-full bg-[#0c0c0e] border border-white/10 rounded-lg p-3 text-sm font-mono text-white focus:border-accent outline-none" />
+                                    <label className="block text-xs font-mono text-fg-muted uppercase mb-2">Возраст</label>
+                                    <input type="number" name="age" value={formData.age} onChange={handleChange} className="w-full bg-surface-0 border border-line rounded-lg p-3 text-sm font-mono text-fg focus:border-accent outline-none" />
                                 </div>
                             ) : (
                                 <div>
-                                    <label className="block text-xs font-mono text-[var(--text-muted)] uppercase mb-2">ОПФ</label>
-                                    <select name="organizationType" value={formData.organizationType} onChange={handleChange} className="w-full bg-[#0c0c0e] border border-white/10 rounded-lg p-3 text-sm font-mono text-white focus:border-accent outline-none">
+                                    <label className="block text-xs font-mono text-fg-muted uppercase mb-2">ОПФ</label>
+                                    <select name="organizationType" value={formData.organizationType} onChange={handleChange} className="w-full bg-surface-0 border border-line rounded-lg p-3 text-sm font-mono text-fg focus:border-accent outline-none">
                                         <option value="LLC">ООО (LLC)</option>
                                         <option value="SE">ГУП (SE)</option>
                                         <option value="ME">МУП (ME)</option>
@@ -288,15 +255,15 @@ IpProfile ip = IpProfileGenerator.generate(
                         {formData.type !== 'organization' && (
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block text-xs font-mono text-[var(--text-muted)] uppercase mb-2">Пол</label>
-                                    <select name="gender" value={formData.gender} onChange={handleChange} className="w-full bg-[#0c0c0e] border border-white/10 rounded-lg p-3 text-sm font-mono text-white focus:border-accent outline-none">
+                                    <label className="block text-xs font-mono text-fg-muted uppercase mb-2">Пол</label>
+                                    <select name="gender" value={formData.gender} onChange={handleChange} className="w-full bg-surface-0 border border-line rounded-lg p-3 text-sm font-mono text-fg focus:border-accent outline-none">
                                         <option value="MALE">MALE</option>
                                         <option value="FEMALE">FEMALE</option>
                                     </select>
                                 </div>
                                 <div>
-                                    <label className="block text-xs font-mono text-[var(--text-muted)] uppercase mb-2">Категория</label>
-                                    <select name="categoryClient" value={formData.categoryClient} onChange={handleChange} className="w-full bg-[#0c0c0e] border border-white/10 rounded-lg p-3 text-sm font-mono text-white focus:border-accent outline-none">
+                                    <label className="block text-xs font-mono text-fg-muted uppercase mb-2">Категория</label>
+                                    <select name="categoryClient" value={formData.categoryClient} onChange={handleChange} className="w-full bg-surface-0 border border-line rounded-lg p-3 text-sm font-mono text-fg focus:border-accent outline-none">
                                         <option value="КЛИЕНТ">КЛИЕНТ</option>
                                         <option value="ЗАРПЛАТНИК">ЗАРПЛАТНИК</option>
                                         <option value="ПЕНСИОНЕР">ПЕНСИОНЕР</option>
@@ -306,8 +273,8 @@ IpProfile ip = IpProfileGenerator.generate(
                         )}
 
                         <div>
-                            <label className="block text-xs font-mono text-[var(--text-muted)] uppercase mb-2">Регион</label>
-                            <select name="region" value={formData.region} onChange={handleChange} className="w-full bg-[#0c0c0e] border border-white/10 rounded-lg p-3 text-sm font-mono text-white focus:border-accent outline-none">
+                            <label className="block text-xs font-mono text-fg-muted uppercase mb-2">Регион</label>
+                            <select name="region" value={formData.region} onChange={handleChange} className="w-full bg-surface-0 border border-line rounded-lg p-3 text-sm font-mono text-fg focus:border-accent outline-none">
                                 <option value="MOSCOW">Москва (77)</option>
                                 <option value="SPB">Санкт-Петербург (78)</option>
                                 <option value="SVERDLOVSK">Свердловская (66)</option>
@@ -315,13 +282,13 @@ IpProfile ip = IpProfileGenerator.generate(
                         </div>
 
                         {formData.type === 'individual' && (
-                            <label className="flex items-center gap-3 p-3 rounded-lg border border-white/5 bg-white/5 cursor-pointer hover:bg-white/10 transition">
+                            <label className="flex items-center gap-3 p-3 rounded-lg border border-line bg-surface-0 cursor-pointer hover:opacity-80 transition">
                                 <input type="checkbox" name="passportWasExchanged" checked={formData.passportWasExchanged} onChange={handleChange} className="accent-accent w-4 h-4" />
-                                <span className="text-sm text-[var(--text-muted)]">Паспорт менялся (age ≥ 20)</span>
+                                <span className="text-sm text-fg">Паспорт менялся (age ≥ 20)</span>
                             </label>
                         )}
 
-                        <button onClick={handleGenerate} disabled={isGenerating} className="w-full mt-4 bg-accent hover:bg-accent-light disabled:opacity-50 text-ink-950 font-semibold py-3 rounded-lg transition-colors flex items-center justify-center gap-2">
+                        <button onClick={handleGenerate} disabled={isGenerating} className="w-full mt-4 bg-accent hover:bg-accent-light disabled:opacity-50 text-accent-fg font-semibold py-3 rounded-lg transition-colors flex items-center justify-center gap-2">
                             {isGenerating ? (
                                 <>
                                     <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
@@ -333,35 +300,30 @@ IpProfile ip = IpProfileGenerator.generate(
                 </div>
             </div>
 
-            {/* ПРАВАЯ КОЛОНКА: Результат */}
             <div className="lg:col-span-7">
-                <div className="rounded-2xl border bg-[#0c0c0e] overflow-hidden flex flex-col h-full" style={{ borderColor: 'var(--border-color)' }}>
-
-                    {/* Табы */}
-                    <div className="flex border-b border-white/10 bg-black/40 px-2 pt-2">
+                <div className="rounded-2xl border border-line bg-code overflow-hidden flex flex-col h-full shadow-lg">
+                    <div className="flex border-b border-line bg-surface-1 px-2 pt-2">
                         {[
-                            { id: 'json', label: 'JSON Response' },
+                            { id: 'json', label: 'JSON' },
                             { id: 'java', label: 'Java' },
                             { id: 'curl', label: 'cURL' },
                             { id: 'cli', label: 'CLI' },
                         ].map(t => (
-                            <button key={t.id} onClick={() => setTab(t.id as OutputTab)} className={`px-4 py-2 text-xs font-mono rounded-t-md transition-colors ${tab === t.id ? 'bg-[#0c0c0e] text-accent border-t border-x border-white/10 -mb-px' : 'text-white/40 hover:text-white'}`}>
+                            <button key={t.id} onClick={() => setTab(t.id as OutputTab)} className={`px-4 py-2 text-xs font-mono rounded-t-md transition-colors ${tab === t.id ? 'bg-code text-accent border-t border-x border-line -mb-px' : 'text-fg-muted hover:text-fg'}`}>
                                 {t.label}
                             </button>
                         ))}
                     </div>
 
-                    {/* Контент */}
-                    <div className="p-5 font-mono text-[13px] leading-relaxed overflow-auto flex-1 relative">
-
+                    <div className="p-5 font-mono text-[13px] leading-relaxed overflow-auto flex-1 relative min-h-[400px]">
                         {result && (
-                            <div className="text-[10px] text-[var(--text-muted)] mb-3 uppercase tracking-wider">
+                            <div className="text-[10px] text-fg-muted mb-3 uppercase tracking-wider">
                                 {getHint()}
                             </div>
                         )}
 
                         {!result ? (
-                            <div className="flex flex-col items-center justify-center h-full min-h-[300px] text-white/20 gap-3">
+                            <div className="flex flex-col items-center justify-center h-full min-h-[300px] text-fg-subtle gap-3">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                                 <span className="text-sm">Нажмите "Сгенерировать"</span>
                             </div>
@@ -371,16 +333,16 @@ IpProfile ip = IpProfileGenerator.generate(
                                     tab === 'json' ? getJson() :
                                         tab === 'java' ? getJavaCode() :
                                             tab === 'curl' ? getCurl() : getCli()
-                                )} className="absolute top-3 right-3 px-2 py-1 bg-white/5 hover:bg-white/10 border border-white/10 rounded text-[10px] text-white/60 transition">
+                                )} className="absolute top-3 right-3 px-2 py-1 bg-surface-2 hover:bg-surface-3 border border-line rounded text-[10px] text-fg-muted transition">
                                     COPY
                                 </button>
 
-                                <pre className="text-[#fafafa]">
-                  {tab === 'json' && getJson()}
+                                <pre className="text-fg">
+                                    {tab === 'json' && getJson()}
                                     {tab === 'java' && getJavaCode()}
                                     {tab === 'curl' && getCurl()}
                                     {tab === 'cli' && getCli()}
-                </pre>
+                                </pre>
                             </>
                         )}
                     </div>

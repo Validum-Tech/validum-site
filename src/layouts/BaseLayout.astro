@@ -22,20 +22,12 @@ const {
   <title>{title} | Validum</title>
   <meta name="description" content={description} />
   <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <script is:inline>
-    // Скрипт для предотвращения мигания темы при загрузке
-    const theme = localStorage.getItem('validum-theme');
-    if (theme === 'light') {
-      document.documentElement.classList.remove('dark');
-      document.documentElement.classList.add('light');
-    }
-  </script>
 </head>
 <body>
-  <Header />
-  <main>
-    <slot />
-  </main>
-  <Footer />
+<Header />
+<main>
+  <slot />
+</main>
+<Footer />
 </body>
 </html>

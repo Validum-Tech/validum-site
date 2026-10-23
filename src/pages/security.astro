@@ -14,31 +14,31 @@ const points = [
 <BaseLayout title="Безопасность">
   <div class="max-w-[1000px] mx-auto px-6 py-16 lg:py-24">
     <div class="mb-16 text-center">
-      <div class="text-xs font-mono text-accent tracking-widest mb-2 uppercase">Security</div>
+      <div class="text-xs font-mono text-accent tracking-widest mb-2 uppercase">Безопасность</div>
       <h1 class="text-4xl sm:text-5xl font-bold tracking-tight mb-4">Безопасность и 152-ФЗ</h1>
-      <p class="text-lg text-[var(--text-muted)] max-w-2xl mx-auto">
+      <p class="text-lg text-fg-muted max-w-2xl mx-auto">
         Страница для банковских юристов, безопасников и compliance-офицеров.
       </p>
     </div>
 
     <div class="grid md:grid-cols-2 gap-5">
       {points.map(p => (
-        <div class="p-6 rounded-2xl border flex gap-5" style="border-color: var(--border-color); background-color: var(--card-bg);">
-          <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center text-accent">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" set:html={p.icon} />
+          <div class="p-6 rounded-2xl border border-line bg-surface-2 flex gap-5">
+            <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center text-accent">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" set:html={p.icon} />
+            </div>
+            <div>
+              <h3 class="font-semibold text-lg mb-2">{p.title}</h3>
+              <p class="text-sm text-fg-muted leading-relaxed">{p.desc}</p>
+            </div>
           </div>
-          <div>
-            <h3 class="font-semibold text-lg mb-2">{p.title}</h3>
-            <p class="text-sm text-[var(--text-muted)] leading-relaxed">{p.desc}</p>
-          </div>
-        </div>
       ))}
     </div>
 
     <div class="mt-12 p-6 rounded-xl border border-accent/20 bg-accent/5">
       <h3 class="font-semibold mb-2">Нашли уязвимость?</h3>
-      <p class="text-sm text-[var(--text-muted)]">
-        Откройте issue в GitHub с лейблом <code class="text-accent">security</code>.
+      <p class="text-sm text-fg-muted">
+        Откройте issue в GitHub с лейблом <code>security</code>.
         Мы не платим bug bounty, но честно разбираемся и фиксим.
       </p>
     </div>
