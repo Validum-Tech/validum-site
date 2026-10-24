@@ -98,10 +98,10 @@ import TryForm from '../components/TryForm';
           <div class="flex items-center gap-2 mb-4">
             <span class="px-2 py-0.5 bg-accent/10 text-accent border border-accent/20 rounded text-[10px] font-mono uppercase">Java</span>
           </div>
-          <h3 class="font-semibold mb-3">Maven-зависимость</h3>
-          <p class="text-xs text-fg-muted mb-4">Встраивается в JUnit-тесты. Публикация в Maven Central в планах.</p>
+          <h3 class="font-semibold mb-3">Java-библиотека</h3>
+          <p class="text-xs text-fg-muted mb-4">Встраивается в JUnit-тесты. Публикация в Maven Central в планах (P1.1).</p>
           <div class="bg-code p-3 rounded-lg border border-line text-[11px] font-mono text-fg overflow-x-auto">
-            <code>./gradlew :validum-core:publishToMavenLocal<br><br>// Затем в pom.xml:<br>ru.validum:validum-core:0.1.0</code>
+            <code>./gradlew :validum-core:jar<br><br>// jar лежит в:<br>validum-core/build/libs/validum-core-0.1.0-SNAPSHOT.jar<br><br>// Maven Central — в планах (P1.1)</code>
           </div>
         </div>
       </div>

@@ -2,6 +2,7 @@
 const navLinks = [
   { href: '/', label: 'Главная' },
   { href: '/docs', label: 'Документация' },
+  { href: '/architecture', label: 'Архитектура' },
   { href: '/roadmap', label: 'Планы' },
   { href: '/try', label: 'Попробовать' },
   { href: '/security', label: 'Безопасность' },
@@ -25,10 +26,10 @@ const currentPath = Astro.url.pathname;
         </svg>
       </div>
       <span class="font-semibold text-[15px] tracking-tight">Validum</span>
-      <span class="hidden sm:inline text-[11px] font-mono px-1.5 py-0.5 rounded border border-line text-fg-muted">v0.1.0</span>
+      <span class="hidden xl:inline text-[11px] font-mono px-1.5 py-0.5 rounded border border-line text-fg-muted">v0.1.0-SNAPSHOT</span>
     </a>
 
-    <nav class="hidden md:flex items-center gap-6">
+    <nav class="hidden lg:flex items-center gap-4 xl:gap-6">
       {navLinks.map(link => (
           <a
               href={link.href}
@@ -45,7 +46,7 @@ const currentPath = Astro.url.pathname;
     <div class="flex items-center gap-2">
       <a href="https://github.com/Validum-Tech/validum" target="_blank" class="hidden sm:inline text-sm text-fg-muted hover:text-fg transition">GitHub ↗</a>
 
-      <details class="md:hidden relative group">
+      <details class="lg:hidden relative group">
         <summary class="list-none cursor-pointer p-2 -mr-2 text-fg-muted hover:text-fg transition" aria-label="Меню">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-open:hidden">
             <line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/>

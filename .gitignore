@@ -24,3 +24,7 @@ Thumbs.db
 
 # LLM Export
 llm-export-site.md
+
+# Scratch: скриншоты проверок, одноразовые пробники
+.tmp/
+.playwright-mcp/

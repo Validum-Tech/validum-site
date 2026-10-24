@@ -30,6 +30,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
                     <div class="text-xs font-mono text-fg-muted uppercase tracking-widest mt-4 mb-1">Справочник API</div>
                     <a href="#ref-generate" class="py-1.5 text-fg-muted hover:text-accent transition-colors">Генерация</a>
                     <a href="#ref-batch" class="py-1.5 text-fg-muted hover:text-accent transition-colors">Батчи</a>
+                    <a href="#ref-scenarios" class="py-1.5 text-fg-muted hover:text-accent transition-colors">Сценарии</a>
                     <a href="#ref-validate" class="py-1.5 text-fg-muted hover:text-accent transition-colors">Валидация</a>
                     <a href="#ref-cli" class="py-1.5 text-fg-muted hover:text-accent transition-colors">CLI</a>
                     <a href="#ref-java" class="py-1.5 text-fg-muted hover:text-accent transition-colors">Java-библиотека</a>
@@ -64,6 +65,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
                         <nav class="flex flex-col space-y-1 border-l border-line">
                             <a href="#ref-generate" class="doc-link px-4 py-2 text-sm text-fg-muted hover:text-fg border-l-2 border-transparent -ml-[1px] transition-colors">Генерация</a>
                             <a href="#ref-batch" class="doc-link px-4 py-2 text-sm text-fg-muted hover:text-fg border-l-2 border-transparent -ml-[1px] transition-colors">Батчи</a>
+                            <a href="#ref-scenarios" class="doc-link px-4 py-2 text-sm text-fg-muted hover:text-fg border-l-2 border-transparent -ml-[1px] transition-colors">Сценарии</a>
                             <a href="#ref-validate" class="doc-link px-4 py-2 text-sm text-fg-muted hover:text-fg border-l-2 border-transparent -ml-[1px] transition-colors">Валидация</a>
                             <a href="#ref-cli" class="doc-link px-4 py-2 text-sm text-fg-muted hover:text-fg border-l-2 border-transparent -ml-[1px] transition-colors">CLI</a>
                             <a href="#ref-java" class="doc-link px-4 py-2 text-sm text-fg-muted hover:text-fg border-l-2 border-transparent -ml-[1px] transition-colors">Java-библиотека</a>
@@ -77,7 +79,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
                 <div class="mb-16">
                     <div class="text-xs font-mono text-accent tracking-widest mb-2 uppercase">Документация</div>
-                    <h1 class="text-4xl font-bold tracking-tight mb-4">Validum Documentation</h1>
+                    <h1 class="text-4xl font-bold tracking-tight mb-4">Документация Validum</h1>
                     <p class="text-lg text-fg-muted leading-relaxed">
                         Генератор валидных тестовых данных для российских АБС. Self-hosted, zero-dependency core,
                         детерминированные алгоритмы без LLM.
@@ -109,18 +111,19 @@ curl http://localhost:8080/actuator/health</code></pre>
                     </div>
 
                     <h3 class="text-xl font-semibold mb-3">CLI (fat JAR)</h3>
-                    <p class="text-sm text-fg-muted mb-3">Работает offline. Только JDK 21+. ~5 МБ.</p>
+                    <p class="text-sm text-fg-muted mb-3">Работает offline. Только JDK 21+. ~3 МБ.</p>
                     <div class="code-block mb-4">
             <pre><code class="language-bash">./gradlew :validum-cli:shadowJar
 java -jar validum-cli/build/libs/validum.jar --help</code></pre>
                     </div>
 
-                    <h3 class="text-xl font-semibold mb-3">Java-библиотека (Maven)</h3>
+                    <h3 class="text-xl font-semibold mb-3">Java-библиотека</h3>
                     <p class="text-sm text-fg-muted mb-3">
-                        Публикация в Maven Central запланирована (P1.1). Пока — локальная сборка:
+                        Публикация в Maven Central запланирована (P1.1). Пока — локальная сборка модуля:
                     </p>
                     <div class="code-block mb-4">
-                        <pre><code class="language-bash">./gradlew :validum-core:publishToMavenLocal</code></pre>
+                        <pre><code class="language-bash">./gradlew :validum-core:jar
+# артефакт: validum-core/build/libs/validum-core-0.1.0-SNAPSHOT.jar</code></pre>
                     </div>
                 </section>
 
@@ -375,7 +378,7 @@ docker run -d -p 8080:8080 \
                             <tr class="border-t border-line"><td class="p-2 font-mono text-accent">seed</td><td class="p-2 text-fg-muted">long</td><td class="p-2 text-fg-muted">Воспроизводимость</td></tr>
                             <tr class="border-t border-line"><td class="p-2 font-mono text-accent">age</td><td class="p-2 text-fg-muted">int</td><td class="p-2 text-fg-muted">Возраст</td></tr>
                             <tr class="border-t border-line"><td class="p-2 font-mono text-accent">gender</td><td class="p-2 text-fg-muted">enum</td><td class="p-2 text-fg-muted">MALE / FEMALE</td></tr>
-                            <tr class="border-t border-line"><td class="p-2 font-mono text-accent">region</td><td class="p-2 text-fg-muted">enum</td><td class="p-2 text-fg-muted">MOSCOW, SPB, ... (16 регионов)</td></tr>
+                            <tr class="border-t border-line"><td class="p-2 font-mono text-accent">region</td><td class="p-2 text-fg-muted">enum</td><td class="p-2 text-fg-muted">MOSCOW, SPB, MO, KRASNODAR, SVERDLOVSK (5); все 16 — для ЮЛ и батчей</td></tr>
                             <tr class="border-t border-line"><td class="p-2 font-mono text-accent">bik</td><td class="p-2 text-fg-muted">string</td><td class="p-2 text-fg-muted">9 цифр, не найден → 400</td></tr>
                             <tr class="border-t border-line"><td class="p-2 font-mono text-accent">corrupt</td><td class="p-2 text-fg-muted">array</td><td class="p-2 text-fg-muted">INN, SNILS</td></tr>
                             <tr class="border-t border-line"><td class="p-2 font-mono text-accent">residencyCountry</td><td class="p-2 text-fg-muted">string</td><td class="p-2 text-fg-muted">TJ, KZ, UZ, ... (10 стран)</td></tr>
@@ -396,6 +399,28 @@ POST /api/v1/generate/organization/batch
 #   count  1..10000
 #   seed   базовый seed
 #   format json | json-array | csv</code></pre>
+                    </div>
+                </section>
+
+                <section id="ref-scenarios" class="mb-16 scroll-mt-24">
+                    <h2 class="text-2xl font-semibold mb-4">Сценарии — 2 эндпоинта</h2>
+                    <p class="text-fg-muted mb-4">
+                        Готовые профили физлиц: состав полей уже согласован, остаётся подставить seed.
+                    </p>
+                    <div class="code-block mb-4">
+            <pre><code class="language-bash">GET  /api/v1/scenarios
+POST /api/v1/scenarios/&#123;name&#125;?seed=42
+
+# Сценарии:
+#   adult-resident-with-account
+#   adult-resident-without-account
+#   pensioner-male
+#   pensioner-female
+#   salary-client</code></pre>
+                    </div>
+                    <div class="code-block">
+            <pre><code class="language-bash">curl "http://localhost:8080/api/v1/scenarios"
+curl -X POST "http://localhost:8080/api/v1/scenarios/salary-client?seed=42"</code></pre>
                     </div>
                 </section>
 

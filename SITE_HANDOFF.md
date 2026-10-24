@@ -1,7 +1,7 @@
 # 📋 Validum Site — Handoff Document
 
-> **Дата обновления:** 23 октября 2026
-> **Статус:** Сайт запущен на `https://validum.tech`. Лендинг, документация и интерактивный генератор кода (Генератор) готовы. Тёмная тема на дизайн-токенах, переключателя нет by design. Навигация — на русском.
+> **Дата обновления:** 24 октября 2026
+> **Статус:** Сайт запущен на `https://validum.tech`. Лендинг, документация, страница архитектуры и интерактивный генератор кода (Генератор) готовы. Все цифры сверены с репозиторием `Validum-Tech/validum` (24.10.2026). Тёмная тема на дизайн-токенах, переключателя нет by design. Навигация — на русском.
 
 ---
 
@@ -46,7 +46,7 @@ validum-site/
 │   ├── layouts/
 │   │   └── BaseLayout.astro      ← Каркас (html, head, class="dark" статически)
 │   ├── components/
-│   │   ├── Header.astro          ← Шапка с навигацией (6 ссылок, без переключателя темы)
+│   │   ├── Header.astro          ← Шапка с навигацией (7 ссылок, без переключателя темы)
 │   │   ├── Footer.astro          ← Подвал
 │   │   ├── TryForm.tsx           ← React-компонент (Генератор кода/JSON)
 │   │   └── home/
@@ -60,6 +60,7 @@ validum-site/
 │   │   ├── index.astro           ← Сборка всех home-компонентов
 │   │   ├── docs/index.astro      ← Документация (сайдбар + контент)
 │   │   ├── try.astro             ← Страница-обертка для TryForm
+│   │   ├── architecture.astro    ← Архитектура: диаграмма + пояснения
 │   │   ├── roadmap.astro         ← Планы развития
 │   │   ├── changelog.astro       ← История версий
 │   │   └── security.astro        ← Безопасность
@@ -173,6 +174,19 @@ grep -rn "rgba(" src/ --include="*.astro" --include="*.tsx" | grep -v global.css
 - **Уровни:** палитра (`--palette-*`) → семантические токены (`--surface-*`, `--fg-*`, `--accent`, ...) → Tailwind-утилиты через `@theme inline`.
 - **Правило для новых компонентов:** использовать только токен-утилиты. Хочешь новый оттенок — добавляешь токен в `:root`, потом утилиту в `@theme inline`. Не пишешь hex в компоненте.
 
+### 6. Диаграмма архитектуры (`/architecture`)
+
+- **Источник:** `validum-architecture.html` из Archify (чат «Первоначальная настрой и проверка функий»), лежит в `public/diagrams/`.
+- **Перекраска:** блок `:root, [data-theme="dark"]` в HTML заменён на палитру сайта (`--bg: #09090b`, `--panel: #121214`, `--grid: #18181b`, `--panel-border: #27272a`, `--muted: #a1a1aa`, external-заливки `rgba(39,39,42,...)`). Светлая тема артефакта не перекрашивалась.
+- **PNG для страницы:** `public/diagrams/validum-architecture.png` — статичный рендер 2× (2692×1256). Пересобрать после правок HTML:
+  ```bash
+  chromium --headless=new --no-sandbox --disable-gpu --hide-scrollbars \
+    --force-device-scale-factor=2 --window-size=1346,628 \
+    --screenshot=public/diagrams/validum-architecture.png \
+    "http://127.0.0.1:8767/diagrams/validum-architecture.html?embed=1&theme=dark"
+  ```
+- **Почему PNG, а не `<iframe>`:** iframe с `loading="lazy"`/`aspect-ratio` нестабильно считал размер внутри страницы (диаграмма обрезалась). PNG стабилен, интерактив доступен по ссылке (`target="_blank"`).
+
 ---
 
 ## 🚀 Как деплоить (Важно!)
@@ -267,9 +281,10 @@ grep -rn "rgba(" src/ --include="*.astro" --include="*.tsx" | grep -v global.css
 - [x] **Дизайн-система на токенах** (23.10.2026): палитра → семантические токены → утилиты через `@theme inline`. Хардкод цветов вычищен из всех компонентов.
 - [x] **Светлая тема удалена.** Тёмная тема статическая (`class="dark"` на `<html>`). Переключатель убран из `Header.astro`. Сломанный `dark:`-вариант пофикшен через `@custom-variant dark`.
 - [x] **Переименование навигации на русский** (23.10.2026): `Roadmap` → `Планы`, `Try it` → `Попробовать`, `Changelog` → `Изменения`. URL-слаги оставлены английскими. Статусы-бейджи: `Готово/Дальше/План`, `Текущая`. В `TryForm`: `MOCK MODE` → `MOCK-РЕЖИМ`, `JSON Response` → `JSON`.
-- [x] **Хедер расширен до 6 ссылок:** Главная, Документация, Планы, Попробовать, Безопасность, Изменения.
+- [x] **Хедер расширен до 7 ссылок:** Главная, Документация, Архитектура, Планы, Попробовать, Безопасность, Изменения.
 - [x] Главная страница (Hero, Quick Start, Features, Comparison, Security, CTA).
-- [x] Страница документации (все 14 эндпоинтов, CLI, Java).
+- [x] Страница документации (все 16 эндпоинтов, включая 2 сценария, CLI, Java).
+- [x] Страница архитектуры (`/architecture`): диаграмма из чата, перекрашенная под дизайн-токены сайта, + разбор модулей, потоков данных и пайплайна сборки.
 - [x] Страницы Планы, Изменения, Безопасность.
 - [x] Интерактивный Генератор (`/try`) — Mock-генератор JSON и кода на Java/CLI/cURL.
 - [x] Деплой на GitHub Pages + домен `validum.tech`.
@@ -284,7 +299,6 @@ grep -rn "rgba(" src/ --include="*.astro" --include="*.tsx" | grep -v global.css
 ### 📝 Технический долг (не блокирует прод)
 
 - **`TryForm.tsx`:** заменить `any` (`result`, `mock`, `payload`) на union-тип `IndividualProfile | OrganizationProfile | IpProfile`.
-- **`docs/index.astro`:** H1 `Validum Documentation` — английский, при русском eyebrow `Документация`. Кандидат на `Документация Validum`.
 - **`package.json`:** добавить скрипт `"check": "astro check"` и шаг `npm run check` в CI. Ловит тип-ошибки (как `React.ChangeEvent`) до мержа.
 - **`tools/export-site-for-llm.ps1`:** `-Encoding UTF8` по-разному работает в PS 5.1 и PS 7 (BOM). Для детерминизма — `utf8NoBOM` или `[System.IO.File]::ReadAllText` с явным `UTF8Encoding`.
 
