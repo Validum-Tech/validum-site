@@ -36,6 +36,9 @@ export default function TryForm() {
                 const familyStatus = isMinor ? 'SINGLE' : 'MARRIED';
                 const issueAge = isSenior ? 45 : (isExchanged && formData.age >= 20 ? 20 : 14);
                 const regionCode = formData.region === 'MOSCOW' ? '77' : formData.region === 'SPB' ? '78' : '66';
+                const regionCity = formData.region === 'MOSCOW' ? 'Москва' : formData.region === 'SPB' ? 'Санкт-Петербург' : 'Екатеринбург';
+                const regionPostal = formData.region === 'MOSCOW' ? '125009' : formData.region === 'SPB' ? '196247' : '620000';
+                const regionStreet = formData.region === 'MOSCOW' ? 'Тверская' : formData.region === 'SPB' ? 'Невский' : 'Ленина';
                 mock = {
                     fullName: formData.gender === 'MALE' ? "Зайцев Григорий Григорьевич" : "Зайцева Галина Григорьевна",
                     gender: formData.gender,
@@ -54,10 +57,10 @@ export default function TryForm() {
                     inn: "427624447300",
                     snils: "11223344595",
                     registrationAddress: {
-                        postalCode: formData.region === 'MOSCOW' ? "125009" : "196247",
-                        city: formData.region === 'MOSCOW' ? "Москва" : "Санкт-Петербург",
-                        street: "Тверская",
-                        formatted: `${formData.region === 'MOSCOW' ? "125009,Москва г" : "196247,Санкт-Петербург г"},,,,,,Тверская ул,1, ,`
+                        postalCode: regionPostal,
+                        city: regionCity,
+                        street: regionStreet,
+                        formatted: `${regionPostal},${regionCity} г,,,,,,${regionStreet} ул,1, ,`
                     },
                     bank: { bik: "044525225", name: "ПАО Сбербанк" },
                     account: "40817810500000012345",
@@ -80,7 +83,7 @@ export default function TryForm() {
                     okfs: okfs,
                     budget: isBudget ? 'Бюджетная организация' : 'Небюджетная организация',
                     swift: "SABRRUMMXXX",
-                    registrationAddress: { city: formData.region === 'MOSCOW' ? "Москва" : "Санкт-Петербург" },
+                    registrationAddress: { city: formData.region === 'MOSCOW' ? "Москва" : formData.region === 'SPB' ? "Санкт-Петербург" : "Екатеринбург" },
                     email: "client12345@test.ru"
                 };
             } else {
