@@ -1,0 +1,177 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const stats = [
+  { value: '4', label: 'модуля' },
+  { value: '19', label: 'эндпоинтов REST' },
+  { value: '8', label: 'команд CLI' },
+  { value: '721', label: 'тестов' },
+];
+
+const modules = [
+  { name: 'validum-core', note: 'Java 21 · ноль зависимостей' },
+  { name: 'validum-api', note: 'Spring Boot 3.5.7 · :8080' },
+  { name: 'validum-cli', note: 'Picocli · fat-jar ~15 МБ' },
+  { name: 'validum-allure', note: 'JUnit 5 Extension' },
+];
+
+const cards = [
+  {
+    dot: 'bg-accent',
+    title: 'Четыре точки входа',
+    items: [
+      'REST API: <code>/api/v1/generate</code>, <code>/validate</code>, <code>/scenarios</code>, Swagger UI и Actuator',
+      'Java-библиотека: генераторы и валидаторы вызываются напрямую, без Spring',
+      'CLI: fat-jar <code>validum</code> — generate (в т. ч. <code>documents</code>), fill, validate, participants, scenarios, export ED807/ED808, fetch-bik, version',
+      'Allure: <code>@ValidumSeed</code> и <code>@ValidumGenerate</code> кладут профиль в отчёт JSON-вложением',
+    ],
+  },
+  {
+    dot: 'bg-accent-light',
+    title: 'Ядро и каскадные дефолты',
+    items: [
+      '<code>seed</code> + <code>asOf</code> → воспроизводимый профиль ФЛ, ИП или ЮЛ (не зависит от календарной даты)',
+      'Не задано — выводится: возраст 19, ОПФ LLC, КПП по региону, счёт по категории клиента',
+      '8 валидаторов: ИНН, СНИЛС, ОГРН, ОГРНИП, КПП, ОКПО, БИК, счёт по 809-П',
+      'Счета: 12 типов ЦБ (<code>AccountType</code>), контрольный ключ по письму ЦБ № 515 — зависит от БИК подразделения',
+      'ДУЛ: 11 видов документов (СПДУЛ ФНС) с правилами совместимости',
+      'SAME_FOR_ALL: регистрация и проживание совпадают по умолчанию',
+    ],
+  },
+  {
+    dot: 'bg-accent/50',
+    title: 'Данные и справочники',
+    items: [
+      'ED807.xml: 1380 записей ЦБ, фильтр PtType=20 · PSAC · CRSA · ACAC → 370 банков',
+      'Справочник БИК обязателен: <code>VALIDUM_BIK_FILE</code> или <code>data/ED807.xml</code>; без файла — 503 <code>bik_source_missing</code>, демо-набора нет',
+      'ОКВЭД-2: 3069 кодов (ОК 029-2014) у ЮЛ и ИП — код и наименование; явный код проверяется по справочнику',
+      'Ресурсы: адреса из КЛАДР (90 субъектов, ~125 тыс. населённых пунктов, ~2 млн улиц), 100 + 190 имён, 310 тайных слов, 50 менеджеров',
+      'CSV: UTF-8 с BOM, разделитель «,», CRLF, RFC 4180',
+    ],
+  },
+  {
+    dot: 'bg-accent-dark',
+    title: 'Сборка и поставка',
+    items: [
+      'Gradle 8.14 · Java 21 · 4 модуля · configuration-cache',
+      'CI: ubuntu + Corretto 21, <code>./gradlew build</code>, отчёты тестов в артефактах',
+      '721 тест: 567 core · 80 api · 55 cli · 19 allure',
+      'Docker: multi-stage образ, порт 8080, <code>./data:/app/data:ro</code>',
+    ],
+  },
+];
+---
+
+<BaseLayout title="Архитектура">
+  <div class="max-w-[1200px] mx-auto px-6 py-16 lg:py-24">
+
+    <div class="max-w-3xl mb-12">
+      <div class="text-xs font-mono text-accent tracking-widest mb-2 uppercase">Архитектура</div>
+      <h1 class="text-4xl sm:text-5xl font-bold tracking-tight mb-4">Как устроен Validum</h1>
+      <p class="text-lg text-fg-muted leading-relaxed">
+        Четыре модуля, одно ядро без зависимостей и три входа: REST, CLI и Java-библиотека.
+        Слева — QA и автотесты, справа — генераторы, сценарии, валидаторы и справочник БИК ЦБ.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
+      {stats.map(s => (
+        <div class="p-4 rounded-xl border border-line bg-surface-2 text-center">
+          <div class="text-accent text-2xl font-bold font-mono mb-1">{s.value}</div>
+          <div class="text-[11px] text-fg-muted uppercase tracking-wider">{s.label}</div>
+        </div>
+      ))}
+    </div>
+
+    <div class="group relative rounded-2xl border border-line bg-surface-1 overflow-hidden">
+      <div class="overflow-x-auto">
+        <div class="min-w-[880px] md:min-w-0">
+          <a href="/diagrams/validum-architecture.html?theme=dark" target="_blank" rel="noopener" class="block" title="Открыть интерактивную диаграмму в новой вкладке">
+            <img
+              src="/diagrams/validum-architecture.png"
+              width="2692"
+              height="1256"
+              alt="Диаграмма архитектуры Validum: QA и автотесты через REST API (19 эндпоинтов), CLI (8 команд) и Allure-расширение обращаются к validum-core на Java 21 без зависимостей; ядро использует генераторы профилей ФЛ/ИП/ЮЛ, сценарии ФЛ по seed (9 профилей), документы ДУЛ (11 видов), валидаторы контрольных сумм, счета по письму ЦБ № 515, экспорт CSV/JSON и ED807/ED808, источник БИК на 30 банков и справочник ED807.xml ЦБ РФ на 1380 записей"
+              class="block w-full h-auto"
+              loading="lazy"
+              decoding="async"
+            />
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="mt-4 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-fg-subtle">
+      <a href="/diagrams/validum-architecture.html?theme=dark" class="inline-flex items-center gap-1.5 text-accent hover:text-accent-light transition-colors duration-150">
+        Интерактивная версия с легендой и пояснениями
+        <svg class="size-3.5" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M5 11 11 5M6 5h5v5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </a>
+      <span>Схема отражает реальную структуру репозитория: 4 модуля Gradle, 19 эндпоинтов, 8 команд CLI, 721 тест.</span>
+    </div>
+
+    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-4">
+      <p class="text-xs font-mono text-fg-muted">
+        Диаграмма · 19 эндпоинтов · 8 команд · 4 модуля · 721 тест
+      </p>
+      <div class="flex flex-wrap items-center gap-3">
+        <a href="/diagrams/validum-architecture.html?theme=dark" target="_blank" rel="noopener"
+           class="inline-flex items-center gap-2 text-sm border border-line bg-surface-2 hover:bg-surface-3 px-4 py-2 rounded-lg transition-colors">
+          Полная версия ↗
+        </a>
+        <a href="/docs#ref-generate"
+           class="inline-flex items-center gap-2 text-sm text-accent hover:text-accent-light transition-colors">
+          Справочник API →
+        </a>
+      </div>
+    </div>
+
+    <p class="mt-3 text-xs text-fg-muted leading-relaxed">
+      В полной версии — светлая и тёмная темы, масштаб, экспорт в PNG, SVG и WebM.
+      На узких экранах диаграмму можно прокрутить по горизонтали.
+    </p>
+
+    <div class="h-px w-full bg-line my-12"></div>
+
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+      {modules.map(m => (
+        <div class="p-4 rounded-xl border border-line bg-surface-2">
+          <div class="font-mono text-sm text-fg mb-1">{m.name}</div>
+          <div class="text-xs text-fg-muted">{m.note}</div>
+        </div>
+      ))}
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-5">
+      {cards.map(card => (
+        <div class="p-6 rounded-2xl border border-line bg-surface-2">
+          <div class="flex items-center gap-3 mb-4">
+            <span class={`w-2.5 h-2.5 rounded-full ${card.dot}`}></span>
+            <h2 class="font-semibold text-lg">{card.title}</h2>
+          </div>
+          <ul class="space-y-2 text-sm text-fg-muted leading-relaxed">
+            {card.items.map(item => (
+              <li class="flex gap-2">
+                <span class="text-accent shrink-0">·</span>
+                <span set:html={item}></span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+
+    <div class="mt-12 p-6 rounded-xl border border-accent/20 bg-accent/5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div>
+        <h3 class="font-semibold mb-1">Посмотреть исходники</h3>
+        <p class="text-sm text-fg-muted">Четыре Gradle-модуля, тесты и Dockerfile — в открытом репозитории.</p>
+      </div>
+      <a href="https://github.com/Validum-Tech/validum" target="_blank" rel="noopener"
+         class="inline-flex items-center justify-center gap-2 bg-accent hover:bg-accent-light text-accent-fg font-semibold px-6 py-3 rounded-lg transition-colors shrink-0">
+        GitHub ↗
+      </a>
+    </div>
+
+  </div>
+
+</BaseLayout>

@@ -1,0 +1,53 @@
+---
+// src/components/home/CallToAction.astro
+---
+
+<section class="relative py-28 border-t border-line overflow-hidden">
+  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[600px] h-[400px] bg-accent/10 blur-[100px] rounded-full pointer-events-none"></div>
+
+  <div class="relative max-w-[800px] mx-auto px-6 text-center z-10">
+    <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-surface-0 border-2 border-accent mb-8 shadow-glow-accent-lg">
+      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-accent">
+        <path d="M9 13l3 7 3-7" stroke-width="2.5"/>
+        <path d="M9 13L5 9" /><path d="M7 11L3 7" />
+        <path d="M5 9L5 4L7 4" /><path d="M3 7L3 3L5 3" />
+        <path d="M15 13l4-4" /><path d="M17 11l4-4" />
+        <path d="M19 9L19 4L17 4" /><path d="M21 7L21 3L19 3" />
+        <circle cx="12" cy="13" r="1" fill="currentColor" stroke="none"/>
+      </svg>
+    </div>
+
+    <h2 class="text-4xl sm:text-5xl font-bold tracking-tight mb-6">
+      Готовы ускорить ваши тесты?
+    </h2>
+
+    <p class="text-lg text-fg-muted mb-10 max-w-xl mx-auto">
+      Open-source. Self-hosted. Без регистрации и облачных подписок.
+      Работает в закрытом контуре вашего банка.
+    </p>
+
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
+      <a href="#quickstart" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-accent hover:bg-accent-light text-accent-fg font-semibold px-8 py-4 rounded-lg text-base transition-all shadow-glow-accent-md hover:shadow-glow-accent-lg hover:-translate-y-0.5">
+        Попробовать сейчас
+      </a>
+      <a href="/docs" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 border border-line bg-surface-2 hover:bg-surface-3 px-8 py-4 rounded-lg text-base font-medium transition-colors">
+        Читать документацию
+      </a>
+    </div>
+
+    <div class="flex items-center justify-center gap-6 text-sm font-mono text-fg-muted">
+      <span class="flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-accent"><polyline points="20 6 9 17 4 12"/></svg>
+        Apache 2.0
+      </span>
+      <span class="flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-accent"><polyline points="20 6 9 17 4 12"/></svg>
+        0 зависимостей
+      </span>
+      <span class="flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-accent"><polyline points="20 6 9 17 4 12"/></svg>
+        152-ФЗ
+      </span>
+    </div>
+  </div>
+</section>

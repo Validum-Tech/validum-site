@@ -1,0 +1,118 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import TryForm from '../components/TryForm';
+---
+
+<BaseLayout title="Генератор">
+  <div class="max-w-[1200px] mx-auto px-6 py-16 lg:py-24">
+
+    <div class="mb-12 text-center">
+      <div class="text-xs font-mono text-accent tracking-widest mb-2 uppercase">Генератор</div>
+      <h1 class="text-4xl sm:text-5xl font-bold tracking-tight mb-4">Генератор кода и данных</h1>
+      <p class="text-lg text-fg-muted max-w-2xl mx-auto">
+        Выберите параметры профиля — получите готовый JSON-ответ, Java-код, cURL-команду и CLI-вызов.
+        Используйте это как шпаргалку для ваших автотестов.
+      </p>
+    </div>
+
+    <div class="mb-8 p-4 rounded-xl border border-accent/20 bg-accent/5 flex items-start gap-3">
+      <div class="text-accent flex-shrink-0 mt-0.5">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+      </div>
+      <div>
+        <h3 class="font-semibold text-sm mb-1">Это Mock-режим</h3>
+        <p class="text-sm text-fg-muted">
+          Данные на этой странице генерируются на клиенте для демонстрации структуры.
+          Реальные данные с проверенными контрольными суммами вы получите, запустив Validum локально.
+          Команды для запуска — ниже.
+        </p>
+      </div>
+    </div>
+
+    <TryForm client:load />
+
+    <div class="mt-20">
+      <div class="text-center mb-12">
+        <div class="text-xs font-mono text-accent tracking-widest mb-2 uppercase">Как это работает</div>
+        <h2 class="text-2xl sm:text-3xl font-bold tracking-tight">Как это работает</h2>
+      </div>
+
+      <div class="grid md:grid-cols-4 gap-4">
+        <div class="p-6 rounded-xl border border-line bg-surface-2 text-center">
+          <div class="w-10 h-10 rounded-full bg-accent/10 border border-accent/20 flex items-center justify-center text-accent font-mono font-bold mx-auto mb-4">1</div>
+          <h3 class="font-semibold mb-2">Параметры</h3>
+          <p class="text-sm text-fg-muted">Выбираете тип (ФЛ/ЮЛ/ИП), возраст, регион и другие параметры.</p>
+        </div>
+        <div class="p-6 rounded-xl border border-line bg-surface-2 text-center">
+          <div class="w-10 h-10 rounded-full bg-accent/10 border border-accent/20 flex items-center justify-center text-accent font-mono font-bold mx-auto mb-4">2</div>
+          <h3 class="font-semibold mb-2">Результат</h3>
+          <p class="text-sm text-fg-muted">Получаете 4 вкладки: JSON, Java, cURL и CLI с готовым кодом.</p>
+        </div>
+        <div class="p-6 rounded-xl border border-line bg-surface-2 text-center">
+          <div class="w-10 h-10 rounded-full bg-accent/10 border border-accent/20 flex items-center justify-center text-accent font-mono font-bold mx-auto mb-4">3</div>
+          <h3 class="font-semibold mb-2">Копируете</h3>
+          <p class="text-sm text-fg-muted">Нажимаете COPY и вставляете код в свой JUnit-тест или скрипт.</p>
+        </div>
+        <div class="p-6 rounded-xl border border-line bg-surface-2 text-center">
+          <div class="w-10 h-10 rounded-full bg-accent/10 border border-accent/20 flex items-center justify-center text-accent font-mono font-bold mx-auto mb-4">4</div>
+          <h3 class="font-semibold mb-2">Запускаете</h3>
+          <p class="text-sm text-fg-muted">Запускаете реальный API локально и получаете настоящие данные.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-20">
+      <div class="text-center mb-12">
+        <div class="text-xs font-mono text-accent tracking-widest mb-2 uppercase">Запуск</div>
+        <h2 class="text-2xl sm:text-3xl font-bold tracking-tight">Как запустить реальный Validum</h2>
+        <p class="text-fg-muted mt-3 max-w-2xl mx-auto">
+          Mock-данные помогают понять структуру, но для реальных тестов нужен локальный Validum.
+          Запускается в 3 способа.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-5">
+        <div class="p-6 rounded-xl border border-line bg-surface-2">
+          <div class="flex items-center gap-2 mb-4">
+            <span class="px-2 py-0.5 bg-accent/10 text-accent border border-accent/20 rounded text-[10px] font-mono uppercase">Docker</span>
+          </div>
+          <h3 class="font-semibold mb-3">Docker-контейнер</h3>
+          <p class="text-xs text-fg-muted mb-4">Не требует JDK на хосте. Изолированная среда.</p>
+          <div class="bg-code p-3 rounded-lg border border-line text-[11px] font-mono text-fg overflow-x-auto">
+            <code>git clone https://github.com/Validum-Tech/validum.git<br>cd validum<br>docker build -f validum-api/Dockerfile -t validum-api .<br>docker run -d -p 8080:8080 validum-api</code>
+          </div>
+        </div>
+
+        <div class="p-6 rounded-xl border border-line bg-surface-2">
+          <div class="flex items-center gap-2 mb-4">
+            <span class="px-2 py-0.5 bg-accent/10 text-accent border border-accent/20 rounded text-[10px] font-mono uppercase">CLI</span>
+          </div>
+          <h3 class="font-semibold mb-3">Fat JAR</h3>
+          <p class="text-xs text-fg-muted mb-4">Работает offline. Только JDK 21+. Не требует API.</p>
+          <div class="bg-code p-3 rounded-lg border border-line text-[11px] font-mono text-fg overflow-x-auto">
+            <code>./gradlew :validum-cli:shadowJar<br>java -jar validum-cli/build/libs/validum.jar \<br>&nbsp;&nbsp;generate individual --seed 42</code>
+          </div>
+        </div>
+
+        <div class="p-6 rounded-xl border border-line bg-surface-2">
+          <div class="flex items-center gap-2 mb-4">
+            <span class="px-2 py-0.5 bg-accent/10 text-accent border border-accent/20 rounded text-[10px] font-mono uppercase">Java</span>
+          </div>
+          <h3 class="font-semibold mb-3">Java-библиотека</h3>
+          <p class="text-xs text-fg-muted mb-4">Встраивается в JUnit-тесты. Публикация в Maven Central в планах (P1.1).</p>
+          <div class="bg-code p-3 rounded-lg border border-line text-[11px] font-mono text-fg overflow-x-auto">
+            <code>./gradlew :validum-core:jar<br><br>// jar лежит в:<br>validum-core/build/libs/validum-core-0.1.0-SNAPSHOT.jar<br><br>// Maven Central — в планах (P1.1)</code>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-20 text-center">
+      <a href="/docs" class="inline-flex items-center gap-2 bg-accent hover:bg-accent-light text-accent-fg font-semibold px-6 py-3 rounded-lg transition-all">
+        Полная документация
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+      </a>
+    </div>
+
+  </div>
+</BaseLayout>

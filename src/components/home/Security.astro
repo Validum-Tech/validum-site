@@ -1,0 +1,57 @@
+---
+// src/components/home/Security.astro
+---
+
+<section class="relative py-24 border-t border-line">
+  <div class="max-w-[1200px] mx-auto px-6">
+    <div class="mb-16 text-center">
+      <div class="text-xs font-mono text-accent tracking-widest mb-3 uppercase">04 / Безопасность</div>
+      <h2 class="text-3xl sm:text-4xl font-bold tracking-tight mb-4">Для банковского контура</h2>
+      <p class="text-fg-muted max-w-2xl mx-auto">
+        Сделано так, чтобы пройти review у безопасников и юристов.
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-5">
+      <div class="p-6 rounded-2xl border border-line bg-surface-2 flex gap-5">
+        <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center text-accent">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+        </div>
+        <div>
+          <h3 class="font-semibold text-lg mb-2">Self-hosted</h3>
+          <p class="text-sm text-fg-muted leading-relaxed">Работает внутри периметра. После сборки Docker-образа интернет не требуется. Никаких outbound-вызовов.</p>
+        </div>
+      </div>
+
+      <div class="p-6 rounded-2xl border border-line bg-surface-2 flex gap-5">
+        <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center text-accent">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        </div>
+        <div>
+          <h3 class="font-semibold text-lg mb-2">152-ФЗ</h3>
+          <p class="text-sm text-fg-muted leading-relaxed">Все данные синтетические. Не содержат ПДн. Не требуется согласие субъектов, невозможно деанонимизировать.</p>
+        </div>
+      </div>
+
+      <div class="p-6 rounded-2xl border border-line bg-surface-2 flex gap-5">
+        <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center text-accent">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
+        </div>
+        <div>
+          <h3 class="font-semibold text-lg mb-2">Zero-dependency core</h3>
+          <p class="text-sm text-fg-muted leading-relaxed">Ядро не тянет Spring, Datafaker и другие библиотеки. Только JDK 21. Код аудируется за час.</p>
+        </div>
+      </div>
+
+      <div class="p-6 rounded-2xl border border-line bg-surface-2 flex gap-5">
+        <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center text-accent">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><path d="m9 15 2 2 4-4"/></svg>
+        </div>
+        <div>
+          <h3 class="font-semibold text-lg mb-2">Apache 2.0</h3>
+          <p class="text-sm text-fg-muted leading-relaxed">Разрешает коммерческое использование, модификацию и форк. Внутренний security-review не требует согласований с правообладателем.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

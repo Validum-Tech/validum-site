@@ -1,0 +1,46 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const points = [
+  { icon: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/>', title: "Синтетика. Не ПДн.", desc: "Все ФИО, паспорта, ИНН, СНИЛС математически сгенерированы. Ни один набор не соответствует реальному человеку. 152-ФЗ не применяется." },
+  { icon: '<rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>', title: "Self-hosted", desc: "Работает внутри периметра. После сборки Docker-образа интернет не требуется. Никаких outbound-вызовов из продукта." },
+  { icon: '<path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/>', title: "Zero-dependency core", desc: "Ядро не тянет Spring, Datafaker и другие библиотеки. Только JDK 21. Весь код помещается в несколько пакетов." },
+  { icon: '<path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><path d="m9 15 2 2 4-4"/>', title: "Apache 2.0", desc: "Лицензия разрешает коммерческое использование, модификацию и форк. Внутренний security-review не требует согласований." },
+  { icon: '<path d="M12 2v20"/><path d="m4 12 8-8 8 8"/>', title: "Никаких LLM", desc: "Генерация — детерминированные алгоритмы. Seed → воспроизводимый результат. Никаких OpenAI, никаких HuggingFace." },
+  { icon: '<path d="M3 12a9 9 0 1 0 18 0 9 9 0 0 0-18 0"/><path d="M12 8v4l3 3"/>', title: "Воспроизводимость", desc: "Один и тот же seed даёт один и тот же профиль. Позволяет фиксировать данные в git, воспроизводить баги и проходить аудит." }
+];
+---
+
+<BaseLayout title="Безопасность">
+  <div class="max-w-[1000px] mx-auto px-6 py-16 lg:py-24">
+    <div class="mb-16 text-center">
+      <div class="text-xs font-mono text-accent tracking-widest mb-2 uppercase">Безопасность</div>
+      <h1 class="text-4xl sm:text-5xl font-bold tracking-tight mb-4">Безопасность и 152-ФЗ</h1>
+      <p class="text-lg text-fg-muted max-w-2xl mx-auto">
+        Страница для банковских юристов, безопасников и compliance-офицеров.
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-5">
+      {points.map(p => (
+          <div class="p-6 rounded-2xl border border-line bg-surface-2 flex gap-5">
+            <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center text-accent">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" set:html={p.icon} />
+            </div>
+            <div>
+              <h3 class="font-semibold text-lg mb-2">{p.title}</h3>
+              <p class="text-sm text-fg-muted leading-relaxed">{p.desc}</p>
+            </div>
+          </div>
+      ))}
+    </div>
+
+    <div class="mt-12 p-6 rounded-xl border border-accent/20 bg-accent/5">
+      <h3 class="font-semibold mb-2">Нашли уязвимость?</h3>
+      <p class="text-sm text-fg-muted">
+        Откройте issue в GitHub с лейблом <code>security</code>.
+        Мы не платим bug bounty, но честно разбираемся и фиксим.
+      </p>
+    </div>
+  </div>
+</BaseLayout>

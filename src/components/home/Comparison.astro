@@ -1,0 +1,64 @@
+---
+// src/components/home/Comparison.astro
+const rows = [
+  { criteria: "ИНН / СНИЛС / счёт по 809-П", faker: "✗ Не сходятся", validum: "✓ По алгоритмам ФНС/ПФР/ЦБ" },
+  { criteria: "БИК из справочника ЦБ", faker: "✗ Случайные цифры", validum: "✓ 370 банков из ED807" },
+  { criteria: "Каскады (age → паспорт)", faker: "✗", validum: "✓ Автоматические" },
+  { criteria: "Self-hosted", faker: "⚠ Облако / SaaS", validum: "✓ Docker, без интернета" },
+  { criteria: "152-ФЗ", faker: "⚠ Зависит от данных", validum: "✓ Чистая синтетика" },
+  { criteria: "Zero-dep core", faker: "✗", validum: "✓ Только JDK 21" },
+];
+---
+
+<section class="relative py-24 border-t border-line">
+  <div class="max-w-[1000px] mx-auto px-6">
+    <div class="mb-12 text-center">
+      <div class="text-xs font-mono text-accent tracking-widest mb-3 uppercase">03 / Сравнение</div>
+      <h2 class="text-3xl sm:text-4xl font-bold tracking-tight mb-4">Почему не Faker</h2>
+      <p class="text-fg-muted max-w-2xl mx-auto">
+        Faker и Mockaroo дают «похожие» данные. Validum даёт валидные. Разница — в том, что проходит в АБС.
+      </p>
+    </div>
+
+    <!-- Desktop: таблица (>= md) -->
+    <div class="hidden md:block rounded-2xl border border-line bg-surface-2 overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-sm border-collapse">
+          <thead>
+          <tr class="border-b border-line bg-surface-1">
+            <th class="p-5 font-medium text-fg-muted uppercase tracking-wider text-xs w-1/3">Критерий</th>
+            <th class="p-5 font-medium text-fg-muted uppercase tracking-wider text-xs">Faker / Mockaroo</th>
+            <th class="p-5 font-medium text-accent uppercase tracking-wider text-xs bg-accent/5">Validum</th>
+          </tr>
+          </thead>
+          <tbody>
+          {rows.map((row, i) => (
+              <tr class:list={["border-b border-line transition-colors hover:bg-surface-3", i === rows.length - 1 ? "border-none" : ""]}>
+                <td class="p-5 font-medium">{row.criteria}</td>
+                <td class="p-5 text-danger/80">{row.faker}</td>
+                <td class="p-5 text-accent font-medium bg-accent/5">{row.validum}</td>
+              </tr>
+          ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Mobile: карточки (< md) -->
+    <div class="md:hidden space-y-3">
+      {rows.map(row => (
+          <div class="p-4 rounded-xl border border-line bg-surface-2">
+            <div class="font-medium text-sm mb-3 pb-3 border-b border-line">{row.criteria}</div>
+            <div class="flex items-start gap-2 text-sm text-danger/80 mb-2">
+              <span class="shrink-0 font-mono text-xs mt-0.5">Faker</span>
+              <span class="flex-1">{row.faker}</span>
+            </div>
+            <div class="flex items-start gap-2 text-sm text-accent">
+              <span class="shrink-0 font-mono text-xs mt-0.5 bg-accent/10 px-1.5 rounded">Validum</span>
+              <span class="flex-1 font-medium">{row.validum}</span>
+            </div>
+          </div>
+      ))}
+    </div>
+  </div>
+</section>

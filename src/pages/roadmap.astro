@@ -1,0 +1,60 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const items = [
+  { status: "done", tag: "P0.1 — P0.3", title: "Данные в ресурсах", desc: "ФИО (3.8 млн), адреса из КЛАДР (90 субъектов), email/секретные слова/менеджеры — вынесены из кода." },
+  { status: "done", tag: "P1.2 — P1.4", title: "Batch, Validation API, экспорт", desc: "3 batch-эндпоинта (до 10 000 профилей), 8 валидаторов, CSV / JSON Array." },
+  { status: "done", tag: "P2.2 — P2.3", title: "7 ОПФ + ОКПО/ОГРНИП", desc: "LLC, JSC, PJSC, NCO, FOUNDATION, SE (ГУП), ME (МУП). 8 валидаторов всего." },
+  { status: "done", tag: "P3.1 — P3.3", title: "CLI, Allure, .bik", desc: "Fat JAR на Picocli, JUnit 5 Extension, явный выбор банка. 721 тест." },
+  { status: "done", tag: "P4.1", title: "Импорт CSV (дозаполнение)", desc: "Свой CSV дозаполняется валидными данными: REST /fill, CLI fill, документы в трёх режимах — inline, JSON, split." },
+  { status: "done", tag: "Октябрь", title: "Участники ЦБ, счета по 515, ДУЛ, ED807/ED808", desc: "17 типов участников, 12 типов счетов с ключом по письму ЦБ № 515, 11 видов ДУЛ, 9 сценариев, экспорт XML ЦБ, Docker. 721 тест." },
+  { status: "next", tag: "P1.1", title: "Maven Central", desc: "Публикация ru.validum:validum-core. Домен validum.tech есть, готовим релиз." },
+  { status: "plan", tag: "P2.4", title: "ЮЛ: банк и счёт", desc: "Юридическое лицо получает банк и расчётный счёт — покрытие как у ФЛ и ИП." },
+  { status: "plan", tag: "P2.1 / P3.4", title: "Транзакции и Mock API", desc: "Платёжные поручения, валютные операции, mock-сервер по OpenAPI." },
+  { status: "plan", tag: "Эмулятор ЦБ", title: "Приём ED807/ED808", desc: "Локальный приёмник сообщений ЦБ для сквозных автотестов. Отложен по решению владельца." },
+];
+---
+
+<BaseLayout title="Планы развития">
+  <div class="max-w-[900px] mx-auto px-6 py-16 lg:py-24">
+    <div class="mb-16">
+      <div class="text-xs font-mono text-accent tracking-widest mb-2 uppercase">Дорожная карта</div>
+      <h1 class="text-4xl sm:text-5xl font-bold tracking-tight mb-4">Что сделано, что дальше</h1>
+      <p class="text-lg text-fg-muted">Открытый план развития. Без обещаний «в Q3». Только факты.</p>
+    </div>
+
+    <div class="space-y-3">
+      {items.map(item => (
+          <div class:list={["p-6 rounded-xl border flex items-start gap-4", item.status === 'next' ? 'border-accent/40 bg-accent/5' : 'border-line bg-surface-2']}>
+
+            <div class:list={["w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 border",
+              item.status === 'done' ? 'bg-accent/20 border-accent/40 text-accent' :
+                  item.status === 'next' ? 'bg-accent border-accent text-accent-fg animate-pulse' :
+                      'bg-surface-2 border-line text-fg-muted']}>
+              {item.status === 'done' ? (
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+              ) : item.status === 'next' ? (
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+              ) : (
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              )}
+            </div>
+
+            <div class="flex-1">
+              <div class="flex items-center gap-3 mb-2 flex-wrap">
+              <span class:list={["text-[10px] font-mono px-2 py-0.5 rounded border uppercase tracking-wider",
+                item.status === 'done' ? 'text-accent border-accent/30 bg-accent/10' :
+                    item.status === 'next' ? 'text-accent-fg border-accent bg-accent' :
+                        'text-fg-muted border-line']}>
+                {item.status === 'done' ? 'Готово' : item.status === 'next' ? 'Дальше' : 'План'}
+              </span>
+                <span class="text-xs font-mono text-fg-muted">{item.tag}</span>
+              </div>
+              <h3 class="text-lg font-semibold mb-1">{item.title}</h3>
+              <p class="text-sm text-fg-muted">{item.desc}</p>
+            </div>
+          </div>
+      ))}
+    </div>
+  </div>
+</BaseLayout>

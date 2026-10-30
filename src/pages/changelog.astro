@@ -1,0 +1,41 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="История версий">
+  <div class="max-w-[800px] mx-auto px-6 py-16 lg:py-24">
+    <div class="mb-16">
+      <div class="text-xs font-mono text-accent tracking-widest mb-2 uppercase">Релизы</div>
+      <h1 class="text-4xl sm:text-5xl font-bold tracking-tight mb-4">История версий</h1>
+    </div>
+
+    <div class="border-l-2 border-accent/30 pl-8 space-y-12">
+      <div class="relative">
+        <div class="absolute -left-[41px] top-1 w-5 h-5 rounded-full bg-accent border-4 border-surface-0"></div>
+        <div class="flex items-center gap-4 mb-3 flex-wrap">
+          <h2 class="text-2xl font-bold font-mono">v0.1.0-SNAPSHOT</h2>
+          <span class="px-2 py-0.5 rounded-full bg-accent/10 text-accent text-xs font-mono border border-accent/20">Текущая сборка</span>
+          <span class="text-sm text-fg-muted font-mono">Октябрь 2026</span>
+        </div>
+        <p class="text-fg-muted mb-4">MVP на пути к первому публичному релизу. Apache 2.0. Git-тега пока нет — в Gradle указана версия 0.1.0-SNAPSHOT.</p>
+        <ul class="space-y-2 text-sm text-fg-muted">
+          <li class="flex gap-2"><span class="text-accent">+</span> <code>validum-core</code> — zero-dependency ядро, 18 пакетов</li>
+          <li class="flex gap-2"><span class="text-accent">+</span> <code>validum-api</code> — Spring Boot 3.5.7, 19 эндпоинтов</li>
+          <li class="flex gap-2"><span class="text-accent">+</span> <code>validum-cli</code> — fat JAR ~15 МБ, 8 команд Picocli</li>
+          <li class="flex gap-2"><span class="text-accent">+</span> <code>validum-allure</code> — JUnit 5 Extension</li>
+          <li class="flex gap-2"><span class="text-accent">+</span> 370 банков ЦБ РФ из ED807 (1380 участников, 17 типов PtType)</li>
+          <li class="flex gap-2"><span class="text-accent">+</span> Счета: 12 типов, контрольный ключ по письму ЦБ № 515 (учитывает БИК подразделения)</li>
+          <li class="flex gap-2"><span class="text-accent">+</span> ДУЛ: 11 видов документов (СПДУЛ ФНС) и правила их совместимости</li>
+          <li class="flex gap-2"><span class="text-accent">+</span> 9 КУС-сценариев готовых профилей, экспорт ED807/ED808 (XML ЦБ)</li>
+          <li class="flex gap-2"><span class="text-accent">+</span> CSV: экспорт, дозаполнение своего файла, документы в трёх режимах</li>
+          <li class="flex gap-2"><span class="text-accent">+</span> 7 ОПФ ЮЛ, 3,8 млн ФИО, адреса из КЛАДР (1,99 млн улиц), Docker-образ</li>
+          <li class="flex gap-2"><span class="text-accent">+</span> 8 валидаторов, каскадные дефолты, явный выбор банка</li>
+          <li class="flex gap-2"><span class="text-accent">+</span> ОКВЭД-2: полный справочник (3069 кодов) у ЮЛ и ИП, явный код в REST и CLI</li>
+          <li class="flex gap-2"><span class="text-accent">+</span> Seed-детерминизм: <code>asOf</code> — профиль не зависит от календарной даты</li>
+          <li class="flex gap-2"><span class="text-accent">+</span> Справочник БИК обязателен — демо-набор из 30 банков удалён</li>
+          <li class="flex gap-2"><span class="text-accent">+</span> 721 тест зелёных (567 core · 80 api · 55 cli · 19 allure)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
