@@ -1,0 +1,50 @@
+name: CI
+
+# Проверяем только pull request'ы и ручной запуск.
+# Деплой живёт отдельно, в deploy.yml, и реагирует только на push в main.
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: site-ci-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.23.4'
+          cache: 'npm'
+
+      - name: "Guard: без внутренних файлов"
+        run: |
+          bad=$(git ls-files | grep -E '^(AGENTS\.md|SITE_HANDOFF\.md|docs/internal/)' || true)
+          if [ -n "$bad" ]; then
+            echo "::error::В ветке появились внутренние файлы:"
+            echo "$bad"
+            exit 1
+          fi
+          echo "Ветка чистая."
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Upload dist
+        uses: actions/upload-artifact@v4
+        with:
+          name: site-dist
+          path: dist
+          retention-days: 3
