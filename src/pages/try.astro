@@ -99,9 +99,9 @@ import TryForm from '../components/TryForm';
             <span class="px-2 py-0.5 bg-accent/10 text-accent border border-accent/20 rounded text-[10px] font-mono uppercase">Java</span>
           </div>
           <h3 class="font-semibold mb-3">Java-библиотека</h3>
-          <p class="text-xs text-fg-muted mb-4">Встраивается в JUnit-тесты. Публикация в Maven Central в планах (P1.1).</p>
+          <p class="text-xs text-fg-muted mb-4">Встраивается в JUnit-тесты. Публикуется в Maven Central.</p>
           <div class="bg-code p-3 rounded-lg border border-line text-[11px] font-mono text-fg overflow-x-auto">
-            <code>./gradlew :validum-core:jar<br><br>// jar лежит в:<br>validum-core/build/libs/validum-core-0.1.0-SNAPSHOT.jar<br><br>// Maven Central — в планах (P1.1)</code>
+            <code>testImplementation(&quot;io.github.validum-tech:validum-core:0.2.0&quot;)<br><br>// JUnit 5 Extension для Allure:<br>testImplementation(&quot;io.github.validum-tech:validum-allure:0.2.0&quot;)</code>
           </div>
         </div>
       </div>

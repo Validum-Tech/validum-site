@@ -127,11 +127,11 @@ java -jar validum-cli/build/libs/validum.jar --help</code></pre>
 
                     <h3 class="text-xl font-semibold mb-3">Java-библиотека</h3>
                     <p class="text-sm text-fg-muted mb-3">
-                        Публикация в Maven Central запланирована (P1.1). Пока — локальная сборка модуля:
+                        Публикуется в Maven Central — репозиторий подключать не нужно:
                     </p>
                     <div class="code-block mb-4">
-                        <pre><code class="language-bash">./gradlew :validum-core:jar
-# артефакт: validum-core/build/libs/validum-core-0.1.0-SNAPSHOT.jar</code></pre>
+                        <pre><code class="language-gradle">testImplementation("io.github.validum-tech:validum-core:0.2.0")
+testImplementation("io.github.validum-tech:validum-allure:0.2.0")</code></pre>
                     </div>
                 </section>
 
