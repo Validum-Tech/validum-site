@@ -13,8 +13,29 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <div class="relative">
         <div class="absolute -left-[41px] top-1 w-5 h-5 rounded-full bg-accent border-4 border-surface-0"></div>
         <div class="flex items-center gap-4 mb-3 flex-wrap">
-          <h2 class="text-2xl font-bold font-mono">v0.2.0</h2>
+          <h2 class="text-2xl font-bold font-mono">v0.3.0</h2>
           <span class="px-2 py-0.5 rounded-full bg-accent/10 text-accent text-xs font-mono border border-accent/20">Актуальный релиз</span>
+          <span class="text-sm text-fg-muted font-mono">Ноябрь 2026</span>
+        </div>
+        <p class="text-fg-muted mb-4">Пакет «Данные как в реале»: человек с историей, документы по возрасту и региону, нерезиденты, поиск и проверка набора. Apache 2.0. Артефакты — в <a href="https://github.com/Validum-Tech/validum/releases/tag/v0.3.0" class="text-accent hover:underline">GitHub Releases</a>, библиотеки — в Maven Central.</p>
+        <ul class="space-y-2 text-sm text-fg-muted">
+          <li class="flex gap-2"><span class="text-accent">+</span> Java 17 для <code>core</code>, <code>allure</code> и CLI (проверено сборкой на JDK 17); REST остаётся на 21</li>
+          <li class="flex gap-2"><span class="text-accent">+</span> <code>personId</code> — идентификатор человека в наборе; <code>--index</code> печатает список, <code>describe --person</code> показывает человека</li>
+          <li class="flex gap-2"><span class="text-accent">+</span> <code>--age-range 18-70</code> и <code>--age-distribution realistic</code> — набор без «тысячи девятнадцатилетних»</li>
+          <li class="flex gap-2"><span class="text-accent">+</span> <code>--documents auto</code> — документы выдаются по возрасту, полу и региону</li>
+          <li class="flex gap-2"><span class="text-accent">+</span> Даты документов от даты рождения; «кем выдан» — из региона серии паспорта, код подразделения ей соответствует</li>
+          <li class="flex gap-2"><span class="text-accent">+</span> <code>--residency non-resident --country KZ</code> — гражданин и адрес за рубежом (11 стран), банк и счёт российские</li>
+          <li class="flex gap-2"><span class="text-accent">+</span> <code>--corrupt inn,snils,address</code> — предсказуемо испорченные поля для негативных тестов</li>
+          <li class="flex gap-2"><span class="text-accent">+</span> <code>coverage</code> проверяет согласованность (документ/возраст, регион/выдача, счёт/банк) и печатает распределения</li>
+          <li class="flex gap-2"><span class="text-accent">+</span> <code>csv-semicolon</code>: кодовые поля текстом — ИНН, счёт и индекс больше не превращаются в 5,86E+11</li>
+          <li class="flex gap-2"><span class="text-accent">+</span> <code>validum-allure</code> не навязывает Allure: компилируется против API 2.29, работает и с 2.35</li>
+          <li class="flex gap-2"><span class="text-accent">+</span> 846 тестов зелёных (645 core · 92 cli · 88 api · 21 allure)</li>
+        </ul>
+      </div>
+      <div class="relative">
+        <div class="absolute -left-[41px] top-1 w-5 h-5 rounded-full bg-accent border-4 border-surface-0"></div>
+        <div class="flex items-center gap-4 mb-3 flex-wrap">
+          <h2 class="text-2xl font-bold font-mono">v0.2.0</h2>
           <span class="text-sm text-fg-muted font-mono">Ноябрь 2026</span>
         </div>
         <p class="text-fg-muted mb-4">Пакет «Набор»: воспроизводимость, уникальность и читаемый CSV. Apache 2.0. Артефакты — в <a href="https://github.com/Validum-Tech/validum/releases/tag/v0.2.0" class="text-accent hover:underline">GitHub Releases</a>, библиотеки — в Maven Central.</p>
