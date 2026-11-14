@@ -13,8 +13,22 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <div class="relative">
         <div class="absolute -left-[41px] top-1 w-5 h-5 rounded-full bg-accent border-4 border-surface-0"></div>
         <div class="flex items-center gap-4 mb-3 flex-wrap">
-          <h2 class="text-2xl font-bold font-mono">v0.4.0</h2>
+          <h2 class="text-2xl font-bold font-mono">v0.4.1</h2>
           <span class="px-2 py-0.5 rounded-full bg-accent/10 text-accent text-xs font-mono border border-accent/20">Актуальный релиз</span>
+          <span class="text-sm text-fg-muted font-mono">Ноябрь 2026</span>
+        </div>
+        <p class="text-fg-muted mb-4">Патч к 0.4.0: REST-сервис больше не принимает <code>?fields=</code> молча для JSON-форматов. Библиотеки в Maven Central — <code>validum-core:0.4.1</code> и <code>validum-allure:0.4.1</code>, артефакты — в <a href="https://github.com/Validum-Tech/validum/releases/tag/v0.4.1" class="text-accent hover:underline">GitHub Releases</a>.</p>
+        <ul class="space-y-2 text-sm text-fg-muted">
+          <li class="flex gap-2"><span class="text-accent">~</span> <code>?fields=</code> с <code>format=json|json-array</code> теперь отвечает <code>400 invalid_argument</code> вместо тихого игнорирования</li>
+          <li class="flex gap-2"><span class="text-accent">~</span> Предрелизные смоуки: REST-проверка читает вложенный <code>bank.bik</code>, CI берёт boot-jar, а не <code>-plain.jar</code></li>
+          <li class="flex gap-2"><span class="text-accent">+</span> 873 теста зелёных</li>
+        </ul>
+      </div>
+
+      <div class="relative">
+        <div class="absolute -left-[41px] top-1 w-5 h-5 rounded-full bg-accent border-4 border-surface-0"></div>
+        <div class="flex items-center gap-4 mb-3 flex-wrap">
+          <h2 class="text-2xl font-bold font-mono">v0.4.0</h2>
           <span class="text-sm text-fg-muted font-mono">Ноябрь 2026</span>
         </div>
         <p class="text-fg-muted mb-4">Пакет «Чистые данные и честный контракт»: регионы и почтовые индексы в каждой строке, узкая выдача, честные формулировки проверок, меньше техдолга. Apache 2.0. Артефакты — в <a href="https://github.com/Validum-Tech/validum/releases/tag/v0.4.0" class="text-accent hover:underline">GitHub Releases</a>, библиотеки — в Maven Central.</p>
