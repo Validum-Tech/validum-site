@@ -65,6 +65,23 @@
         --success-surface: rgba(16, 185, 129, 0.08);
         --success-border:  rgba(16, 185, 129, 0.30);
 
+        /* --- Фон страницы: мягкие источники света сверху (без резких пятен) --- */
+        --page-glow-left: radial-gradient(
+            58rem 30rem at 14% -12%,
+            color-mix(in oklab, var(--accent) 9%, transparent),
+            transparent 70%
+        );
+        --page-glow-right: radial-gradient(
+            44rem 26rem at 88% 6%,
+            color-mix(in oklab, var(--accent-light) 6%, transparent),
+            transparent 72%
+        );
+        --page-glow-depth: linear-gradient(
+            180deg,
+            color-mix(in oklab, var(--accent) 4%, var(--surface-0)) 0,
+            var(--surface-0) 34rem
+        );
+
         /* --- Glows --- */
         --glow-accent-sm:  0 0 15px rgba(16, 185, 129, 0.40);
         --glow-accent-md:  0 0 25px rgba(16, 185, 129, 0.30);
@@ -84,6 +101,14 @@
 
     body {
         background-color: var(--surface-0);
+        /* Плавный переход от света сверху к чистому фону — как в первой версии витрины,
+           но в нашей палитре: сияние из акцента, без чужих цветов. */
+        background-image:
+            var(--page-glow-left),
+            var(--page-glow-right),
+            var(--page-glow-depth);
+        background-repeat: no-repeat;
+        background-attachment: fixed;
         color: var(--fg);
         font-family: var(--font-sans);
         -webkit-font-smoothing: antialiased;
