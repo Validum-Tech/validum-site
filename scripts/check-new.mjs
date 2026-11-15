@@ -144,18 +144,19 @@ for (const p of pages) {
 }
 
 // --- 3. Версии -----------------------------------------------------------------
-const versionRe = /\b(0\.\d{1,2}\.\d{1,2})\b/g;
+const versionRe = /\b(v?0\.\d{1,2}\.\d{1,2})\b/g;
 let versionOnHome = false;
 for (const p of pages) {
   for (const m of p.text.matchAll(versionRe)) {
-    const v = m[1];
+    const raw = m[1];
+    const v = raw.replace(/^v/, '');
     const known = v === SITE_VERSION || DEPRECATED_VERSIONS.includes(v);
     if (!known) continue;
     if (v === SITE_VERSION && p.url === '/') versionOnHome = true;
     if (v === SITE_VERSION) continue;
     if (SOFTENER.test(near(p.text, m.index))) continue;
     if (isHistory(p.url)) continue;
-    warns.push(`устаревшая версия ${v} без оговорки: ${p.url}`);
+    warns.push(`устаревшая версия ${raw} без оговорки: ${p.url}`);
   }
 }
 const versionWhere = sourceMode
