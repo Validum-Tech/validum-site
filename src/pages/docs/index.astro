@@ -2,7 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title="Документация">
+<BaseLayout title="Документация" description="Документация Validum: установка, ключевые концепции, CLI, REST API, Allure-расширение и разбор частых ошибок при работе с реквизитами.">
     <div class="max-w-[1200px] mx-auto px-6 py-12 lg:py-20">
         <div class="grid lg:grid-cols-12 gap-12">
 
@@ -233,7 +233,7 @@ testImplementation("io.github.validum-tech:validum-allure:0.5.0")</code></pre>
 
                 <div class="mb-12">
                     <div class="text-xs font-mono text-accent tracking-widest mb-2 uppercase">Гайды</div>
-                    <h1 class="text-3xl font-bold tracking-tight">Практические сценарии</h1>
+                    <h2 class="text-3xl font-bold tracking-tight">Практические сценарии</h2>
                 </div>
 
                 <section id="guide-cascades" class="mb-16 scroll-mt-24">
@@ -410,7 +410,7 @@ docker run -d -p 8080:8080 \
 
                 <div class="mb-12">
                     <div class="text-xs font-mono text-accent tracking-widest mb-2 uppercase">Справочник API</div>
-                    <h1 class="text-3xl font-bold tracking-tight">Полный справочник</h1>
+                    <h2 class="text-3xl font-bold tracking-tight">Полный справочник</h2>
                 </div>
 
                 <section id="ref-generate" class="mb-16 scroll-mt-24">
@@ -748,6 +748,8 @@ AccountValidator.isValid(account, AccountType.CLAC, "044525225"); // письм�
 <script>
     document.querySelectorAll<HTMLPreElement>('pre').forEach(pre => {
         const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.setAttribute('aria-label', 'Скопировать код в буфер обмена');
         btn.className = 'copy-btn absolute top-2 right-2 px-2 py-1 text-xs text-fg-muted bg-surface-2 hover:bg-surface-3 rounded transition opacity-0 group-hover:opacity-100 border border-line';
         btn.innerText = 'Copy';
         btn.addEventListener('click', () => {

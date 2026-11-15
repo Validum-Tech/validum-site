@@ -13,15 +13,15 @@
         <div class="rounded-2xl border border-line bg-surface-2 overflow-hidden">
 
             <div class="flex items-center border-b border-line bg-surface-1 px-2 pt-2">
-                <button class="tab-btn active px-6 py-3 text-sm font-medium rounded-t-lg transition-colors border-b-2 border-accent text-accent bg-surface-0" data-tab="cli">CLI</button>
-                <button class="tab-btn px-6 py-3 text-sm font-medium text-fg-muted hover:text-fg border-b-2 border-transparent transition-colors" data-tab="docker">Docker</button>
-                <button class="tab-btn px-6 py-3 text-sm font-medium text-fg-muted hover:text-fg border-b-2 border-transparent transition-colors" data-tab="rest">REST API</button>
+                <button type="button" class="tab-btn active px-6 py-3 text-sm font-medium rounded-t-lg transition-colors border-b-2 border-accent text-accent bg-surface-0" data-tab="cli">CLI</button>
+                <button type="button" class="tab-btn px-6 py-3 text-sm font-medium text-fg-muted hover:text-fg border-b-2 border-transparent transition-colors" data-tab="docker">Docker</button>
+                <button type="button" class="tab-btn px-6 py-3 text-sm font-medium text-fg-muted hover:text-fg border-b-2 border-transparent transition-colors" data-tab="rest">REST API</button>
             </div>
 
             <div class="p-6 relative">
                 <div class="tab-content block" data-content="cli">
                     <div class="relative group">
-                        <button class="copy-btn absolute top-3 right-3 px-2.5 py-1.5 text-xs font-mono text-fg-muted bg-surface-2 hover:bg-surface-3 rounded transition opacity-0 group-hover:opacity-100 border border-line" data-copy>Copy</button>
+                        <button type="button" class="copy-btn absolute top-3 right-3 px-2.5 py-1.5 text-xs font-mono text-fg-muted bg-surface-2 hover:bg-surface-3 rounded transition opacity-0 group-hover:opacity-100 border border-line" data-copy>Copy</button>
                         <pre class="text-[13px] font-mono text-fg bg-code p-5 rounded-xl border border-line overflow-x-auto leading-relaxed"><code class="language-bash">git clone https://github.com/Validum-Tech/validum.git
 cd validum && ./gradlew :validum-cli:shadowJar
 
@@ -32,7 +32,7 @@ java -jar validum-cli/build/libs/validum.jar \
 
                 <div class="tab-content hidden" data-content="docker">
                     <div class="relative group">
-                        <button class="copy-btn absolute top-3 right-3 px-2.5 py-1.5 text-xs font-mono text-fg-muted bg-surface-2 hover:bg-surface-3 rounded transition opacity-0 group-hover:opacity-100 border border-line" data-copy>Copy</button>
+                        <button type="button" class="copy-btn absolute top-3 right-3 px-2.5 py-1.5 text-xs font-mono text-fg-muted bg-surface-2 hover:bg-surface-3 rounded transition opacity-0 group-hover:opacity-100 border border-line" data-copy>Copy</button>
                         <pre class="text-[13px] font-mono text-fg bg-code p-5 rounded-xl border border-line overflow-x-auto leading-relaxed"><code class="language-bash">git clone https://github.com/Validum-Tech/validum.git
 cd validum
 docker build -f validum-api/Dockerfile -t validum-api .
@@ -42,7 +42,7 @@ docker run -d -p 8080:8080 validum-api</code></pre>
 
                 <div class="tab-content hidden" data-content="rest">
                     <div class="relative group">
-                        <button class="copy-btn absolute top-3 right-3 px-2.5 py-1.5 text-xs font-mono text-fg-muted bg-surface-2 hover:bg-surface-3 rounded transition opacity-0 group-hover:opacity-100 border border-line" data-copy>Copy</button>
+                        <button type="button" class="copy-btn absolute top-3 right-3 px-2.5 py-1.5 text-xs font-mono text-fg-muted bg-surface-2 hover:bg-surface-3 rounded transition opacity-0 group-hover:opacity-100 border border-line" data-copy>Copy</button>
                         <pre class="text-[13px] font-mono text-fg bg-code p-5 rounded-xl border border-line overflow-x-auto leading-relaxed"><code class="language-bash">curl -X POST http://localhost:8080/api/v1/generate/individual \
   -H "Content-Type: application/json" \
   -d '&#123;"seed": 42, "age": 35, "region": "MOSCOW"&#125;'</code></pre>

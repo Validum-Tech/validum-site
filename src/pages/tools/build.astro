@@ -7,6 +7,8 @@ import TryForm from '../../components/TryForm';
   title="Соберите набор"
   description="Конструктор набора Validum: команда CLI под ваши параметры и mock-ответ с кодом для Java, cURL и Allure."
 >
+  <h1 class="sr-only">Соберите набор</h1>
+  <p class="sr-only">Конструктор набора Validum: параметры выборки, команда CLI и mock-ответ с кодом.</p>
   <div class="max-w-[1400px] mx-auto px-4 pt-6 pb-2 flex flex-wrap items-center justify-between gap-4">
     <a href="/tools" class="font-mono text-xs text-fg-muted hover:text-accent transition-colors">← Все инструменты</a>
     <div class="flex gap-1 p-1 rounded-xl border border-line bg-surface-1" id="mode-switcher">
@@ -33,7 +35,7 @@ import TryForm from '../../components/TryForm';
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
         </div>
         <div>
-          <h3 class="font-semibold text-sm mb-1">Это mock-ответ</h3>
+          <h2 class="font-semibold text-sm mb-1">Это mock-ответ</h2>
           <p class="text-sm text-fg-muted">
             Данные считаются на клиенте и показывают структуру и код. Значения с проверенными контрольными
             суммами даёт продукт — команда собирается на вкладке «Команда CLI».
@@ -41,7 +43,7 @@ import TryForm from '../../components/TryForm';
         </div>
       </div>
 
-      <TryForm client:load />
+      <TryForm client:visible />
     </div>
   </section>
 

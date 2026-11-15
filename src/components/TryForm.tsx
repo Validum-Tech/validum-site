@@ -221,8 +221,8 @@ IpProfile ip = IpProfileGenerator.generate(
 
                     <div className="space-y-4">
                         <div>
-                            <label className="block text-xs font-mono text-fg-muted uppercase mb-2">Тип субъекта</label>
-                            <select name="type" value={formData.type} onChange={handleChange} className="w-full bg-surface-0 border border-line rounded-lg p-3 text-sm font-mono text-fg focus:border-accent outline-none">
+                            <label htmlFor="try-type" className="block text-xs font-mono text-fg-muted uppercase mb-2">Тип субъекта</label>
+                            <select id="try-type" name="type" value={formData.type} onChange={handleChange} className="w-full bg-surface-0 border border-line rounded-lg p-3 text-sm font-mono text-fg focus:border-accent">
                                 <option value="individual">Физлицо (IndividualProfile)</option>
                                 <option value="ip">ИП (IpProfile)</option>
                                 <option value="organization">Юрлицо (OrganizationProfile)</option>
@@ -231,18 +231,18 @@ IpProfile ip = IpProfileGenerator.generate(
 
                         <div className="grid grid-cols-2 gap-4">
                             <div>
-                                <label className="block text-xs font-mono text-fg-muted uppercase mb-2">Seed</label>
-                                <input type="number" name="seed" value={formData.seed} onChange={handleChange} className="w-full bg-surface-0 border border-line rounded-lg p-3 text-sm font-mono text-fg focus:border-accent outline-none" />
+                                <label htmlFor="try-seed" className="block text-xs font-mono text-fg-muted uppercase mb-2">Seed</label>
+                                <input id="try-seed" type="number" name="seed" value={formData.seed} onChange={handleChange} className="w-full bg-surface-0 border border-line rounded-lg p-3 text-sm font-mono text-fg focus:border-accent" />
                             </div>
                             {formData.type !== 'organization' ? (
                                 <div>
-                                    <label className="block text-xs font-mono text-fg-muted uppercase mb-2">Возраст</label>
-                                    <input type="number" name="age" value={formData.age} onChange={handleChange} className="w-full bg-surface-0 border border-line rounded-lg p-3 text-sm font-mono text-fg focus:border-accent outline-none" />
+                                    <label htmlFor="try-age" className="block text-xs font-mono text-fg-muted uppercase mb-2">Возраст</label>
+                                    <input id="try-age" type="number" name="age" value={formData.age} onChange={handleChange} className="w-full bg-surface-0 border border-line rounded-lg p-3 text-sm font-mono text-fg focus:border-accent" />
                                 </div>
                             ) : (
                                 <div>
-                                    <label className="block text-xs font-mono text-fg-muted uppercase mb-2">ОПФ</label>
-                                    <select name="organizationType" value={formData.organizationType} onChange={handleChange} className="w-full bg-surface-0 border border-line rounded-lg p-3 text-sm font-mono text-fg focus:border-accent outline-none">
+                                    <label htmlFor="try-opf" className="block text-xs font-mono text-fg-muted uppercase mb-2">ОПФ</label>
+                                    <select id="try-opf" name="organizationType" value={formData.organizationType} onChange={handleChange} className="w-full bg-surface-0 border border-line rounded-lg p-3 text-sm font-mono text-fg focus:border-accent">
                                         <option value="LLC">ООО (LLC)</option>
                                         <option value="SE">ГУП (SE)</option>
                                         <option value="ME">МУП (ME)</option>
@@ -258,15 +258,15 @@ IpProfile ip = IpProfileGenerator.generate(
                         {formData.type !== 'organization' && (
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block text-xs font-mono text-fg-muted uppercase mb-2">Пол</label>
-                                    <select name="gender" value={formData.gender} onChange={handleChange} className="w-full bg-surface-0 border border-line rounded-lg p-3 text-sm font-mono text-fg focus:border-accent outline-none">
+                                    <label htmlFor="try-gender" className="block text-xs font-mono text-fg-muted uppercase mb-2">Пол</label>
+                                    <select id="try-gender" name="gender" value={formData.gender} onChange={handleChange} className="w-full bg-surface-0 border border-line rounded-lg p-3 text-sm font-mono text-fg focus:border-accent">
                                         <option value="MALE">MALE</option>
                                         <option value="FEMALE">FEMALE</option>
                                     </select>
                                 </div>
                                 <div>
-                                    <label className="block text-xs font-mono text-fg-muted uppercase mb-2">Категория</label>
-                                    <select name="categoryClient" value={formData.categoryClient} onChange={handleChange} className="w-full bg-surface-0 border border-line rounded-lg p-3 text-sm font-mono text-fg focus:border-accent outline-none">
+                                    <label htmlFor="try-category" className="block text-xs font-mono text-fg-muted uppercase mb-2">Категория</label>
+                                    <select id="try-category" name="categoryClient" value={formData.categoryClient} onChange={handleChange} className="w-full bg-surface-0 border border-line rounded-lg p-3 text-sm font-mono text-fg focus:border-accent">
                                         <option value="КЛИЕНТ">КЛИЕНТ</option>
                                         <option value="ЗАРПЛАТНИК">ЗАРПЛАТНИК</option>
                                         <option value="ПЕНСИОНЕР">ПЕНСИОНЕР</option>
@@ -276,8 +276,8 @@ IpProfile ip = IpProfileGenerator.generate(
                         )}
 
                         <div>
-                            <label className="block text-xs font-mono text-fg-muted uppercase mb-2">Регион</label>
-                            <select name="region" value={formData.region} onChange={handleChange} className="w-full bg-surface-0 border border-line rounded-lg p-3 text-sm font-mono text-fg focus:border-accent outline-none">
+                            <label htmlFor="try-region" className="block text-xs font-mono text-fg-muted uppercase mb-2">Регион</label>
+                            <select id="try-region" name="region" value={formData.region} onChange={handleChange} className="w-full bg-surface-0 border border-line rounded-lg p-3 text-sm font-mono text-fg focus:border-accent">
                                 <option value="MOSCOW">Москва (77)</option>
                                 <option value="SPB">Санкт-Петербург (78)</option>
                                 <option value="SVERDLOVSK">Свердловская (66)</option>
@@ -291,7 +291,7 @@ IpProfile ip = IpProfileGenerator.generate(
                             </label>
                         )}
 
-                        <button onClick={handleGenerate} disabled={isGenerating} className="w-full mt-4 bg-accent hover:bg-accent-light disabled:opacity-50 text-accent-fg font-semibold py-3 rounded-lg transition-colors flex items-center justify-center gap-2">
+                        <button type="button" onClick={handleGenerate} disabled={isGenerating} className="w-full mt-4 bg-accent hover:bg-accent-light disabled:opacity-50 text-accent-fg font-semibold py-3 rounded-lg transition-colors flex items-center justify-center gap-2">
                             {isGenerating ? (
                                 <>
                                     <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/></svg>
@@ -312,7 +312,7 @@ IpProfile ip = IpProfileGenerator.generate(
                             { id: 'curl', label: 'cURL' },
                             { id: 'cli', label: 'CLI' },
                         ].map(t => (
-                            <button key={t.id} onClick={() => setTab(t.id as OutputTab)} className={`px-4 py-2 text-xs font-mono rounded-t-md transition-colors ${tab === t.id ? 'bg-code text-accent border-t border-x border-line -mb-px' : 'text-fg-muted hover:text-fg'}`}>
+                            <button type="button" key={t.id} onClick={() => setTab(t.id as OutputTab)} className={`px-4 py-2 text-xs font-mono rounded-t-md transition-colors ${tab === t.id ? 'bg-code text-accent border-t border-x border-line -mb-px' : 'text-fg-muted hover:text-fg'}`}>
                                 {t.label}
                             </button>
                         ))}
@@ -332,7 +332,7 @@ IpProfile ip = IpProfileGenerator.generate(
                             </div>
                         ) : (
                             <>
-                                <button onClick={() => copyToClipboard(
+                                <button type="button" onClick={() => copyToClipboard(
                                     tab === 'json' ? getJson() :
                                         tab === 'java' ? getJavaCode() :
                                             tab === 'curl' ? getCurl() : getCli()

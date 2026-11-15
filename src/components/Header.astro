@@ -7,7 +7,8 @@ const navLinks = [
   { href: '/security', label: 'Безопасность' },
   { href: '/changelog', label: 'Изменения' },
 ];
-const currentPath = Astro.url.pathname;
+const currentPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
+const isActive = (href: string) => currentPath === href || currentPath.startsWith(href + '/');
 ---
 
 <header class="sticky top-0 z-50 backdrop-blur-md border-b border-line bg-surface-0/80">
@@ -34,8 +35,9 @@ const currentPath = Astro.url.pathname;
               href={link.href}
               class:list={[
                 "text-sm transition-colors hover:text-accent",
-                currentPath === link.href ? "text-accent" : "text-fg-muted"
+                isActive(link.href) ? "text-accent" : "text-fg-muted"
               ]}
+              aria-current={isActive(link.href) ? 'page' : undefined}
           >
             {link.label}
           </a>
@@ -43,7 +45,7 @@ const currentPath = Astro.url.pathname;
     </nav>
 
     <div class="flex items-center gap-2">
-      <a href="https://github.com/Validum-Tech/validum" target="_blank" class="hidden sm:inline text-sm text-fg-muted hover:text-fg transition">GitHub ↗</a>
+      <a href="https://github.com/Validum-Tech/validum" target="_blank" rel="noopener noreferrer" class="hidden sm:inline text-sm text-fg-muted hover:text-fg transition">GitHub ↗</a>
 
       <details class="lg:hidden relative group">
         <summary class="list-none cursor-pointer p-2 -mr-2 text-fg-muted hover:text-fg transition" aria-label="Меню">
@@ -60,13 +62,14 @@ const currentPath = Astro.url.pathname;
                   href={link.href}
                   class:list={[
                     "text-sm py-2.5 px-3 rounded-md transition-colors",
-                    currentPath === link.href ? "text-accent bg-accent/5 font-medium" : "text-fg-muted hover:text-fg hover:bg-surface-3"
+                    isActive(link.href) ? "text-accent bg-accent/5 font-medium" : "text-fg-muted hover:text-fg hover:bg-surface-3"
                   ]}
+                  aria-current={isActive(link.href) ? 'page' : undefined}
               >
                 {link.label}
               </a>
           ))}
-          <a href="https://github.com/Validum-Tech/validum" target="_blank" class="text-sm py-2.5 px-3 rounded-md text-fg-muted hover:text-fg hover:bg-surface-3 transition-colors border-t border-line mt-1 pt-3">
+          <a href="https://github.com/Validum-Tech/validum" target="_blank" rel="noopener noreferrer" class="text-sm py-2.5 px-3 rounded-md text-fg-muted hover:text-fg hover:bg-surface-3 transition-colors border-t border-line mt-1 pt-3">
             GitHub ↗
           </a>
         </nav>
