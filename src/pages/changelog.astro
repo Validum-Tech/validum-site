@@ -13,8 +13,25 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <div class="relative">
         <div class="absolute -left-[41px] top-1 w-5 h-5 rounded-full bg-accent border-4 border-surface-0"></div>
         <div class="flex items-center gap-4 mb-3 flex-wrap">
-          <h2 class="text-2xl font-bold font-mono">v0.4.1</h2>
+          <h2 class="text-2xl font-bold font-mono">v0.5.0</h2>
           <span class="px-2 py-0.5 rounded-full bg-accent/10 text-accent text-xs font-mono border border-accent/20">Актуальный релиз</span>
+          <span class="text-sm text-fg-muted font-mono">Ноябрь 2026</span>
+        </div>
+        <p class="text-fg-muted mb-4">Пакет «Связанный набор и карты «Мир»»: человек ссылается на работодателя, стенд засевается за один прогон и откатывается одним скриптом. Библиотеки в Maven Central — <code>validum-core:0.5.0</code> и <code>validum-allure:0.5.0</code>, артефакты — в <a href="https://github.com/Validum-Tech/validum/releases/tag/v0.5.0" class="text-accent hover:underline">GitHub Releases</a>.</p>
+        <ul class="space-y-2 text-sm text-fg-muted">
+          <li class="flex gap-2"><span class="text-accent">+</span> Связь «человек → работодатель»: <code>employerOgrn</code> в плоской выдаче и в <code>describe</code></li>
+          <li class="flex gap-2"><span class="text-accent">+</span> Карты «Мир»: <code>--cards N</code>, BIN <code>220000–220499</code>, Луна, срок +2…+5 лет, исходы операций, вторая таблица <code>*-cards.csv</code></li>
+          <li class="flex gap-2"><span class="text-accent">+</span> Набор из нескольких сущностей: <code>type: "set"</code> — организации, люди и ИП за один прогон, связи в <code>*-relations.csv</code></li>
+          <li class="flex gap-2"><span class="text-accent">+</span> Скрипт отката <code>*-teardown.sql</code>: <code>DELETE</code> в обратном порядке загрузки, без DDL</li>
+          <li class="flex gap-2"><span class="text-accent">+</span> <code>--format json-nested</code>: профиль как объект — те же группы, что в REST-DTO</li>
+          <li class="flex gap-2"><span class="text-accent">+</span> 906 тестов зелёных</li>
+        </ul>
+      </div>
+
+      <div class="relative">
+        <div class="absolute -left-[41px] top-1 w-5 h-5 rounded-full bg-accent border-4 border-surface-0"></div>
+        <div class="flex items-center gap-4 mb-3 flex-wrap">
+          <h2 class="text-2xl font-bold font-mono">v0.4.1</h2>
           <span class="text-sm text-fg-muted font-mono">Ноябрь 2026</span>
         </div>
         <p class="text-fg-muted mb-4">Патч к 0.4.0: REST-сервис больше не принимает <code>?fields=</code> молча для JSON-форматов. Библиотеки в Maven Central — <code>validum-core:0.4.1</code> и <code>validum-allure:0.4.1</code>, артефакты — в <a href="https://github.com/Validum-Tech/validum/releases/tag/v0.4.1" class="text-accent hover:underline">GitHub Releases</a>.</p>

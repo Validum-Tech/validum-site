@@ -8,9 +8,9 @@ const items = [
   { status: "done", tag: "P3.1 — P3.3", title: "CLI, Allure, .bik", desc: "Fat JAR на Picocli, JUnit 5 Extension, явный выбор банка. 721 тест." },
   { status: "done", tag: "P4.1", title: "Импорт CSV (дозаполнение)", desc: "Свой CSV дозаполняется валидными данными: REST /fill, CLI fill, документы в трёх режимах — inline, JSON, split." },
   { status: "done", tag: "Октябрь", title: "Участники ЦБ, счета по 515, ДУЛ, ED807/ED808", desc: "17 типов участников, 12 типов счетов с ключом по письму ЦБ № 515, 11 видов ДУЛ, 9 сценариев, экспорт XML ЦБ, Docker. 721 тест." },
-  { status: "next", tag: "P1.1", title: "Maven Central", desc: "Публикация ru.validum:validum-core. Домен validum.tech есть, готовим релиз." },
-  { status: "plan", tag: "P2.4", title: "ЮЛ: банк и счёт", desc: "Юридическое лицо получает банк и расчётный счёт — покрытие как у ФЛ и ИП." },
-  { status: "plan", tag: "P2.1 / P3.4", title: "Транзакции и Mock API", desc: "Платёжные поручения, валютные операции, mock-сервер по OpenAPI." },
+  { status: "done", tag: "P1.1", title: "Maven Central", desc: "Пакеты io.github.validum-tech:validum-core и validum-allure публикуются из CI; текущая версия 0.4.1." },
+  { status: "done", tag: "P2.4", title: "ЮЛ: банк и счёт", desc: "Юридическое лицо получает банк и расчётный счёт — покрытие как у ФЛ и ИП." },
+  { status: "plan", tag: "P3.4", title: "Mock API по OpenAPI", desc: "Mock-сервер для сквозных автотестов. Транзакции (платёжные поручения, ED101/ED210/211) по решению владельца не планируются." },
   { status: "plan", tag: "Эмулятор ЦБ", title: "Приём ED807/ED808", desc: "Локальный приёмник сообщений ЦБ для сквозных автотестов. Отложен по решению владельца." },
 ];
 ---
