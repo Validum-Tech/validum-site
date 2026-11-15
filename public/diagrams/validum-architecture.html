@@ -13894,5 +13894,35 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
   });
 })();
 </script>
+
+<script>
+/* Validum: подсветка модуля из родительской страницы и по ?focus=<id> */
+(function () {
+  function focusNode(id) {
+    if (!id) return;
+    try {
+      if (window.Archify && Archify.focus && typeof Archify.focus.set === 'function') {
+        Archify.focus.set(id, { toggle: false });
+      }
+      var el = document.querySelector('[data-node-id="' + id + '"]');
+      if (el && window.Archify && Archify.view && typeof Archify.view.reveal === 'function') {
+        Archify.view.reveal([id], { includeNeighbors: true, reason: 'radar' });
+      }
+      if (el) {
+        try { el.focus({ preventScroll: true }); } catch (_) {}
+        el.scrollIntoView({ block: 'center', inline: 'center', behavior: 'smooth' });
+      }
+    } catch (_) {}
+  }
+  window.addEventListener('message', function (event) {
+    var data = event.data;
+    if (!data || data.type !== 'validum-diagram-focus') return;
+    focusNode(String(data.id));
+  });
+  window.__validumFocus = focusNode;
+  var focus = new URLSearchParams(location.search).get('focus');
+  if (focus) setTimeout(function () { focusNode(focus); }, 400);
+})();
+</script>
 </body>
 </html>

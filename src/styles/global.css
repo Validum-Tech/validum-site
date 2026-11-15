@@ -133,6 +133,9 @@
         --palette-red-500: #ef4444;
         --palette-red-400: #f87171;
 
+        --palette-amber-500: #f5b544;
+        --palette-amber-400: #fbbf24;
+
         /* --- Semantic surfaces --- */
         --surface-0: var(--palette-ink-950);      /* фон страницы */
         --surface-1: rgba(255, 255, 255, 0.02);   /* подложки (footer, thead) */
@@ -154,6 +157,13 @@
         --accent-light: var(--palette-emerald-400);
         --accent-dark:  var(--palette-emerald-600);
         --accent-fg:    var(--palette-ink-950);   /* текст на accent */
+
+        /* --- Second accent: метрики и статусы «в работе» ---
+           Изумруд остаётся цветом действий и ссылок, янтарь — цифр и пометок состояния. */
+        --metric:         var(--palette-amber-500);
+        --metric-light:   var(--palette-amber-400);
+        --metric-surface: rgba(245, 181, 68, 0.09);
+        --metric-border:  rgba(245, 181, 68, 0.38);
 
         /* --- Status: danger --- */
         --danger:         var(--palette-red-500);
@@ -259,6 +269,10 @@
     --color-line-strong: var(--line-strong);
 
     /* Accent */
+    --color-metric:       var(--metric);
+    --color-metric-light: var(--metric-light);
+    --color-metric-surface: var(--metric-surface);
+    --color-metric-border:  var(--metric-border);
     --color-accent:       var(--accent);
     --color-accent-light: var(--accent-light);
     --color-accent-dark:  var(--accent-dark);

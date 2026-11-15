@@ -78,38 +78,83 @@ const cards = [
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
       {stats.map(s => (
         <div class="p-4 rounded-xl border border-line bg-surface-2 text-center">
-          <div class="text-accent text-2xl font-bold font-mono mb-1">{s.value}</div>
+          <div class="text-metric text-2xl font-bold font-mono mb-1">{s.value}</div>
           <div class="text-[11px] text-fg-muted uppercase tracking-wider">{s.label}</div>
         </div>
       ))}
     </div>
 
-    <div class="group relative rounded-2xl border border-line bg-surface-1 overflow-hidden">
-      <div class="overflow-x-auto">
-        <div class="min-w-[880px] md:min-w-0">
-          <a href="/diagrams/validum-architecture.html?theme=dark" class="block" title="Открыть интерактивную диаграмму">
-            <img
-              src="/diagrams/validum-architecture.png"
-              width="2692"
-              height="1256"
-              alt="Диаграмма архитектуры Validum: QA и автотесты через REST API (19 эндпоинтов), CLI (10 команд) и Allure-расширение обращаются к validum-core на Java 21 без зависимостей; ядро использует генераторы профилей ФЛ/ИП/ЮЛ, сценарии ФЛ по seed (9 профилей), документы ДУЛ (11 видов), валидаторы контрольных сумм, счета по письму ЦБ № 515, экспорт CSV/JSON и ED807/ED808, справочник ED807.xml ЦБ РФ (около 1,4 тыс. записей; файл обязателен — встроенного демо-набора нет)"
-              class="block w-full h-auto"
-              loading="lazy"
-              decoding="async"
-            />
-          </a>
-        </div>
-      </div>
+    <div class="mb-4 flex flex-wrap items-center gap-2" id="diagram-chips">
+      <span class="mr-1 font-mono text-[10px] uppercase tracking-[0.14em] text-fg-subtle">Подсветить модуль:</span>
+      {[
+        ['qa', 'QA и автотесты'],
+        ['api', 'REST API'],
+        ['cli', 'CLI'],
+        ['allure', 'Allure'],
+        ['core', 'validum-core'],
+        ['gen', 'Генераторы'],
+        ['scen', 'Сценарии'],
+        ['val', 'Валидаторы'],
+        ['export', 'Экспорт'],
+        ['bank', 'Источник БИК'],
+        ['ed807', 'ED807.xml'],
+        ['res', 'Ресурсы'],
+      ].map(([id, label]) => (
+        <button
+          type="button"
+          data-focus={id}
+          class="rounded-lg border border-line bg-surface-2 px-3 py-1.5 font-mono text-[11px] text-fg-muted transition-colors hover:border-metric/50 hover:text-metric aria-pressed:border-metric/60 aria-pressed:text-metric"
+        >{label}</button>
+      ))}
+      <button
+        type="button"
+        data-focus=""
+        class="rounded-lg border border-line bg-surface-2 px-3 py-1.5 font-mono text-[11px] text-fg-subtle transition-colors hover:border-accent/50 hover:text-accent"
+      >Сбросить</button>
     </div>
+
+    <div class="group relative overflow-hidden rounded-2xl border border-line bg-surface-1">
+      <iframe
+        id="diagram-frame"
+        src="/diagrams/validum-architecture.html?theme=dark"
+        title="Интерактивная диаграмма архитектуры Validum"
+        class="block h-[560px] w-full border-0 md:h-[620px]"
+        loading="lazy"
+      ></iframe>
+    </div>
+
     <div class="mt-4 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-fg-subtle">
       <a href="/diagrams/validum-architecture.html?theme=dark" class="inline-flex items-center gap-1.5 text-accent hover:text-accent-light transition-colors duration-150">
-        Интерактивная версия с легендой и пояснениями
+        Открыть диаграмму на весь экран
         <svg class="size-3.5" viewBox="0 0 16 16" fill="none" aria-hidden="true">
           <path d="M5 11 11 5M6 5h5v5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
       </a>
-      <span>Схема отражает реальную структуру репозитория: 4 модуля Gradle, 19 эндпоинтов, 10 команд CLI, 906 тестов.</span>
+      <span>Схема отражает структуру репозитория: 4 модуля Gradle, 19 эндпоинтов, 10 команд CLI, 906 тестов.</span>
     </div>
+
+    <script>
+      (function () {
+        const frame = document.getElementById('diagram-frame') as HTMLIFrameElement | null;
+        const chips = document.querySelectorAll<HTMLButtonElement>('#diagram-chips button[data-focus]');
+        if (!frame) return;
+
+        function send(id: string) {
+          frame.contentWindow?.postMessage({ type: 'validum-diagram-focus', id }, '*');
+          chips.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.focus === id)));
+        }
+
+        chips.forEach((button) => {
+          button.addEventListener('click', () => send(button.dataset.focus ?? ''));
+        });
+
+        // если во фрейме ещё не загрузился скрипт — повторим после load
+        frame.addEventListener('load', () => {
+          const pressed = document.querySelector<HTMLButtonElement>('#diagram-chips button[aria-pressed="true"]');
+          if (pressed?.dataset.focus) send(pressed.dataset.focus);
+        });
+      })();
+    </script>
 
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-4">
       <p class="text-xs font-mono text-fg-muted">

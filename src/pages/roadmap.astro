@@ -25,11 +25,11 @@ const items = [
 
     <div class="space-y-3">
       {items.map(item => (
-          <div class:list={["p-6 rounded-xl border flex items-start gap-4", item.status === 'next' ? 'border-accent/40 bg-accent/5' : 'border-line bg-surface-2']}>
+          <div class:list={["p-6 rounded-xl border flex items-start gap-4", item.status === 'next' ? 'border-metric/45 bg-metric-surface' : 'border-line bg-surface-2']}>
 
             <div class:list={["w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 border",
               item.status === 'done' ? 'bg-accent/20 border-accent/40 text-accent' :
-                  item.status === 'next' ? 'bg-accent border-accent text-accent-fg animate-pulse' :
+                  item.status === 'next' ? 'bg-metric border-metric text-surface-0 animate-pulse' :
                       'bg-surface-2 border-line text-fg-muted']}>
               {item.status === 'done' ? (
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
