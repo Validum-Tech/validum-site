@@ -4874,13 +4874,13 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
        Motion appears only for trace-enabled artifacts and has no shortcut;
        Keyboard: T toggles theme, S cycles style, F toggles the stage, E opens export. -->
   <div class="toolbar" role="toolbar" aria-label="Действия с диаграммой">
-    <a data-validum-back="1" href="../" title="Вернуться на сайт Validum" aria-label="Вернуться на сайт Validum"
+    <a data-validum-back="1" href="/architecture" title="Вернуться туда, откуда пришли" aria-label="Вернуться назад"
        style="display:inline-flex;align-items:center;gap:0.375rem;height:2.25rem;padding:0 0.75rem;margin-right:0.375rem;
               border:1px solid var(--panel-border, rgba(148,163,184,0.35));border-radius:0.6875rem;
               background:color-mix(in srgb, var(--panel, #ffffff) 78%, transparent);
               backdrop-filter:blur(12px);color:var(--text-muted, var(--text, #334155));
               font-family:inherit;font-size:0.8125rem;line-height:1;text-decoration:none;white-space:nowrap;
-              box-shadow:0 1px 2px rgba(15,23,42,0.06);transition:color .14s ease, border-color .14s ease;">← На сайт</a>
+              box-shadow:0 1px 2px rgba(15,23,42,0.06);transition:color .14s ease, border-color .14s ease;">← Назад</a>
     <div class="toolbar-group">
     <button id="btn-theme" type="button"
             title="Переключить тему (T)"
@@ -13861,5 +13861,38 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
       }
     });
   </script>
+<script data-validum-darkonly="1">
+(function () {
+  var root = document.documentElement;
+  // Только тёмная тема: витрина живёт в одной теме, светлая версия — источник расхождений.
+  function lock() {
+    if (root.getAttribute('data-theme') !== 'dark') root.setAttribute('data-theme', 'dark');
+    var btn = document.getElementById('btn-theme');
+    if (btn) btn.style.display = 'none';
+    var light = document.querySelector('[data-format="svg-light"]');
+    if (light && light.closest('[role="menuitem"]')) light.closest('[role="menuitem"]').style.display = 'none';
+    else if (light) light.style.display = 'none';
+  }
+  lock();
+  document.addEventListener('DOMContentLoaded', lock);
+  window.addEventListener('load', function () { lock(); setTimeout(lock, 120); setTimeout(lock, 600); });
+  // Горячая клавиша T больше ничего не переключает.
+  window.addEventListener('keydown', function (e) {
+    if ((e.key === 't' || e.key === 'T') && !/input|textarea|select/i.test((e.target.tagName || ''))) {
+      e.stopPropagation(); e.preventDefault(); lock();
+    }
+  }, true);
+  // «Назад»: возврат на исходную страницу, а не всегда на /architecture.
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('[data-validum-back]');
+    if (!a) return;
+    var ref = document.referrer || '';
+    if (ref && ref.indexOf(location.origin) === 0 && history.length > 1) {
+      e.preventDefault();
+      history.back();
+    }
+  });
+})();
+</script>
 </body>
 </html>

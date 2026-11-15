@@ -1,0 +1,39 @@
+---
+interface Props {
+  src: string;
+  title: string;
+  hint?: string;
+}
+
+const { src, title, hint } = Astro.props;
+---
+
+<div class="max-w-[1400px] mx-auto px-4 pt-6 pb-2 flex items-center justify-between gap-4">
+  <a href="/tools" class="font-mono text-xs text-fg-muted hover:text-accent transition-colors">← Все инструменты</a>
+  {hint && <span class="font-mono text-[10px] uppercase tracking-[0.14em] text-accent">{hint}</span>}
+</div>
+<iframe
+  src={src}
+  title={title}
+  data-tool-frame
+  class="w-full border-0 block"
+  style="min-height: calc(100vh - 4rem)"
+  loading="lazy"
+></iframe>
+
+<script>
+  (function () {
+    function resize(frame: HTMLIFrameElement, height: number) {
+      if (!height || height < 560) return;
+      frame.style.height = Math.round(height + 4) + 'px';
+    }
+
+    window.addEventListener('message', function (event: MessageEvent) {
+      const data = event.data;
+      if (!data || data.type !== 'validum-tool-height') return;
+      document.querySelectorAll<HTMLIFrameElement>('iframe[data-tool-frame]').forEach(function (frame) {
+        if (frame.contentWindow === event.source) resize(frame, Number(data.height));
+      });
+    });
+  })();
+</script>

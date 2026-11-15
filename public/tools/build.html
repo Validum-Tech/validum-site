@@ -1,0 +1,433 @@
+<!doctype html>
+<html lang="ru" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<title>Validum · соберите набор за минуту</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+:root{--surface-0:#09090b;--surface-1:rgba(255,255,255,.02);--surface-2:rgba(255,255,255,.03);
+--fg:#fafafa;--fg-muted:#a1a1aa;--fg-subtle:rgba(255,255,255,.35);--line:rgba(255,255,255,.10);
+--accent:#10b981;--accent-2:#34d399;--red:#ef4444;--amber:#f59e0b;
+--mono:'JetBrains Mono',ui-monospace,monospace;--sans:'Inter',system-ui,sans-serif}
+*{box-sizing:border-box}
+body{margin:0;background:var(--surface-0);color:var(--fg);font-family:var(--sans);font-size:15px;line-height:1.6}
+.wrap{max-width:1240px;margin:0 auto;padding:0 24px}
+header{padding:32px 0 4px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-2);display:flex;gap:10px;align-items:center}
+.tag{border:1px solid rgba(16,185,129,.5);border-radius:6px;padding:1px 7px;font-size:10.5px}
+h1{font-size:32px;line-height:1.15;margin:10px 0 8px;letter-spacing:-.02em}
+.lead{color:var(--fg-muted);max-width:74ch;margin:0}
+.grid{display:grid;grid-template-columns:minmax(0,1.02fr) minmax(0,.98fr);gap:26px;margin:20px 0 0;align-items:start}
+.grid>*{min-width:0}
+.group{border:1px solid var(--line);border-radius:14px;background:var(--surface-1);padding:14px;margin-bottom:12px}
+.group.muted{opacity:.45;pointer-events:none}
+.group h3{margin:0;font-size:14.5px;display:flex;gap:8px;align-items:baseline}
+.group .n{font-family:var(--mono);font-size:11px;color:var(--accent-2)}
+.group p{margin:2px 0 10px;font-size:12.5px;color:var(--fg-muted)}
+.group .na{display:inline-block;margin-left:6px;padding:1px 7px;border:1px solid var(--line);border-radius:999px;font-family:var(--mono);font-size:10.5px;color:var(--fg-subtle)}
+.group.muted{border-style:dashed}
+details.legend{margin:14px 0 0;border:1px solid var(--line);border-radius:12px;background:var(--surface-1);padding:12px 14px}
+details.legend summary{cursor:pointer;font-size:13.5px;color:var(--fg)}
+details.legend dl{margin:10px 0 0;display:grid;grid-template-columns:180px 1fr;gap:6px 14px;font-size:12.5px}
+details.legend dt{font-family:var(--mono);color:var(--accent-2);font-size:11.5px}
+details.legend dd{margin:0;color:var(--fg-muted)}
+@media(max-width:640px){details.legend dl{grid-template-columns:1fr}}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{border:1px solid var(--line);border-radius:10px;background:transparent;color:var(--fg);
+padding:7px 11px;font-family:var(--sans);font-size:13px;cursor:pointer;text-align:left;line-height:1.3;
+transition:border-color .14s ease, color .14s ease, background .14s ease}
+.chip:hover{border-color:rgba(16,185,129,.55);color:var(--fg)}
+.chip:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.chip[aria-pressed="true"]{border-color:rgba(16,185,129,.75);background:rgba(16,185,129,.08);color:var(--fg)}
+.chip[aria-pressed="true"] small{color:var(--accent-2)}
+.chip small{display:block;font-family:var(--mono);font-size:10.5px;color:var(--fg-subtle)}
+.chip:disabled{opacity:.45;cursor:not-allowed}
+.chip:disabled:hover{border-color:var(--line)}
+.chip[aria-pressed=true]{border-color:rgba(16,185,129,.55);background:rgba(16,185,129,.10);color:var(--accent-2)}
+.chip[aria-pressed=true] small{color:rgba(52,211,153,.75)}
+input[type=range]{width:100%;accent-color:var(--accent)}
+input[type=number],input[type=text]{background:#050506;border:1px solid var(--line);border-radius:9px;color:var(--fg);
+font-family:var(--mono);font-size:12.5px;padding:6px 9px;width:96px}
+.rowline{display:flex;gap:12px;align-items:center;font-family:var(--mono);font-size:12px;color:var(--fg-muted);margin-top:8px;flex-wrap:wrap}
+.preview{position:sticky;top:16px}
+.card{border:1px solid var(--line);border-radius:16px;background:var(--surface-1);padding:16px;margin-bottom:12px}
+.card h2{margin:0 0 8px;font-size:15px}
+pre{margin:0;background:#050506;border:1px solid var(--line);border-radius:12px;padding:12px;
+font-family:var(--mono);font-size:12.5px;line-height:1.7;overflow:auto;max-height:260px;color:#d4d4d8}
+pre .k{color:var(--accent-2)} pre .s{color:#fca5a5} pre .n{color:#93c5fd}
+.flat{white-space:nowrap;font-family:var(--mono);font-size:11.5px;color:var(--fg-muted);overflow-x:auto;
+background:#050506;border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+.cmd{display:flex;gap:8px;align-items:stretch}
+.cmd code{flex:1;font-family:var(--mono);font-size:12px;background:#050506;border:1px solid var(--line);
+border-radius:12px;padding:10px 12px;color:var(--accent-2);overflow-x:auto;white-space:nowrap}
+.btn{border:1px solid var(--accent);background:rgba(16,185,129,.12);color:var(--accent-2);border-radius:10px;
+padding:8px 12px;font-size:13px;cursor:pointer;font-family:var(--sans)}
+.warn{border:1px solid rgba(245,158,11,.5);background:rgba(245,158,11,.08);color:#fcd34d;border-radius:10px;
+padding:8px 10px;font-family:var(--mono);font-size:12px;margin-bottom:10px}
+.warn.hide{display:none}
+.next{margin:0;padding-left:18px;font-size:13px;color:var(--fg-muted)}
+.next code{font-family:var(--mono);font-size:12px;color:var(--accent-2)}
+@media(max-width:900px){.grid{grid-template-columns:1fr}.preview{position:static}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Инструменты Validum<span class="tag">конструктор набора</span></div>
+    <h1>Соберите набор за минуту</h1>
+    <p class="lead">Выбирайте опции как в интерфейсе — справа сразу видно, что попадёт в JSON, как это ляжет
+    в плоский CSV и какую команду выполнить. Каждый переключатель — реальная опция CLI, ничего «примерного».</p>
+  </header>
+
+  <div class="grid">
+    <div class="col">
+      <div id="controls"></div>
+    <details class="legend">
+        <summary>Что значит каждая опция — коротко</summary>
+        <dl>
+          <dt>seed</dt><dd>одно число задаёт весь набор: тот же seed + as-of дают байт-в-байт тот же файл.</dd>
+          <dt>count</dt><dd>сколько записей сгенерировать.</dd>
+          <dt>as-of</dt><dd>дата расчёта: от неё считаются возраст, срок паспорта и карты.</dd>
+          <dt>generate individual</dt><dd>профиль физлица: ФИО, паспорт, адреса, счёт, карты.</dd>
+          <dt>--age-range</dt><dd>диапазон возраста, например 18-70.</dd>
+          <dt>--age-distribution</dt><dd>ровный или «как в жизни» (когорты с пенсионерами и детьми).</dd>
+          <dt>--residency / --country</dt><dd>нерезидент получает паспорт своей страны и адрес за рубежом.</dd>
+          <dt>--documents auto</dt><dd>набор документов по возрасту: 14 — паспорт, 18 — права, 18–27 — военный билет.</dd>
+          <dt>--documents-mode split</dt><dd>документы отдельной таблицей, основная таблица уже.</dd>
+          <dt>--cards</dt><dd>сколько карт «Мир» на человека; больше одной — вторая таблица.</dd>
+          <dt>--okved</dt><dd>код ОКВЭД-2 из справочника (только ИП и ЮЛ).</dd>
+          <dt>--format</dt><dd>JSON, массив JSON, CSV, CSV для Excel или вложенный JSON как в REST.</dd>
+          <dt>--corrupt</dt><dd>намеренно испортить одно поле — для негативных проверок.</dd>
+          <dt>--fields short</dt><dd>узкая выдача из 15 колонок вместо 69.</dd>
+          <dt>--unique</dt><dd>каждое значение ровно один раз; требует seed и проверяет ёмкость.</dd>
+        </dl>
+      </details>
+    </div>
+
+    <div class="preview">
+      <div class="card">
+        <h2>Что получится</h2>
+        <div class="warn hide" id="warn"></div>
+        <div id="tags" class="chips" style="margin-bottom:10px"></div>
+        <pre id="json"></pre>
+      </div>
+      <div class="card">
+        <h2>Плоская выдача (CSV)</h2>
+        <div class="flat" id="flat"></div>
+      </div>
+      <div class="card">
+        <h2>Команда</h2>
+        <div class="cmd">
+          <code id="cmd"></code>
+          <button class="btn" id="copy">копировать</button>
+        </div>
+      </div>
+      <div class="card">
+        <h2>Что дальше</h2>
+        <ul class="next" id="next"></ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const state={
+  kind:'individual', seed:42, count:3, gender:'', age:34, ageMode:'uniform', ageRange:'',
+  residency:'resident', country:'KZ', region:'', documents:'auto', documentsMode:'inline',
+  noAccount:false, cards:1, corrupt:'', unique:false, fields:'', format:'json',
+  asOf:'', terrorist:false, blocked:false, okved:'', orgType:'SE', orgName:''
+};
+
+const REGIONS=[['','любой'],['50','Московская'],['77','Москва'],['78','Ленинградская / СПб'],['23','Краснодарский край'],
+  ['16','Татарстан'],['60','Псковская'],['66','Свердловская']];
+const COUNTRIES=[['KZ','Казахстан'],['BY','Беларусь'],['UZ','Узбекистан'],['KG','Киргизия'],['AM','Армения'],['GE','Грузия']];
+const OKVED=[['','любой'],['62.01','разработка ПО'],['64.19','банковские услуги'],['41.20','строительство']];
+
+const GROUPS=[
+ {n:'00',key:'batch',title:'Партия',hint:'seed делает набор воспроизводимым, count — сколько записей, as-of — дата расчёта.',batch:true},
+ {n:'01',key:'kind',title:'Кто это',hint:'Тип сущности задаёт набор полей и проверок.',
+  options:[['individual','Физлицо','generate individual'],['ip','ИП','generate ip'],['organization','Юрлицо','generate organization']]},
+ {n:'02',key:'gender',title:'Пол и возраст',hint:'Возраст влияет на паспортные рубежи, права и военный билет.',only:['individual','ip'],
+  options:[['','любой',''],['MALE','мужской','--gender MALE'],['FEMALE','женский','--gender FEMALE']],
+  range:true},
+ {n:'03',key:'residency',title:'Резидентство и регион',hint:'Нерезидент получает паспорт страны и адрес за рубежом.',only:['individual','ip'],
+  options:[['resident','резидент РФ','--residency resident'],['nonresident-kz','нерезидент · KZ','--country KZ'],['nonresident-by','нерезидент · BY','--country BY']],
+  region:true},
+ {n:'04',key:'documents',title:'Документы',hint:'Автонабор зависит от возраста: 14 — паспорт, 18 — права.',only:['individual'],
+  options:[['','без документов',''],['auto','авто по возрасту','--documents auto'],['split','отдельной таблицей','--documents-mode split']]},
+ {n:'05',key:'cards',title:'Карты «Мир»',hint:'BIN 220000–220499, Луна, исход операции.',only:['individual'],
+  options:[['1','1 карта','--cards 1'],['3','3 карты','--cards 3 → *-cards.csv']]},
+ {n:'06',key:'okved',title:'ОКВЭД',hint:'Код из справочника ОКВЭД-2 (3 069 позиций).',only:['ip','organization'],
+  options:OKVED.map(([v,t])=>[v,t,v?('--okved '+v):''])},
+ {n:'07',key:'format',title:'Формат выдачи',hint:'CSV для машин, csv-semicolon — для Excel, json-nested — как в REST.',only:['individual','ip','organization'],
+  options:[['json','JSON','--format json'],['json-array','JSON-массив','--format json-array'],['csv','CSV машинный','--format csv'],
+           ['csv-semicolon','CSV для Excel','--format csv-semicolon'],['json-nested','вложенный JSON','--format json-nested']]},
+ {n:'08',key:'corrupt',title:'Испортить данные',hint:'Ровно одна ошибка в поле — для негативных проверок.',only:['individual'],
+  options:[['','валидные',''],['inn','битый ИНН','--corrupt inn'],['inn,snils','ИНН и СНИЛС','--corrupt inn,snils'],['address','битый адрес','--corrupt address']]},
+ {n:'09',key:'fields',title:'Колонки',hint:'Узкий профиль вместо 69 колонок.',only:['individual','ip','organization'],
+  options:[['','все колонки',''],['short','только нужные','--fields short']]},
+ {n:'10',key:'unique',title:'Уникальность',hint:'Без seed набор невоспроизводим — CLI это не разрешит.',only:['individual','ip','organization'],
+  options:[['false','без уникальности',''],['true','все значения уникальны','--unique']]}
+];
+
+const el=(h)=>{const d=document.createElement('div');d.innerHTML=h.trim();return d.firstChild;};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const pad=n=>String(n).padStart(2,'0');
+
+const TIPS={
+ 'kind|individual':'Физлицо: ФИО, паспорт, адрес, ИНН/СНИЛС, счёт и карты — команда generate individual',
+ 'kind|ip':'ИП: ОГРНИП, ОКВЭД, счёт 40802 — команда generate ip',
+ 'kind|organization':'Юрлицо: ОГРН, КПП, ОКПО, ОКВЭД, счёт 40702 — команда generate organization',
+ 'gender|':'Любой пол — выбирается случайно по seed',
+ 'gender|MALE':'Мужской пол: влияет на военный билет и обращение в ФИО',
+ 'gender|FEMALE':'Женский пол: влияет на девичью фамилию и семейное положение',
+ 'residency|resident':'Резидент РФ: паспорт РФ, адрес из КЛАДР, ИНН/СНИЛС',
+ 'residency|nonresident-kz':'Нерезидент: паспорт Казахстана, адрес в Алматы, счёт в российском банке',
+ 'residency|nonresident-by':'Нерезидент: паспорт Беларуси, адрес в Минске',
+ 'documents|':'Дополнительных документов нет — в выгрузке только паспорт',
+ 'documents|auto':'Набор зависит от возраста: с 14 — паспорт, с 18 — права, 18–27 — военный билет',
+ 'documents|split':'Документы уйдут отдельной таблицей «*-documents.csv», основная станет уже',
+ 'cards|1':'Одна карта «Мир»: BIN 220000–220499, Луна, исход операции',
+ 'cards|3':'Три карты на человека: вторая таблица «*-cards.csv», нужен -o',
+ 'okved|':'ОКВЭД не задан — выберется случайный из справочника',
+ 'okved|62.01':'Разработка ПО — регулярный код для IT-компаний',
+ 'okved|64.19':'Банковские услуги — для кредитных организаций',
+ 'okved|41.20':'Строительство зданий',
+ 'format|json':'Один объект JSON — удобно вставить в ответ API',
+ 'format|json-array':'Массив JSON — для фикстур и bulk-загрузки',
+ 'format|csv':'Машинный CSV: запятая, без BOM, английские заголовки',
+ 'format|csv-semicolon':'CSV для Excel: BOM, «;», русские заголовки, коды текстом',
+ 'format|json-nested':'Вложенный JSON как в REST: passport, addresses, bank, cards',
+ 'corrupt|':'Все значения проходят проверку',
+ 'corrupt|inn':'Одна ошибка: неверная контрольная цифра ИНН',
+ 'corrupt|inn,snils':'Две ошибки: ИНН и СНИЛС',
+ 'corrupt|address':'Пустой индекс и строка адреса без улицы',
+ 'fields|':'Все 69 колонок — полный профиль',
+ 'fields|short':'Только 15 ключевых колонок (--fields short)',
+ 'unique|false':'Значения могут повторяться между записями',
+ 'unique|true':'Каждое значение встречается один раз; НЕ работает без seed'
+};
+
+function allowed(kind){return GROUPS.filter(g=>!g.only||g.only.includes(kind));}
+
+function render(){
+  const host=document.getElementById('controls'); host.innerHTML='';
+  // Показываем ВСЕ группы со сквозной нумерацией: неприменимые — с пометкой «только для ИП и ЮЛ»,
+  // иначе нумерация прыгает и кажется, что часть кнопок сломана.
+  let num=0;
+  GROUPS.forEach(g=>{
+    const applicable=!g.only||g.only.includes(state.kind);
+    const mark=applicable?'':' <span class="na">только для ИП и ЮЛ</span>';
+    const wrap=el('<section class="group'+(applicable?'':' muted')+'"><h3><span class="n">'+pad(num++)+'</span>'+esc(g.title)+'</h3><p>'+esc(g.hint)+mark+'</p><div class="chips"></div></section>');
+    const chips=wrap.querySelector('.chips');
+    (g.options||[]).forEach(([v,label,opt])=>{
+      const active=applicable&&((state[g.key]===v)||(g.key==='residency'&&v.startsWith('nonresident')&&state.residency==='nonresident'&&v.endsWith(state.country)));
+      const tip=TIPS[g.key+'|'+v]||'';
+      const b=el('<button class="chip" aria-pressed="'+active+'"'+(applicable?'':' disabled')+(tip?' title="'+esc(tip)+'"':'')+'>'+esc(label)+(opt?'<small>'+esc(opt)+'</small>':'')+'</button>');
+      b.addEventListener('click',()=>{
+        if(g.key==='residency'){ state.residency=v.startsWith('nonresident')?'nonresident':'resident'; if(v.endsWith('KZ'))state.country='KZ'; if(v.endsWith('BY'))state.country='BY'; }
+        else if(g.key==='unique'){ state.unique=(v==='true'); }
+        else if(g.key==='cards'){ state.cards=+v; }
+        else if(g.key==='documents'){ if(v==='split'){state.documentsMode='split';state.documents='auto';} else {state.documentsMode='inline';state.documents=v;} }
+        else { state[g.key]=v; }
+        render(); update();
+      });
+      chips.appendChild(b);
+    });
+    if(g.batch){
+      const line=el('<div class="rowline">seed <input type="number" id="seedIn" value="'+state.seed+'" min="0" step="1">'+
+        ' записей <input type="number" id="countIn" value="'+state.count+'" min="1" max="10000">'+
+        ' as-of <input type="text" id="asOfIn" value="'+(state.asOf||'')+'" placeholder="2026-01-15" style="width:120px"></div>');
+      line.querySelector('#seedIn').addEventListener('input',e=>{const v=parseInt(e.target.value,10);state.seed=Number.isFinite(v)?v:42;update();});
+      line.querySelector('#countIn').addEventListener('input',e=>{const v=parseInt(e.target.value,10);state.count=Number.isFinite(v)&&v>0?v:1;update();});
+      line.querySelector('#asOfIn').addEventListener('input',e=>{state.asOf=e.target.value.trim();update();});
+      wrap.appendChild(line);
+    }
+    if(g.range){
+      const holder=el('<div class="rowline">возраст <span id="ageVal">'+state.age+'</span> лет</div>');
+      const r=el('<input type="range" min="14" max="90" value="'+state.age+'">');
+      r.addEventListener('input',e=>{state.age=+e.target.value;document.getElementById('ageVal').textContent=state.age;update();});
+      const modes=el('<div class="chips" style="margin-top:8px"></div>');
+      [['uniform','ровный','--age-distribution uniform'],['realistic','как в жизни','--age-distribution realistic']].forEach(([v,l,o])=>{
+        const b=el('<button class="chip" aria-pressed="'+(state.ageMode===v)+'">'+l+'<small>'+o+'</small></button>');
+        b.addEventListener('click',()=>{state.ageMode=v;render();update();});
+        modes.appendChild(b);
+      });
+      holder.appendChild(r); holder.appendChild(modes);
+      wrap.appendChild(holder);
+    }
+    if(g.region){
+      const sel=el('<select id="regionSel" style="margin-top:10px;background:#050506;border:1px solid var(--line);border-radius:9px;color:var(--fg);font-family:var(--mono);font-size:12.5px;padding:7px 9px;width:100%"></select>');
+      REGIONS.forEach(([v,t])=>{const o=document.createElement('option');o.value=v;o.textContent=t;sel.appendChild(o);});
+      sel.value=state.region; sel.addEventListener('change',e=>{state.region=e.target.value;update();});
+      wrap.appendChild(sel);
+    }
+    host.appendChild(wrap);
+  });
+}
+
+function flags(){
+  const f=[];
+  if(state.count!==3) f.push('-n '+state.count);
+  if(state.seed!==42) f.push('--seed '+state.seed);
+  if(state.gender) f.push('--gender '+state.gender);
+  if(state.residency==='nonresident') f.push('--country '+state.country);
+  if(state.region) f.push('--region '+state.region);
+  if(state.kind==='individual'){
+    if(state.documents) f.push('--documents '+state.documents);
+    if(state.documentsMode==='split') f.push('--documents-mode split');
+    if(state.cards>1) f.push('--cards '+state.cards);
+    if(state.noAccount) f.push('--no-account');
+    if(state.corrupt) f.push('--corrupt '+state.corrupt);
+  }
+  if(state.okved) f.push('--okved '+state.okved);
+  if(state.kind==='organization'){ f.push('--type '+state.orgType); if(state.orgName) f.push('--name "'+state.orgName+'"'); }
+  if(state.unique) f.push('--unique');
+  if(state.fields) f.push('--fields '+state.fields);
+  if(state.format!=='json') f.push('--format '+state.format);
+  if(state.terrorist) f.push('--terrorist');
+  if(state.blocked) f.push('--blocked');
+  if(state.asOf) f.push('--as-of '+state.asOf);
+  return f;
+}
+
+function command(){
+  const kind=state.kind;
+  const sub=kind==='individual'?'individual':kind==='ip'?'ip':'organization';
+  const parts=['validum generate '+sub];
+  parts.push(kind==='organization'?'--type '+state.orgType:'--seed '+state.seed);
+  if(kind!=='organization'){
+    if(state.ageMode==='realistic') parts.push('--age-distribution realistic');
+    parts.push('--age '+state.age);
+  }
+  if(kind==='organization') parts.push('--seed '+state.seed);
+  if(kind!=='organization' && state.gender) parts.push('--gender '+state.gender);
+  if(state.count!==3) parts.push('-n '+state.count);
+  if(state.residency==='nonresident' && kind!=='organization') parts.push('--country '+state.country);
+  if(state.region) parts.push('--region '+state.region);
+  if(kind==='individual'){
+    if(state.documents) parts.push('--documents '+state.documents);
+    if(state.documentsMode==='split') parts.push('--documents-mode split');
+    if(state.cards>1) parts.push('--cards '+state.cards);
+    if(state.corrupt) parts.push('--corrupt '+state.corrupt);
+  }
+  if(kind==='organization') parts.push('--bank-bik 044525225');
+  if(state.okved && kind!=='individual') parts.push('--okved '+state.okved);
+  if(state.unique) parts.push('--unique');
+  if(state.fields) parts.push('--fields '+state.fields);
+  const fmt=(state.format==='json-nested'&&kind!=='individual')?'json':state.format;
+  if(fmt!=='json') parts.push('--format '+fmt);
+  if(state.terrorist) parts.push('--terrorist');
+  if(state.blocked) parts.push('--blocked');
+  if(state.asOf) parts.push('--as-of '+state.asOf);
+  if(kind==='individual' && (state.cards>1||state.documentsMode==='split')) parts.push('-o out/set.csv');
+  return parts.join(' ');
+}
+
+function update(){
+  const warn=document.getElementById('warn');
+  const messages=[];
+  if(state.format==='json-nested' && state.kind!=='individual') messages.push('json-nested есть только у generate individual — команда подставит --format json');
+  if(state.kind==='organization' && state.ageMode==='realistic') messages.push('у ЮЛ нет возраста: --age-distribution не применяется');
+  if(state.kind==='individual' && state.cards>1 && !/ -o /.test(command())) messages.push('--cards > 1 без -o: вторая таблица некуда писать (CLI вернёт код 2)');
+  warn.className='warn'+(messages.length?'':' hide');
+  warn.textContent=messages.join(' · ');
+
+  const tags=document.getElementById('tags');
+  const t=[[state.kind==='individual'?'физлицо':state.kind==='ip'?'ИП':'юрлицо',1],
+    [(state.residency==='nonresident'?'нерезидент '+state.country:'резидент РФ'),1],
+    [String(state.age)+' лет',1],[state.unique?'уникальные':'обычные',1],
+    [state.corrupt?'испорчено':'чистые',!state.corrupt],
+    [state.format,'']];
+  tags.innerHTML=t.map(([x,ok])=>`<span class="chip" style="pointer-events:none" aria-pressed="${ok?'true':'false'}">${esc(x)}</span>`).join('');
+
+  const seed=state.seed, person='pd-'+(seed*7919).toString(16).slice(0,6);
+  let obj;
+  if(state.kind==='individual'){
+    obj={personId:person,fullName:state.gender==='FEMALE'?'Петрова Анна Сергеевна':'Иванов Иван Иванович',
+      gender:state.gender||'MALE',birthDate:(2026-state.age)+'-03-14',age:state.age,familyStatus:'Женат/Замужем',
+      inn:state.corrupt.includes('inn')?'779370501281':'779370501280',
+      snils:state.corrupt.includes('snils')?'43826479517':'43826479516',
+      isResident:state.residency==='resident',citizenship:state.residency==='resident'?'RU':state.country,
+      passport:{type:state.residency==='resident'?'RF':'FOREIGN',country:state.residency==='resident'?'RU':state.country,
+        series:state.residency==='resident'?'5012':'71 06',number:'345678',expirationDate:'2026-05-12'},
+      addresses:{registration:{region:state.residency==='resident'?'Московская':'BY',city:state.residency==='resident'?'Истра':'Минск',
+        postalCode:state.corrupt==='address'?'':'143500'}},
+      bank:{bik:'044525225',name:'ПАО СБЕРБАНК',corrAccount:'30101810400000000225'},
+      account:state.noAccount?null:'40817810500009198787',
+      cards:state.cards>0?[{pan:'2201515746164839',expiry:'09/29',outcome:'успех'}]:[],
+      documents:state.documents?['паспорт РФ','права']:[],
+      terrorist:state.terrorist,blocked:state.blocked,asOf:state.asOf||'2026-01-15'};
+  } else if(state.kind==='ip'){
+    obj={personId:person,ogrnip:'304500116000157',iin:'7793705012',okved:state.okved||'62.01',okvedName:'разработка ПО',
+      fullName:'Кузнецов Артём Петрович',age:state.age,region:state.region||'50',account:'40802810900000001234',asOf:'2026-01-15'};
+  } else {
+    obj={organizationName:state.orgName||'ООО «Пойдём!»',organizationType:state.orgType,ogrn:'1027700132195',inn:'7707083893',
+      kpp:'502501001',okpo:'12345678',okved:state.okved||'64.19',okvedName:'банковские услуги',
+      region:state.region||'50',account:'40702810100000001234',asOf:'2026-01-15'};
+  }
+  const json=JSON.stringify(obj,null,2)
+    .replace(/"([^"]+)":/g,'<span class="k">"$1"</span>:')
+    .replace(/: "([^"]*)"/g,': <span class="s">"$1"</span>')
+    .replace(/: (\d+)/g,': <span class="n">$1</span>');
+  document.getElementById('json').innerHTML=json;
+
+  const cols=state.kind==='individual'
+    ? ['personId','fullName','gender','birthDate','age','inn','snils','passportSeries','registrationRegion','registrationCity','bankBik','account','cardPan','terrorist','blocked','asOf']
+    : state.kind==='ip' ? ['ogrnip','personId','okved','fullName','age','region','account','asOf']
+    : ['organizationName','organizationType','ogrn','inn','kpp','okpo','okved','region','account'];
+  const vals={personId:person,fullName:obj.fullName||obj.organizationName,gender:obj.gender||'',birthDate:obj.birthDate||'',
+    age:state.age,inn:obj.inn||obj.iin,snils:obj.snils||'',passportSeries:obj.passport?obj.passport.series:'',
+    registrationRegion:state.region||'50',registrationCity:state.residency==='resident'?'Истра':'Минск',
+    bankBik:obj.bank?obj.bank.bik:'',account:obj.account||'',cardPan:state.cards?'2201515746164839':'',
+    terrorist:String(state.terrorist),blocked:String(state.blocked),asOf:'2026-01-15',
+    ogrnip:obj.ogrnip||'',okved:obj.okved||'',region:state.region||'50',organizationName:obj.organizationName||'',
+    organizationType:obj.organizationType||'',ogrn:obj.ogrn||'',kpp:obj.kpp||'',okpo:obj.okpo||''};
+  document.getElementById('flat').textContent=cols.join(',')+'  ⏎  '+cols.map(c=>vals[c]===''?'':vals[c]).join(',');
+
+  document.getElementById('cmd').textContent=command();
+
+  const next=[];
+  next.push('<li>Посмотреть глазами: <code>validum describe --file out/set.csv --row 1</code></li>');
+  next.push('<li>Прогнать правила: <code>validum coverage --file out/set.csv</code></li>');
+  if(state.kind==='individual' && state.cards>1) next.push('<li>Карты отдельной таблицей: <code>out/set-cards.csv</code></li>');
+  if(state.unique) next.push('<li>Проверить уникальность: <code>coverage</code> покажет число различных значений</li>');
+  next.push('<li>Повторить ровно тот же набор: тот же <code>--seed</code> и <code>--as-of</code></li>');
+  document.getElementById('next').innerHTML=next.join('');
+}
+
+document.getElementById('copy').addEventListener('click',async()=>{
+  const btn=document.getElementById('copy');
+  try{ await navigator.clipboard.writeText(command()); btn.textContent='скопировано'; }
+  catch(e){ btn.textContent='не удалось'; }
+  setTimeout(()=>btn.textContent='копировать',1200);
+});
+
+render(); update();
+</script>
+
+<script>
+/* Сообщаем высоту родителю, чтобы iframe на сайте не обрезал раскрытые блоки. */
+(function () {
+  var last = 0;
+  function report() {
+    try {
+      var el = document.querySelector('.wrap') || document.body;
+      var h = Math.ceil(el.getBoundingClientRect().height) + 8;
+      if (h === last || h < 400 || h > 20000) return;
+      last = h;
+      if (window.parent && window.parent !== window) {
+        window.parent.postMessage({ type: 'validum-tool-height', height: h }, '*');
+      }
+    } catch (e) { /* standalone-режим */ }
+  }
+  window.addEventListener('load', report);
+  window.addEventListener('resize', report);
+  document.addEventListener('click', function () { setTimeout(report, 120); }, true);
+  document.addEventListener('toggle', function () { setTimeout(report, 120); }, true);
+  if (window.ResizeObserver) { new ResizeObserver(report).observe(document.body); }
+  setTimeout(report, 300);
+})();
+</script>
+</body>
+</html>

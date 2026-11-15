@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="ru" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<title>Validum · проверка реквизитов: вставьте свои значения</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+:root{--surface-0:#09090b;--surface-1:rgba(255,255,255,.02);--surface-2:rgba(255,255,255,.03);
+--fg:#fafafa;--fg-muted:#a1a1aa;--fg-subtle:rgba(255,255,255,.35);
+--line:rgba(255,255,255,.10);--accent:#10b981;--accent-2:#34d399;
+--mono:'JetBrains Mono',ui-monospace,monospace;--sans:'Inter',system-ui,sans-serif}
+*{box-sizing:border-box}
+body{margin:0;background:var(--surface-0);color:var(--fg);font-family:var(--sans);font-size:15px;line-height:1.6}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+header{padding:34px 0 6px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-2);display:flex;gap:10px;align-items:center}
+.tag{border:1px solid rgba(16,185,129,.5);border-radius:6px;padding:1px 7px;font-size:10.5px}
+h1{font-size:32px;line-height:1.15;margin:10px 0 8px;letter-spacing:-.02em}
+.lead{color:var(--fg-muted);max-width:72ch;margin:0}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;margin:20px 0 0;align-items:start}
+.grid>*{min-width:0}
+.card{border:1px solid var(--line);border-radius:16px;background:var(--surface-1);padding:16px}
+.card h2{margin:0 0 4px;font-size:15.5px}
+.hint{color:var(--fg-subtle);font-size:12.5px;font-family:var(--mono);margin-bottom:10px}
+textarea{width:100%;min-height:180px;resize:vertical;background:#050506;border:1px solid var(--line);border-radius:12px;
+color:var(--fg);font-family:var(--mono);font-size:13px;padding:12px;outline:none;line-height:1.8}
+textarea:focus{border-color:var(--accent)}
+.tools{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+.btn{border:1px solid var(--accent);background:rgba(16,185,129,.12);color:var(--accent-2);border-radius:10px;
+padding:8px 13px;font-size:13px;font-family:var(--sans);cursor:pointer}
+.btn.ghost{border-color:var(--line);background:transparent;color:var(--fg-muted)}
+.sum{font-family:var(--mono);font-size:12.5px;color:var(--fg-muted);margin:12px 0 6px}
+.rows{border-top:1px solid var(--line)}
+.row{display:grid;grid-template-columns:minmax(0,1fr) 92px 86px;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);
+font-size:13px;align-items:baseline;cursor:pointer}
+.row:hover{background:var(--surface-2)}
+.row .v{font-family:var(--mono);font-size:12.5px;word-break:break-all}
+.row .t{font-family:var(--mono);font-size:11px;color:var(--fg-subtle)}
+.row .s{font-family:var(--mono);font-size:11px;border-radius:6px;padding:1px 6px;justify-self:end;white-space:nowrap}
+.ok{color:var(--accent-2);border:1px solid rgba(16,185,129,.45);background:rgba(16,185,129,.08)}
+.bad{color:#fca5a5;border:1px solid rgba(239,68,68,.45);background:rgba(239,68,68,.08)}
+.unk{color:var(--fg-subtle);border:1px solid var(--line)}
+.detail h3{margin:0;font-size:17px;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.detail .key{font-family:var(--mono);font-size:11.5px;color:var(--fg-subtle);margin-bottom:10px;word-break:break-all}
+.verdict{border-radius:12px;padding:10px 12px;font-size:14px;margin-bottom:12px}
+.verdict.ok{background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.4);color:var(--accent-2)}
+.verdict.bad{background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.4);color:#fca5a5}
+.steps{margin-top:8px;font-family:var(--mono);font-size:12.5px}
+.steps .s2{display:grid;grid-template-columns:26px 96px 1fr 84px;gap:8px;padding:5px 0;border-top:1px solid var(--line);color:var(--fg-muted)}
+.steps .s2.head{color:var(--fg-subtle);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;border-top:0}
+.steps .s2 b{color:var(--fg)}
+.cap{margin-top:12px;font-family:var(--mono);font-size:11px;color:var(--fg-subtle);letter-spacing:.08em;text-transform:uppercase}
+.formula{margin-top:12px;font-family:var(--mono);font-size:12px;color:var(--fg-muted);line-height:1.8}
+.formula b{color:var(--fg)}
+.empty{color:var(--fg-subtle);font-size:14px;padding:26px 0;text-align:center}
+.legend{display:flex;gap:14px;flex-wrap:wrap;margin-top:14px;font-family:var(--mono);font-size:11.5px;color:var(--fg-subtle)}
+.legend i{display:inline-block;width:8px;height:8px;border-radius:2px;margin-right:5px}
+footer{color:var(--fg-subtle);font-size:12.5px;padding:26px 0 60px;border-top:1px solid var(--line);margin-top:26px}
+code{font-family:var(--mono);font-size:12.5px}
+@media(max-width:860px){.grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Инструменты Validum<span class="tag">проверка реквизитов</span></div>
+    <h1>Вставьте свои реквизиты — получите диагноз</h1>
+    <p class="lead">Одна строка или целый столбец из выгрузки: тип определяется сам, контрольная сумма проверяется,
+    а в разборе видно, какой разряд сломан и что поправить. Это та же арифметика, что в <code>validum-core</code>,
+    поэтому «здесь проходит» означает «пройдёт и в АБС».</p>
+  </header>
+
+  <div class="grid">
+    <section class="card">
+      <h2>Значения</h2>
+      <div class="hint">по одному в строке · ИНН, СНИЛС, ОГРН, ОГРНИП, счёт (20 цифр), БИК, карта</div>
+      <textarea id="src" spellcheck="false"></textarea>
+      <div class="tools">
+        <button class="btn" id="run">Проверить</button>
+        <button class="btn ghost" id="demo">Пример из выгрузки</button>
+        <button class="btn ghost" id="bikWrap">Счёт другого банка</button>
+        <button class="btn ghost" id="clear">Очистить</button>
+      </div>
+      <div class="sum" id="sum"></div>
+      <div class="rows" id="rows"></div>
+      <div class="legend">
+        <span><i style="background:#10b981"></i>сходится</span>
+        <span><i style="background:#ef4444"></i>не сходится</span>
+        <span><i style="background:#52525b"></i>тип не распознан</span>
+      </div>
+    </section>
+
+    <section class="card detail" id="detail">
+      <div class="empty">Вставьте значения и нажмите «Проверить» — здесь появится разбор выбранной строки.</div>
+    </section>
+  </div>
+
+  <footer>Всё считается в браузере. Алгоритмы повторяют <code>InnValidator</code>, <code>SnilsValidator</code>,
+  <code>OgrnValidator</code>, <code>AccountValidator</code> (ключ по письму Банка России № 515) и правило BIN «Мир»
+  <code>220000–220499</code>. В витрину не встроено.</footer>
+</div>
+
+<script>
+const W10=[2,4,10,3,5,9,4,6,8], W11=[7,2,4,10,3,5,9,4,6,8], W12=[3,7,2,4,10,3,5,9,4,6,8], W20=[7,1,3,7,1,3,7,1,3,7,1,3,7,1,3,7,1,3,7,1];
+const digits=s=>s.replace(/\D/g,'').split('').map(Number);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+function inn10(v){ const d=digits(v); if(d.length!==10) return null; const st=[]; let s=0;
+  for(let i=0;i<9;i++){ s+=d[i]*W10[i]; st.push([i+1,d[i],W10[i],d[i]*W10[i],s]); }
+  const ctrl=(s%11)%10;
+  return {type:'ИНН ЮЛ',ok:ctrl===d[9],ctrl,last:d[9],steps:st,
+    rule:'10 знаков: веса 2,4,10,3,5,9,4,6,8 для первых девяти цифр; ключ = (сумма mod 11) mod 10, сравнивается с 10-й'};
+}
+function inn12(v){ const d=digits(v); if(d.length!==12) return null; const s1=[],s2=[]; let a=0,b=0;
+  for(let i=0;i<10;i++){ a+=d[i]*W11[i]; s1.push([i+1,d[i],W11[i],d[i]*W11[i],a]); }
+  for(let i=0;i<11;i++){ b+=d[i]*W12[i]; s2.push([i+1,d[i],W12[i],d[i]*W12[i],b]); }
+  const c1=(a%11)%10, c2=(b%11)%10;
+  return {type:'ИНН ФЛ/ИП',ok:c1===d[10]&&c2===d[11],ctrl:[c1,c2],last:[d[10],d[11]],steps1:s1,steps2:s2,
+    rule:'12 знаков: 11-я цифра = (сумма по весам 7,2,4,10,3,5,9,4,6,8 mod 11) mod 10; 12-я — по весам 3,7,2,4,10,3,5,9,4,6,8 на 11 цифр'};
+}
+function snils(v){ const d=digits(v); if(d.length!==11) return null; const st=[]; let s=0;
+  for(let i=0;i<9;i++){ s+=d[i]*(9-i); st.push([i+1,d[i],9-i,d[i]*(9-i),s]); }
+  let ctrl=s%101; if(ctrl===100||ctrl===101) ctrl=0; const last=parseInt(String(d[9])+String(d[10]),10);
+  return {type:'СНИЛС',ok:ctrl===last,ctrl,last,steps:st,
+    rule:'9 цифр с весами 9…1, контрольное число = сумма mod 101 (100 и 101 → 0), сравнивается с двумя последними цифрами'};
+}
+function ogrn13(v){ const n=BigInt(v.slice(0,12)); const rem=Number(n%11n)%10;
+  return {type:'ОГРН',ok:rem===+(+v[12]),ctrl:rem,last:+v[12],
+    rule:'13 знаков: первые 12 — число; последняя цифра остатка от деления на 11 = 13-я цифра'};
+}
+function ogrn15(v){ const n=BigInt(v.slice(0,14)); const rem=Number(n%13n)%10;
+  return {type:'ОГРНИП',ok:rem===+(+v[14]),ctrl:rem,last:+v[14],
+    rule:'15 знаков: первые 14 — число; последняя цифра остатка от деления на 13 = 15-я цифра'};
+}
+function account(v,bik){ const d=digits(v), b=digits(bik||'044525225'); if(d.length!==20||b.length!==9) return null;
+  let s=b[6]*7+b[7]*1+b[8]*3; const st=[];
+  for(let i=0;i<20;i++){ const x=(i===8)?0:d[i]; s+=x*W20[i]; st.push([i+1,x,W20[i],x*W20[i],s]); }
+  const ctrl=(s*3)%10;
+  return {type:'Счёт',ok:ctrl===d[8],ctrl,last:d[8],steps:st,bik,
+    rule:'Условный номер берётся из БИК (разряды 7–9 для клиентского счёта); 9-й разряд при расчёте считается нулём; ключ = (сумма × 3) mod 10 и сравнивается с 9-й цифрой'};
+}
+function card(v){ const d=digits(v); if(d.length!==16) return null; const st=[]; let s=0;
+  for(let i=0;i<16;i++){ let x=d[i], x2=x; if(i%2===0){ x2=x*2; if(x2>9)x2-=9; } s+=x2; st.push([i+1,x,i%2===0?2:1,x2,s]); }
+  const bin=+v.slice(0,6), binOk=bin>=220000&&bin<=220499, luhn=s%10===0;
+  return {type:'Карта «Мир»',ok:luhn&&binOk,ctrl:'',last:null,steps:st,binOk,luhn,bin,
+    rule:'16 цифр: алгоритм Луна (цифры на чётных позициях удваиваются) и BIN в диапазоне 220000–220499'};
+}
+
+let currentBik='044525225', results=[];
+
+function detect(raw){
+  const digitsOnly=raw.replace(/\D/g,'');
+  if(digitsOnly.length===9) return {type:'БИК',ok:true,ctrl:'',last:null,rule:'9 цифр. Наличие в справочнике ЦБ проверяется отдельно: validum participants --type 20'};
+  if(digitsOnly.length===10) return inn10(digitsOnly);
+  if(digitsOnly.length===12) return inn12(digitsOnly);
+  if(digitsOnly.length===11) return snils(digitsOnly);
+  if(digitsOnly.length===13) return ogrn13(digitsOnly);
+  if(digitsOnly.length===15) return ogrn15(digitsOnly);
+  if(digitsOnly.length===16) return card(digitsOnly);
+  if(digitsOnly.length===20) return account(digitsOnly,currentBik);
+  return {type:'—',ok:null,rule:'тип не распознан: ожидается 9, 10, 11, 12, 13, 15, 16 или 20 цифр'};
+}
+
+function run(){
+  const lines=document.getElementById('src').value.split(/\r?\n/).map(s=>s.trim()).filter(Boolean);
+  results=lines.map(line=>({value:line,r:detect(line)}));
+  const ok=results.filter(x=>x.r.ok===true).length, bad=results.filter(x=>x.r.ok===false).length;
+  document.getElementById('sum').textContent=lines.length
+    ? `Проверено: ${lines.length} · сходится: ${ok} · не сходится: ${bad} · не распознано: ${lines.length-ok-bad}`
+    : 'Введите хотя бы одно значение.';
+  document.getElementById('rows').innerHTML=results.map((x,i)=>{
+    const cls=x.r.ok===true?'ok':x.r.ok===false?'bad':'unk';
+    const st=x.r.ok===true?'сходится':x.r.ok===false?'ошибка':'?';
+    return `<div class="row" data-i="${i}"><span class="v">${esc(x.value)}</span>
+      <span class="t">${esc(x.r.type)}</span><span class="s ${cls}">${st}</span></div>`;
+  }).join('');
+  document.querySelectorAll('.row').forEach(el=>el.addEventListener('click',()=>show(+el.dataset.i)));
+  if(results.length) show(0); else document.getElementById('detail').innerHTML='<div class="empty">Нет значений.</div>';
+}
+
+function table(rows,title){
+  if(!rows||!rows.length) return '';
+  return `<div class="cap">${title}</div><div class="steps">
+    <div class="s2 head"><span>#</span><span>разряд</span><span>вес → произведение</span><span>накоплено</span></div>
+    ${rows.map(([n,d,w,p,s])=>`<div class="s2"><span>${n}</span><b>${d}</b><span>${w} → ${p}</span><span>${s}</span></div>`).join('')}
+  </div>`;
+}
+
+function show(i){
+  const x=results[i]; if(!x) return;
+  const r=x.r, box=document.getElementById('detail');
+  const ok=r.ok===true, bad=r.ok===false;
+  const badge=ok?'<span class="s ok" style="font-family:var(--mono);font-size:11px;border-radius:6px;padding:1px 7px">сходится</span>'
+                :bad?'<span class="s bad" style="font-family:var(--mono);font-size:11px;border-radius:6px;padding:1px 7px">не сходится</span>':'';
+  let verdict='';
+  if(ok) verdict=`<div class="verdict ok">Значение проходит проверку: контрольные разряды для «${esc(r.type)}» сходятся.</div>`;
+  else if(bad) verdict=`<div class="verdict bad">Не проходит: ожидалась контрольная цифра <b>${Array.isArray(r.ctrl)?r.ctrl.join(' и '):r.ctrl}</b>, в значении <b>${Array.isArray(r.last)?r.last.join(' и '):r.last}</b>.</div>`;
+  else verdict='<div class="verdict bad">Тип не распознан — проверка не выполнялась.</div>';
+
+  let detail='';
+  if(r.type==='Карта «Мир»'){
+    detail=`<div class="formula"><b>BIN</b> ${esc(String(r.bin))} — ${r.binOk?'в диапазоне 220000–220499':'вне диапазона «Мир»'}<br>
+      <b>Луна</b> ${r.luhn?'сходится':'не сходится'}</div>`+table(r.steps,'Цифры и удвоение');
+  } else {
+    detail=table(r.steps,'Разряды и веса')+table(r.steps1,'Первая контрольная цифра')+table(r.steps2,'Вторая контрольная цифра');
+  }
+
+  const fix=(bad&&!Array.isArray(r.last)&&r.last!==null&&r.ctrl!==undefined&&r.ctrl!=='')
+    ? `<div class="formula"><b>Что поправить:</b> поставить последней цифрой <b>${r.ctrl}</b> вместо <b>${r.last}</b> — значение станет валидным.</div>`
+    : (bad&&Array.isArray(r.last)?`<div class="formula"><b>Что поправить:</b> заменить последние две цифры на <b>${r.ctrl.join('</b> и <b>')}</b>.</div>`:'');
+
+  box.innerHTML=`<h3>${esc(r.type)} ${badge}</h3><div class="key">${esc(x.value)}</div>
+    ${verdict}${detail}<div class="formula"><b>Правило:</b> ${esc(r.rule)}</div>${fix}`;
+}
+
+const DEMO=['779370501280','43826479516','1027700132195','304500116000157','044525225',
+  '40817810500009198787','2201515746164839','779370501281','40817810500009198788'].join('\n');
+
+document.getElementById('run').addEventListener('click',run);
+document.getElementById('demo').addEventListener('click',()=>{document.getElementById('src').value=DEMO;run();});
+document.getElementById('bikWrap').addEventListener('click',()=>{
+  const bik=prompt('БИК банка (9 цифр):', currentBik)||currentBik;
+  currentBik=(bik.match(/\d{9}/)||['044525225'])[0];
+  const acc=prompt('Счёт (20 цифр):','40817840500001234567');
+  if(acc){document.getElementById('src').value=acc;run();}
+});
+document.getElementById('clear').addEventListener('click',()=>{
+  document.getElementById('src').value='';results=[];
+  document.getElementById('sum').textContent='';document.getElementById('rows').innerHTML='';
+  document.getElementById('detail').innerHTML='<div class="empty">Вставьте значения и нажмите «Проверить».</div>';
+});
+
+document.getElementById('src').value=['779370501280','779370501281','43826479516','1027700132195','40817810500009198788','2201515746164839'].join('\n');
+run();
+</script>
+
+<script>
+/* Сообщаем высоту родителю, чтобы iframe на сайте не обрезал раскрытые блоки. */
+(function () {
+  var last = 0;
+  function report() {
+    try {
+      var el = document.querySelector('.wrap') || document.body;
+      var h = Math.ceil(el.getBoundingClientRect().height) + 8;
+      if (h === last || h < 400 || h > 20000) return;
+      last = h;
+      if (window.parent && window.parent !== window) {
+        window.parent.postMessage({ type: 'validum-tool-height', height: h }, '*');
+      }
+    } catch (e) { /* standalone-режим */ }
+  }
+  window.addEventListener('load', report);
+  window.addEventListener('resize', report);
+  document.addEventListener('click', function () { setTimeout(report, 120); }, true);
+  document.addEventListener('toggle', function () { setTimeout(report, 120); }, true);
+  if (window.ResizeObserver) { new ResizeObserver(report).observe(document.body); }
+  setTimeout(report, 300);
+})();
+</script>
+</body>
+</html>

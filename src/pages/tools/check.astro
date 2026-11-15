@@ -1,0 +1,11 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ToolFrame from '../../components/ToolFrame.astro';
+---
+
+<BaseLayout
+  title="Проверка реквизитов"
+  description="Проверьте свои ИНН, СНИЛС, ОГРН, ОГРНИП, счёт или карту: контрольная сумма, разбор по разрядам и что поправить."
+>
+  <ToolFrame src="/tools/check.html" title="Проверка реквизитов" hint="вставьте свой столбец" />
+</BaseLayout>
