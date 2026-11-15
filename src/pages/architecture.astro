@@ -5,11 +5,11 @@ const stats = [
   { value: '4', label: 'модуля' },
   { value: '19', label: 'эндпоинтов REST' },
   { value: '8', label: 'команд CLI' },
-  { value: '721', label: 'тестов' },
+  { value: '906', label: 'тестов' },
 ];
 
 const modules = [
-  { name: 'validum-core', note: 'Java 21 · ноль зависимостей' },
+  { name: 'validum-core', note: 'Java 17+ · ноль зависимостей' },
   { name: 'validum-api', note: 'Spring Boot 3.5.7 · :8080' },
   { name: 'validum-cli', note: 'Picocli · fat-jar ~15 МБ' },
   { name: 'validum-allure', note: 'JUnit 5 Extension' },
@@ -42,10 +42,10 @@ const cards = [
     dot: 'bg-accent/50',
     title: 'Данные и справочники',
     items: [
-      'ED807.xml: 1380 записей ЦБ, фильтр PtType=20 · PSAC · CRSA · ACAC → 370 банков',
+      'ED807.xml: около 1,4 тыс. записей ЦБ, фильтр PtType=20 → около 370 банков',
       'Справочник БИК обязателен: <code>VALIDUM_BIK_FILE</code> или <code>data/ED807.xml</code>; без файла — 503 <code>bik_source_missing</code>, демо-набора нет',
       'ОКВЭД-2: 3069 кодов (ОК 029-2014) у ЮЛ и ИП — код и наименование; явный код проверяется по справочнику',
-      'Ресурсы: адреса из КЛАДР (90 субъектов, ~125 тыс. населённых пунктов, ~2 млн улиц), 100 + 190 имён, 310 тайных слов, 50 менеджеров',
+      'Ресурсы: адреса из КЛАДР (90 субъектов, ~125 тыс. населённых пунктов, ~2 млн улиц), 100 + 190 имён, 310 тайных слов, 1 менеджер',
       'CSV: UTF-8 с BOM, разделитель «,», CRLF, RFC 4180',
     ],
   },
@@ -53,9 +53,9 @@ const cards = [
     dot: 'bg-accent-dark',
     title: 'Сборка и поставка',
     items: [
-      'Gradle 8.14 · Java 21 · 4 модуля · configuration-cache',
+      'Gradle 8.14 · Java 17+ (API — 21) · 4 модуля · configuration-cache',
       'CI: ubuntu + Corretto 21, <code>./gradlew build</code>, отчёты тестов в артефактах',
-      '721 тест: 567 core · 80 api · 55 cli · 19 allure',
+      '906 тестов: 660 core · 92 api · 100 cli · 21 allure',
       'Docker: multi-stage образ, порт 8080, <code>./data:/app/data:ro</code>',
     ],
   },
@@ -91,7 +91,7 @@ const cards = [
               src="/diagrams/validum-architecture.png"
               width="2692"
               height="1256"
-              alt="Диаграмма архитектуры Validum: QA и автотесты через REST API (19 эндпоинтов), CLI (8 команд) и Allure-расширение обращаются к validum-core на Java 21 без зависимостей; ядро использует генераторы профилей ФЛ/ИП/ЮЛ, сценарии ФЛ по seed (9 профилей), документы ДУЛ (11 видов), валидаторы контрольных сумм, счета по письму ЦБ № 515, экспорт CSV/JSON и ED807/ED808, источник БИК на 30 банков и справочник ED807.xml ЦБ РФ на 1380 записей"
+              alt="Диаграмма архитектуры Validum: QA и автотесты через REST API (19 эндпоинтов), CLI (10 команд) и Allure-расширение обращаются к validum-core на Java 21 без зависимостей; ядро использует генераторы профилей ФЛ/ИП/ЮЛ, сценарии ФЛ по seed (9 профилей), документы ДУЛ (11 видов), валидаторы контрольных сумм, счета по письму ЦБ № 515, экспорт CSV/JSON и ED807/ED808, справочник ED807.xml ЦБ РФ (около 1,4 тыс. записей; файл обязателен — встроенного демо-набора нет)"
               class="block w-full h-auto"
               loading="lazy"
               decoding="async"
@@ -107,12 +107,12 @@ const cards = [
           <path d="M5 11 11 5M6 5h5v5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
       </a>
-      <span>Схема отражает реальную структуру репозитория: 4 модуля Gradle, 19 эндпоинтов, 8 команд CLI, 721 тест.</span>
+      <span>Схема отражает реальную структуру репозитория: 4 модуля Gradle, 19 эндпоинтов, 10 команд CLI, 906 тестов.</span>
     </div>
 
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-4">
       <p class="text-xs font-mono text-fg-muted">
-        Диаграмма · 19 эндпоинтов · 8 команд · 4 модуля · 721 тест
+        Диаграмма · 19 эндпоинтов · 10 команд · 4 модуля · 906 тестов
       </p>
       <div class="flex flex-wrap items-center gap-3">
         <a href="/diagrams/validum-architecture.html?theme=dark" target="_blank" rel="noopener"

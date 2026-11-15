@@ -42,6 +42,11 @@ jobs:
       - name: Build
         run: npm run build
 
+      # Контракт витрины с продуктом: версия, цифры, ссылки, отсутствие черновиков.
+      # Смотри src/lib/content-contract.mjs и scripts/check-new.mjs.
+      - name: "Контент: версия, цифры, ссылки"
+        run: npm run check:new -- --strict
+
       - name: Upload dist
         uses: actions/upload-artifact@v4
         with:
