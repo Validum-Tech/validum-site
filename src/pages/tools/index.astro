@@ -5,6 +5,7 @@ const tools = [
   {
     href: '/architecture',
     badge: 'схема',
+    thumb: '/tools/thumbs/architecture.png',
     title: 'Как устроен Validum',
     text: 'Модули, точки входа, источники данных и форматы выдачи — на одной интерактивной схеме.',
     action: 'Открыть схему',
@@ -12,6 +13,7 @@ const tools = [
   {
     href: '/tools/anatomy',
     badge: 'интерактив',
+    thumb: '/tools/thumbs/anatomy.png',
     title: 'Анатомия одной записи',
     text: 'Один профиль и шесть слоёв: что за поле, откуда значение, какое правило и что отобьёт в АБС.',
     action: 'Разобрать запись',
@@ -19,6 +21,7 @@ const tools = [
   {
     href: '/tools/check',
     badge: 'инструмент',
+    thumb: '/tools/thumbs/check.png',
     title: 'Проверка реквизитов',
     text: 'Вставьте свои ИНН, СНИЛС, счёт или карту — покажем, сходится ли контрольная сумма и что поправить.',
     action: 'Проверить значение',
@@ -26,6 +29,7 @@ const tools = [
   {
     href: '/tools/build',
     badge: 'инструмент',
+    thumb: '/tools/thumbs/build.png',
     title: 'Соберите набор за минуту',
     text: 'Сущность, возраст, регион, документы, карты и формат — на выходе JSON, строка CSV и готовая команда.',
     action: 'Собрать набор',
@@ -33,6 +37,7 @@ const tools = [
   {
     href: '/tools/pipeline',
     badge: 'схема',
+    thumb: '/tools/thumbs/pipeline.png',
     title: 'Откуда берутся данные',
     text: 'КЛАДР, ОКВЭД и справочник ЦБ внутри продукта; слева источники, справа — форматы выдачи.',
     action: 'Смотреть пайплайн',
@@ -56,8 +61,21 @@ const tools = [
       {tools.map((tool) => (
         <a
           href={tool.href}
-          class="group block rounded-2xl border border-line bg-surface-1 p-6 transition-colors hover:border-accent/60"
+          class="group flex flex-col overflow-hidden rounded-2xl border border-line bg-surface-1 transition-colors hover:border-accent/60"
         >
+          {tool.thumb && (
+            <div class="relative aspect-[2/1] overflow-hidden border-b border-line bg-surface-0">
+              <img
+                src={tool.thumb}
+                alt={`Превью: ${tool.title}`}
+                loading="lazy"
+                width="794"
+                height="397"
+                class="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]"
+              />
+            </div>
+          )}
+          <div class="p-6">
           <div class="flex items-center gap-3 mb-3">
             <span class="font-mono text-[10px] uppercase tracking-[0.14em] text-accent border border-accent/40 rounded px-2 py-0.5">
               {tool.badge}
@@ -68,6 +86,7 @@ const tools = [
           <span class="font-mono text-xs text-accent group-hover:text-accent-light transition-colors">
             {tool.action} →
           </span>
+          </div>
         </a>
       ))}
     </div>
