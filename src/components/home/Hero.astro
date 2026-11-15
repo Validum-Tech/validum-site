@@ -1,5 +1,17 @@
 ---
 // src/components/home/Hero.astro
+const badRows = [
+  { label: 'ИНН', value: '779370501281', why: 'контрольная сумма' },
+  { label: 'СНИЛС', value: '43826479517', why: 'контрольное число' },
+  { label: 'Счёт', value: '40817810200006614154', why: 'ключ по 515' },
+  { label: 'Индекс', value: '604831', why: 'чужой регион' },
+];
+const goodRows = [
+  { label: 'ИНН', value: '779370501280', why: 'ok' },
+  { label: 'СНИЛС', value: '43826479516', why: 'ok' },
+  { label: 'Счёт', value: '40817810200006614153', why: '515' },
+  { label: 'Индекс', value: '143500', why: 'МО' },
+];
 import { EXPECTED_REST_ENDPOINTS, EXPECTED_TEST_COUNT } from '../../lib/content-contract.mjs';
 ---
 
@@ -42,42 +54,114 @@ import { EXPECTED_REST_ENDPOINTS, EXPECTED_TEST_COUNT } from '../../lib/content-
     </div>
   </div>
 
-  <!-- Живой вывод CLI: честнее любой анимации -->
-  <div class="relative w-full max-w-3xl mx-auto px-6 -mt-4 sm:mt-0 z-20">
-    <div class="overflow-hidden rounded-xl border border-line bg-surface-code shadow-glow-accent-sm">
-      <div class="flex items-center gap-2 border-b border-line px-4 py-2">
-        <span class="h-2.5 w-2.5 rounded-full bg-danger/70"></span>
-        <span class="h-2.5 w-2.5 rounded-full bg-metric/70"></span>
-        <span class="h-2.5 w-2.5 rounded-full bg-accent/70"></span>
-        <span class="ml-2 font-mono text-[11px] text-fg-subtle">validum-cli · терминал</span>
-        <span class="ml-auto rounded border border-accent/40 px-1.5 py-0.5 font-mono text-[10px] uppercase tracking-wider text-accent">live</span>
+  <!-- Было → стало: 4 реквизита, которые АБС отклонит, и они же после Validum -->
+  <div class="relative z-20 mx-auto w-full max-w-4xl px-6">
+    <div class="grid items-stretch gap-3 sm:grid-cols-[1fr_auto_1fr] sm:gap-0">
+
+      <!-- Как обычно -->
+      <div class="hero-card rounded-2xl border border-danger/35 bg-danger-surface/60 p-4 sm:p-5">
+        <div class="mb-3 flex items-center justify-between gap-2">
+          <span class="font-mono text-[10px] uppercase tracking-[0.16em] text-danger">как обычно</span>
+          <span class="font-mono text-[10px] text-danger/80">отклонит АБС</span>
+        </div>
+        <ul class="space-y-2 font-mono text-[11px] sm:text-xs">
+          {badRows.map((row, i) => (
+            <li
+              class="hero-row hero-row--bad flex items-baseline justify-between gap-3 rounded-lg border border-danger/25 bg-surface-0/50 px-2.5 py-1.5"
+              style={`--i:${i}`}
+            >
+              <span class="shrink-0 text-fg-subtle">{row.label}</span>
+              <span class="truncate text-danger">{row.value}</span>
+              <span class="shrink-0 text-[10px] text-danger/80">{row.why}</span>
+            </li>
+          ))}
+        </ul>
       </div>
-      <pre class="overflow-x-auto px-4 py-3 font-mono text-[11px] leading-relaxed sm:text-xs"><code><span class="text-fg-subtle">$</span> java -jar validum.jar generate individual --seed 42 -n 2 <span class="text-fg">--fields</span> personId,fullName,age,inn,snils <span class="text-fg">--format csv</span>
-<span class="text-accent"># validum 0.5.0 · seed=42 · asOf=2026-01-15</span>
-<span class="text-fg">personId,fullName,age,inn,snils</span>
-<span class="text-fg-muted">pd-364c37,Иванов Иван Иванович,34,779370501280,43826479516</span>
-<span class="text-fg-muted">pd-a91f03,Петрова Мария Сергеевна,37,500100732259,11234567894</span>
-<span class="text-accent animate-pulse">▌</span></code></pre>
-      <div class="flex flex-wrap items-center gap-x-4 gap-y-1 border-t border-line px-4 py-2 font-mono text-[10px] text-fg-subtle">
-        <span><span class="text-accent">✔</span> контрольные суммы сходятся</span>
-        <span><span class="text-accent">✔</span> тот же seed → тот же файл (SHA-256)</span>
-        <span class="text-metric">906 тестов</span>
+
+      <!-- Преобразование -->
+      <div class="relative flex items-center justify-center py-2 sm:px-4">
+        <span class="pointer-events-none absolute left-0 right-0 top-1/2 hidden -translate-y-1/2 border-t border-dashed border-line sm:block" aria-hidden="true"></span>
+        <div class="hero-morph relative flex h-12 w-12 items-center justify-center rounded-full border border-accent/50 bg-surface-0 shadow-glow-accent-md">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-accent sm:rotate-0 rotate-90" aria-hidden="true">
+            <path d="M5 12h14" /><path d="m12 5 7 7-7 7" />
+          </svg>
+          <span class="pointer-events-none absolute inset-0 rounded-full border border-accent/40 hero-ring" aria-hidden="true"></span>
+        </div>
+        <span class="absolute -bottom-1 left-1/2 -translate-x-1/2 whitespace-nowrap font-mono text-[10px] text-accent/90 sm:hidden">--seed 42</span>
+      </div>
+
+      <!-- После Validum -->
+      <div class="hero-card relative overflow-hidden rounded-2xl border border-accent/35 bg-accent/[0.06] p-4 sm:p-5">
+        <span class="hero-scan pointer-events-none absolute inset-x-0 top-0 h-16" aria-hidden="true"></span>
+        <div class="mb-3 flex items-center justify-between gap-2">
+          <span class="font-mono text-[10px] uppercase tracking-[0.16em] text-accent">validum --seed 42</span>
+          <span class="font-mono text-[10px] text-accent/80">4 / 4 сходится</span>
+        </div>
+        <ul class="space-y-2 font-mono text-[11px] sm:text-xs">
+          {goodRows.map((row, i) => (
+            <li
+              class="hero-row hero-row--ok flex items-baseline justify-between gap-3 rounded-lg border border-accent/20 bg-surface-0/60 px-2.5 py-1.5"
+              style={`--i:${i}`}
+            >
+              <span class="shrink-0 text-fg-subtle">{row.label}</span>
+              <span class="truncate text-fg">{row.value}</span>
+              <span class="shrink-0 text-accent" aria-label={row.why}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12" /></svg>
+              </span>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
-    <p class="mt-3 text-center font-mono text-[11px] text-fg-subtle">
-      Реальный вывод CLI: первая строка после команды — метаданные прогона, дальше — данные
-    </p>
+
+    <div class="mt-3 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 font-mono text-[10px] text-fg-subtle">
+      <span><span class="text-accent">✔</span> одна и та же строка — без ручной правки</span>
+      <span><span class="text-accent">✔</span> тот же seed даёт тот же файл</span>
+      <span class="text-metric">906 тестов</span>
+    </div>
   </div>
 
-  <div class="relative z-30 text-center mt-6 mb-16">
-    <p class="inline-flex flex-col sm:flex-row items-center gap-2 sm:gap-4 text-xs sm:text-sm font-mono text-fg-muted bg-surface-2 border border-line px-4 py-2 rounded-full backdrop-blur">
-      <span class="text-danger">Битые данные</span>
-      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden sm:block opacity-50"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-      <span class="text-accent font-bold">Validum исправляет</span>
-      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden sm:block opacity-50"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-      <span class="text-success">Валидный профиль</span>
-    </p>
-  </div>
+  <style>
+    .hero-row--bad {
+      animation: heroBad 7s ease-in-out infinite;
+      animation-delay: calc(var(--i) * 120ms);
+    }
+    .hero-row--ok {
+      animation: heroOk 7s ease-in-out infinite;
+      animation-delay: calc(var(--i) * 160ms + 900ms);
+    }
+    .hero-ring {
+      animation: heroRing 7s ease-out infinite;
+    }
+    .hero-scan {
+      background: linear-gradient(180deg, transparent, rgba(16, 185, 129, 0.22), transparent);
+      animation: heroScan 7s ease-in-out infinite;
+      animation-delay: 700ms;
+    }
+    @keyframes heroScan {
+      0%, 10% { transform: translateY(-4rem); opacity: 0; }
+      18% { opacity: 1; }
+      55% { transform: translateY(24rem); opacity: 0; }
+      100% { transform: translateY(24rem); opacity: 0; }
+    }
+    @keyframes heroBad {
+      0%, 6% { opacity: 0.35; transform: translateX(-4px); }
+      12%, 16% { opacity: 1; transform: translateX(2px); }
+      20%, 100% { opacity: 0.75; transform: none; }
+    }
+    @keyframes heroOk {
+      0%, 14% { opacity: 0.15; transform: translateY(6px); border-color: rgba(16, 185, 129, 0.12); }
+      24%, 100% { opacity: 1; transform: none; border-color: rgba(16, 185, 129, 0.35); }
+    }
+    @keyframes heroRing {
+      0%, 12% { opacity: 0; transform: scale(0.7); }
+      24% { opacity: 0.9; transform: scale(1); }
+      60%, 100% { opacity: 0; transform: scale(1.9); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .hero-row--bad, .hero-row--ok, .hero-ring, .hero-scan { animation: none; opacity: 1; }
+    }
+  </style>
 
   <div class="relative max-w-[1000px] mx-auto px-6 z-30">
     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">

@@ -13924,5 +13924,38 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
   if (focus) setTimeout(function () { focusNode(focus); }, 400);
 })();
 </script>
+
+<style id="validum-embed-style">
+/* Встраивание в iframe (?embed=1): без внутренней прокрутки и без шапки с гидом */
+html.validum-embed { height: 100%; }
+html.validum-embed body { height: 100%; overflow: hidden !important; }
+html.validum-embed .toolbar,
+html.validum-embed .header,
+html.validum-embed .diagram-guide,
+html.validum-embed .node-finder,
+html.validum-embed .archify-toast { display: none !important; }
+html.validum-embed .container {
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 6px !important;
+  height: 100vh !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0 !important;
+}
+html.validum-embed .diagram-container {
+  flex: 1 1 auto !important;
+  height: auto !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+}
+html.validum-embed ::-webkit-scrollbar { width: 0; height: 0; }
+</style>
+<script>
+(function () {
+  if (new URLSearchParams(location.search).get('embed') !== '1') return;
+  document.documentElement.classList.add('validum-embed');
+})();
+</script>
 </body>
 </html>

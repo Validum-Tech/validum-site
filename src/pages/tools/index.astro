@@ -58,13 +58,19 @@ const tools = [
     </p>
 
     <div class="grid gap-5 mt-10 sm:grid-cols-2">
-      {tools.map((tool) => (
+      {tools.map((tool, index) => (
         <a
           href={tool.href}
-          class="group flex flex-col overflow-hidden rounded-2xl border border-line bg-surface-1 transition-colors hover:border-accent/60"
+          class:list={[
+            "group flex flex-col overflow-hidden rounded-2xl border border-line bg-surface-1 transition-colors hover:border-accent/60",
+            index === tools.length - 1 && "sm:col-span-2 sm:flex-row",
+          ]}
         >
           {tool.thumb && (
-            <div class="relative aspect-[2/1] overflow-hidden border-b border-line bg-surface-0">
+            <div class:list={[
+              "relative aspect-[2/1] overflow-hidden border-b border-line bg-surface-0",
+              index === tools.length - 1 && "sm:aspect-auto sm:w-[46%] sm:shrink-0 sm:border-b-0 sm:border-r",
+            ]}>
               <img
                 src={tool.thumb}
                 alt={`Превью: ${tool.title}`}
@@ -75,7 +81,7 @@ const tools = [
               />
             </div>
           )}
-          <div class="p-6">
+          <div class:list={["p-6", index === tools.length - 1 && "sm:flex sm:flex-col sm:justify-center"]}>
           <div class="flex items-center gap-3 mb-3">
             <span class="font-mono text-[10px] uppercase tracking-[0.14em] text-accent border border-accent/40 rounded px-2 py-0.5">
               {tool.badge}
@@ -91,23 +97,12 @@ const tools = [
       ))}
     </div>
 
-    <div class="mt-10 rounded-2xl border border-line bg-surface-1 p-6">
-      <h2 class="text-lg font-semibold mb-2">Ответ и код</h2>
-      <p class="text-sm text-fg-muted mb-4">
-        Mock-ответ генератора (JSON, Java, cURL, CLI) переехал на вторую вкладку конструктора —
-        прежний адрес <code class="font-mono text-xs text-accent">/try</code> ведёт туда же.
-      </p>
-      <a href="/tools/build?mode=answer" class="font-mono text-xs text-accent hover:text-accent-light transition-colors">Открыть «Ответ и код» →</a>
-    </div>
-
-    <div class="mt-10 rounded-2xl border border-line bg-surface-1 p-6">
-      <h2 class="text-lg font-semibold mb-2">Чем это отличается от документации</h2>
-      <p class="text-sm text-fg-muted">
-        Документация отвечает «как вызвать», инструменты — «как это выглядит и почему проходит».
-        Каждое значение на этих страницах проверяется теми же алгоритмами, что и в продукте:
-        ИНН, СНИЛС, ОГРН, ОГРНИП, КПП, ОКПО, счёт по письму Банка России № 515. Подробности —
-        в <a href="/docs" class="text-accent hover:text-accent-light">документации</a>.
-      </p>
-    </div>
+    <p class="mt-8 max-w-3xl text-sm leading-relaxed text-fg-subtle">
+      Документация отвечает «как вызвать», инструменты — «как это выглядит и почему проходит»:
+      ИНН, СНИЛС, ОГРН, ОГРНИП, КПП, ОКПО и счёт по письму № 515 проверяются теми же алгоритмами,
+      что в продукте. Mock-ответ генератора и код подключения — на вкладке «Ответ и код»
+      в <a href="/tools/build?mode=answer" class="text-accent transition-colors hover:text-accent-light">конструкторе набора</a>;
+      подробности — в <a href="/docs" class="text-accent transition-colors hover:text-accent-light">документации</a>.
+    </p>
   </section>
 </BaseLayout>
