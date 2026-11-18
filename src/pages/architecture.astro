@@ -10,7 +10,7 @@ const stats = [
 
 const modules = [
   { name: 'validum-core', note: 'Java 17+ · ноль зависимостей' },
-  { name: 'validum-api', note: 'Spring Boot 3.5.7 · :8080' },
+  { name: 'validum-api', note: 'Spring Boot 4.1.2 · :8080' },
   { name: 'validum-cli', note: 'Picocli · fat-jar ~15 МБ' },
   { name: 'validum-allure', note: 'JUnit 5 Extension' },
 ];
@@ -53,7 +53,7 @@ const cards = [
     dot: 'bg-accent-dark',
     title: 'Сборка и поставка',
     items: [
-      'Gradle 8.14 · Java 17+ (API — 21) · 4 модуля · configuration-cache',
+      'Gradle 9.9.1 · Java 17+ (все модули) · 4 модуля · configuration-cache',
       'CI: ubuntu + Corretto 21, <code>./gradlew build</code>, отчёты тестов в артефактах',
       '906 тестов: 660 core · 92 api · 100 cli · 21 allure',
       'Docker: multi-stage образ, порт 8080, <code>./data:/app/data:ro</code>',
@@ -91,7 +91,7 @@ const cards = [
               src="/diagrams/validum-architecture.png"
               width="2692"
               height="1256"
-              alt="Диаграмма архитектуры Validum: QA и автотесты через REST API (19 эндпоинтов), CLI (10 команд) и Allure-расширение обращаются к validum-core на Java 21 без зависимостей; ядро использует генераторы профилей ФЛ/ИП/ЮЛ, сценарии ФЛ по seed (9 профилей), документы ДУЛ (11 видов), валидаторы контрольных сумм, счета по письму ЦБ № 515, экспорт CSV/JSON и ED807/ED808, справочник ED807.xml ЦБ РФ (около 1,4 тыс. записей; файл обязателен — встроенного демо-набора нет)"
+              alt="Диаграмма архитектуры Validum: QA и автотесты через REST API (19 эндпоинтов), CLI (10 команд) и Allure-расширение обращаются к validum-core на Java 17 без зависимостей; ядро использует генераторы профилей ФЛ/ИП/ЮЛ, сценарии ФЛ по seed (9 профилей), документы ДУЛ (11 видов), валидаторы контрольных сумм, счета по письму ЦБ № 515, экспорт CSV/JSON и ED807/ED808, справочник ED807.xml ЦБ РФ (около 1,4 тыс. записей; файл обязателен — встроенного демо-набора нет)"
               class="block w-full h-auto"
               loading="lazy"
               decoding="async"
