@@ -1,0 +1,186 @@
+/* validum · tools/_theme.css
+   Редакционный слой для автономных страниц /public/tools/*.
+   Подключается ПОСЛЕ локального <style>, поэтому переопределяет оформление,
+   не трогая разметку и скрипты инструментов. Контент не меняется. */
+
+:root {
+  --surface-0: #09090b;
+  --surface-1: rgba(255, 255, 255, 0.02);
+  --surface-2: rgba(255, 255, 255, 0.035);
+  --fg: #fafafa;
+  --fg-muted: #a1a1aa;
+  --fg-subtle: rgba(255, 255, 255, 0.45);
+  --line: rgba(255, 255, 255, 0.1);
+  --accent: #10b981;
+  --accent-2: #34d399;
+  --metric: #f5b544;
+  --danger: #fca5a5;
+}
+
+html {
+  color-scheme: dark;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.14);
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+body {
+  -webkit-font-smoothing: antialiased;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Надзаголовок — рубрика постером */
+.eyebrow {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent-2);
+}
+.tag {
+  border: 1px solid var(--line);
+  border-radius: 2px;
+  padding: 2px 8px;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fg-subtle);
+}
+
+/* Постерная типографика */
+h1 {
+  font-size: clamp(2.15rem, 4.2vw, 3.5rem);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  font-weight: 800;
+  margin: 14px 0 0;
+}
+h1 + .lead {
+  margin-top: 18px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+  max-width: 62ch;
+}
+.lead {
+  color: var(--fg-muted);
+  font-size: 15.5px;
+}
+h2 {
+  letter-spacing: -0.02em;
+  font-weight: 700;
+}
+h3 {
+  letter-spacing: -0.015em;
+}
+
+/* Плоские блоки: волосяная рамка, радиус 2px, без «пузырей» */
+.card,
+.verdict,
+textarea,
+.btn,
+.tag,
+.row .s,
+.legend i,
+.steps .s2 {
+  border-radius: 2px;
+}
+.card {
+  background: var(--surface-0);
+  border: 1px solid var(--line);
+  padding: 18px;
+}
+.card:hover {
+  background: var(--surface-1);
+}
+
+/* Кнопки — капсом, моно, как .btn-solid / .btn-hairline на витрине */
+.btn {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 9px 14px;
+  border-radius: 2px;
+  border-color: var(--accent);
+  background: var(--accent);
+  color: #04140d;
+  font-weight: 600;
+}
+.btn:hover {
+  background: var(--accent-2);
+  border-color: var(--accent-2);
+}
+.btn.ghost {
+  background: transparent;
+  border-color: var(--line);
+  color: var(--fg-subtle);
+  font-weight: 500;
+}
+.btn.ghost:hover {
+  border-color: var(--accent);
+  color: var(--accent-2);
+  background: transparent;
+}
+
+/* Строки таблиц и легенды */
+.row:hover {
+  background: var(--surface-1);
+}
+.sum,
+.cap,
+.hint {
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-size: 10.5px;
+  color: var(--fg-subtle);
+}
+.ok {
+  color: var(--accent-2);
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  background: rgba(16, 185, 129, 0.06);
+}
+.bad {
+  color: var(--danger);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  background: rgba(239, 68, 68, 0.06);
+}
+.verdict.ok,
+.verdict.bad {
+  border-width: 1px;
+}
+footer {
+  border-top: 1px solid var(--line);
+  color: var(--fg-subtle);
+  font-size: 12px;
+  letter-spacing: 0.02em;
+}
+code {
+  letter-spacing: 0;
+}
+
+
+/* Скрываем декоративные «пузыри» и свечения, если они были в исходниках */
+.glow,
+.blob {
+  display: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}

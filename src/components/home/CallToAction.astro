@@ -1,53 +1,36 @@
 ---
-// src/components/home/CallToAction.astro
+// src/components/home/CallToAction.astro — финальный постер: линия, крупный заголовок, две кнопки.
 ---
 
-<section class="relative py-28 border-t border-line overflow-hidden">
-  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[600px] h-[400px] bg-accent/10 blur-[100px] rounded-full pointer-events-none"></div>
+<section class="relative overflow-hidden border-t border-line py-20 lg:py-24">
+  <div class="mx-auto max-w-[1280px] px-6 lg:px-10">
+    <div class="grid gap-10 lg:grid-cols-[1.3fr_.9fr] lg:items-end">
+      <div>
+        <p class="kicker">05 / старт</p>
+        <h2 class="poster-sm mt-4">
+          Готовы ускорить<br />ваши тесты?
+        </h2>
+        <div class="rule mt-7 max-w-xl"></div>
+        <p class="mt-6 max-w-xl text-[16px] leading-relaxed text-fg-muted">
+          Open-source. Self-hosted. Без регистрации и облачных подписок.
+          Работает в закрытом контуре вашего банка.
+        </p>
+      </div>
 
-  <div class="relative max-w-[800px] mx-auto px-6 text-center z-10">
-    <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-surface-0 border-2 border-accent mb-8 shadow-glow-accent-lg">
-      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-accent">
-        <path d="M9 13l3 7 3-7" stroke-width="2.5"/>
-        <path d="M9 13L5 9" /><path d="M7 11L3 7" />
-        <path d="M5 9L5 4L7 4" /><path d="M3 7L3 3L5 3" />
-        <path d="M15 13l4-4" /><path d="M17 11l4-4" />
-        <path d="M19 9L19 4L17 4" /><path d="M21 7L21 3L19 3" />
-        <circle cx="12" cy="13" r="1" fill="currentColor" stroke="none"/>
-      </svg>
-    </div>
+      <div class="lg:pb-2">
+        <div class="flex flex-wrap items-center gap-x-7 gap-y-4">
+          <a href="/tools/build" class="btn-solid">Собрать набор</a>
+          <a href="/docs" class="link-arrow">Читать документацию →</a>
+        </div>
 
-    <h2 class="text-4xl sm:text-5xl font-bold tracking-tight mb-6">
-      Готовы ускорить ваши тесты?
-    </h2>
-
-    <p class="text-lg text-fg-muted mb-10 max-w-xl mx-auto">
-      Open-source. Self-hosted. Без регистрации и облачных подписок.
-      Работает в закрытом контуре вашего банка.
-    </p>
-
-    <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
-      <a href="/tools/build" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-accent hover:bg-accent-light text-accent-fg font-semibold px-8 py-4 rounded-lg text-base transition-all shadow-glow-accent-md hover:shadow-glow-accent-lg hover:-translate-y-0.5">
-        Собрать набор
-      </a>
-      <a href="/docs" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 border border-line bg-surface-2 hover:bg-surface-3 px-8 py-4 rounded-lg text-base font-medium transition-colors">
-        Читать документацию
-      </a>
-    </div>
-
-    <div class="flex items-center justify-center gap-6 text-sm font-mono text-fg-muted">
-      <span class="flex items-center gap-2">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-accent"><polyline points="20 6 9 17 4 12"/></svg>
-        Apache 2.0
-      </span>
-      <span class="flex items-center gap-2">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-accent"><polyline points="20 6 9 17 4 12"/></svg>
-        0 зависимостей
-      </span>
-      <span class="flex items-center gap-2">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-accent"><polyline points="20 6 9 17 4 12"/></svg>
-        152-ФЗ
-      </span>
+        <div class="mt-8 flex flex-wrap items-center gap-x-5 gap-y-2 font-mono text-[10px] uppercase tracking-[0.14em] text-fg-subtle">
+          <span>Apache 2.0</span>
+          <span class="text-line">·</span>
+          <span>0 зависимостей</span>
+          <span class="text-line">·</span>
+          <span>152-ФЗ</span>
+        </div>
+      </div>
     </div>
   </div>
 </section>

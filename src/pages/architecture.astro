@@ -63,29 +63,30 @@ const cards = [
 ---
 
 <BaseLayout title="Архитектура" description="Как устроен Validum: четыре модуля Gradle, 19 REST-эндпоинтов, 10 команд CLI, core без зависимостей и справочник ЦБ как единственный источник БИК.">
-  <div class="max-w-[1200px] mx-auto px-6 py-16 lg:py-24">
+  <div class="mx-auto max-w-[1280px] px-6 py-16 lg:px-10 lg:py-20">
 
-    <div class="max-w-3xl mb-12">
-      <div class="text-xs font-mono text-accent tracking-widest mb-2 uppercase">Архитектура</div>
-      <a href="/tools" class="inline-flex font-mono text-xs text-fg-muted hover:text-accent transition-colors mb-6">← Все инструменты</a>
-      <h1 class="text-4xl sm:text-5xl font-bold tracking-tight mb-4">Как устроен Validum</h1>
-      <p class="text-lg text-fg-muted leading-relaxed">
+    <div class="mb-12">
+      <p class="kicker">Архитектура</p>
+      <a href="/tools" class="mt-4 inline-flex font-mono text-[11px] uppercase tracking-[0.14em] text-fg-subtle transition-colors hover:text-accent">← Все инструменты</a>
+      <h1 class="poster mt-5">Как устроен Validum</h1>
+      <div class="rule mt-7 max-w-xl"></div>
+      <p class="mt-6 max-w-2xl text-[16px] leading-relaxed text-fg-muted">
         Четыре модуля, одно ядро без зависимостей и три входа: REST, CLI и Java-библиотека.
         Слева — QA и автотесты, справа — генераторы, сценарии, валидаторы и справочник БИК ЦБ.
       </p>
     </div>
 
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
+    <div class="mb-10 grid grid-cols-2 gap-px bg-line md:grid-cols-4">
       {stats.map(s => (
-        <div class="p-4 rounded-xl border border-line bg-surface-2 text-center">
-          <div class="text-metric text-2xl font-bold font-mono mb-1">{s.value}</div>
-          <div class="text-[11px] text-fg-muted uppercase tracking-wider">{s.label}</div>
+        <div class="bg-surface-0 p-5">
+          <div class="num-xl text-fg">{s.value}</div>
+          <div class="label mt-2">{s.label}</div>
         </div>
       ))}
     </div>
 
-    <div class="mb-4 flex flex-wrap items-center gap-2" id="diagram-chips">
-      <span class="mr-1 font-mono text-[10px] uppercase tracking-[0.14em] text-fg-subtle">Подсветить модуль:</span>
+    <div class="-mx-6 mb-4 flex items-center gap-2 overflow-x-auto px-6 pb-1 lg:mx-0 lg:flex-wrap lg:overflow-visible lg:px-0" id="diagram-chips">
+      <span class="mr-1 shrink-0 font-mono text-[10px] uppercase tracking-[0.14em] text-fg-subtle">Подсветить модуль:</span>
       {[
         ['qa', 'QA и автотесты'],
         ['api', 'REST API'],
@@ -103,28 +104,36 @@ const cards = [
         <button
           type="button"
           data-focus={id}
-          class="rounded-lg border border-line bg-surface-2 px-3 py-1.5 font-mono text-[11px] text-fg-muted transition-colors hover:border-metric/50 hover:text-metric aria-pressed:border-metric/60 aria-pressed:text-metric"
+          class="shrink-0 border border-line bg-surface-0 px-3 py-2 font-mono text-[11px] uppercase tracking-[0.1em] text-fg-subtle transition-colors hover:border-fg/30 hover:text-fg aria-pressed:border-accent/60 aria-pressed:text-accent"
         >{label}</button>
       ))}
       <button
         type="button"
         data-focus=""
-        class="rounded-lg border border-line bg-surface-2 px-3 py-1.5 font-mono text-[11px] text-fg-subtle transition-colors hover:border-accent/50 hover:text-accent"
+        class="border border-line bg-surface-0 px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.1em] text-fg-subtle transition-colors hover:border-accent/50 hover:text-accent"
       >Сбросить</button>
     </div>
 
-    <div class="group relative overflow-hidden rounded-2xl border border-line bg-surface-1">
+    <div class="hairline group relative overflow-hidden">
       <iframe
         id="diagram-frame"
         src="/diagrams/validum-architecture.html?theme=dark&embed=1"
         title="Интерактивная диаграмма архитектуры Validum"
-        class="block h-[520px] w-full border-0 sm:h-[560px] md:h-[600px]"
+        class="hidden h-[640px] w-full border-0 md:block lg:h-[760px]"
         loading="lazy"
       ></iframe>
+
+      <a href="/diagrams/validum-architecture.html?theme=dark" class="group relative block md:hidden" aria-label="Открыть схему архитектуры на весь экран">
+        <img src="/tools/thumbs/architecture.png" alt="Схема архитектуры Validum: три входа, ядро и источники данных" width="794" height="471" class="w-full" loading="lazy" />
+        <span class="absolute inset-x-0 bottom-0 flex items-center justify-between gap-3 bg-surface-0/95 px-4 py-3 font-mono text-[10px] uppercase tracking-[0.14em] text-fg-subtle">
+          открыть схему на весь экран
+          <span class="text-accent">→</span>
+        </span>
+      </a>
     </div>
 
     <div class="mt-4 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-fg-subtle">
-      <a href="/diagrams/validum-architecture.html?theme=dark" class="inline-flex items-center gap-1.5 text-accent hover:text-accent-light transition-colors duration-150">
+      <a href="/diagrams/validum-architecture.html?theme=dark" class="inline-flex min-h-6 items-center gap-1.5 text-accent hover:text-accent-light transition-colors duration-150">
         Открыть диаграмму на весь экран
         <svg class="size-3.5" viewBox="0 0 16 16" fill="none" aria-hidden="true">
           <path d="M5 11 11 5M6 5h5v5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
@@ -162,7 +171,7 @@ const cards = [
       </p>
       <div class="flex flex-wrap items-center gap-3">
         <a href="/diagrams/validum-architecture.html?theme=dark"
-           class="inline-flex items-center gap-2 text-sm border border-line bg-surface-2 hover:bg-surface-3 px-4 py-2 rounded-lg transition-colors">
+           class="btn-hairline">
           Полная версия ↗
         </a>
         <a href="/docs#ref-generate"
@@ -177,23 +186,23 @@ const cards = [
       На узких экранах диаграмму можно прокрутить по горизонтали.
     </p>
 
-    <div class="h-px w-full bg-line my-12"></div>
+    <div class="rule my-12"></div>
 
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+    <div class="mb-12 grid grid-cols-2 gap-px bg-line md:grid-cols-4">
       {modules.map(m => (
-        <div class="p-4 rounded-xl border border-line bg-surface-2">
-          <div class="font-mono text-sm text-fg mb-1">{m.name}</div>
-          <div class="text-xs text-fg-muted">{m.note}</div>
+        <div class="bg-surface-0 p-5">
+          <div class="font-mono text-[13px] text-fg">{m.name}</div>
+          <div class="mt-1.5 text-xs text-fg-subtle">{m.note}</div>
         </div>
       ))}
     </div>
 
-    <div class="grid md:grid-cols-2 gap-5">
+    <div class="grid gap-px bg-line md:grid-cols-2">
       {cards.map(card => (
-        <div class="p-6 rounded-2xl border border-line bg-surface-2">
+        <div class="bg-surface-0 p-7">
           <div class="flex items-center gap-3 mb-4">
-            <span class={`w-2.5 h-2.5 rounded-full ${card.dot}`}></span>
-            <h2 class="font-semibold text-lg">{card.title}</h2>
+            <span class={`h-2 w-2 ${card.dot}`}></span>
+            <h2 class="text-[17px] font-semibold tracking-tight">{card.title}</h2>
           </div>
           <ul class="space-y-2 text-sm text-fg-muted leading-relaxed">
             {card.items.map(item => (
@@ -207,13 +216,13 @@ const cards = [
       ))}
     </div>
 
-    <div class="mt-12 p-6 rounded-xl border border-accent/20 bg-accent/5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div class="mt-12 flex flex-col items-start justify-between gap-4 border border-line bg-surface-0 p-7 sm:flex-row sm:items-center">
       <div>
-        <h3 class="font-semibold mb-1">Посмотреть исходники</h3>
-        <p class="text-sm text-fg-muted">Четыре Gradle-модуля, тесты и Dockerfile — в открытом репозитории.</p>
+        <h3 class="text-[17px] font-semibold tracking-tight">Посмотреть исходники</h3>
+        <p class="mt-2 text-sm text-fg-muted">Четыре Gradle-модуля, тесты и Dockerfile — в открытом репозитории.</p>
       </div>
       <a href="https://github.com/Validum-Tech/validum" target="_blank" rel="noopener"
-         class="inline-flex items-center justify-center gap-2 bg-accent hover:bg-accent-light text-accent-fg font-semibold px-6 py-3 rounded-lg transition-colors shrink-0">
+         class="btn-solid shrink-0">
         GitHub ↗
       </a>
     </div>

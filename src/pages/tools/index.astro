@@ -49,26 +49,27 @@ const tools = [
   title="Инструменты"
   description="Интерактивные схемы и инструменты Validum: анатомия записи, проверка реквизитов, конструктор набора, пайплайн данных."
 >
-  <section class="max-w-6xl mx-auto px-6 pt-16 pb-10">
-    <p class="font-mono text-xs uppercase tracking-[0.2em] text-accent mb-4">Инструменты</p>
-    <h1 class="text-4xl sm:text-5xl font-bold tracking-tight mb-4">Посмотрите, как это работает</h1>
-    <p class="text-fg-muted max-w-2xl text-lg">
+  <section class="mx-auto max-w-[1280px] px-6 pt-16 pb-12 lg:px-10 lg:pt-20">
+    <p class="kicker">Инструменты</p>
+    <h1 class="poster mt-4">Посмотрите, как это работает</h1>
+    <div class="rule mt-7 max-w-xl"></div>
+    <p class="mt-6 max-w-2xl text-[16px] leading-relaxed text-fg-muted">
       Пять страниц без установки: схема архитектуры, разбор одной записи, проверка ваших реквизитов,
       конструктор набора и путь данных от справочников ЦБ до CSV и SQL.
     </p>
 
-    <div class="grid gap-5 mt-10 sm:grid-cols-2">
+    <div class="mt-10 grid gap-px bg-line sm:grid-cols-2">
       {tools.map((tool, index) => (
         <a
           href={tool.href}
           class:list={[
-            "group flex flex-col overflow-hidden rounded-2xl border border-line bg-surface-1 transition-colors hover:border-accent/60",
+            "group flex flex-col overflow-hidden bg-surface-0 transition-colors hover:bg-surface-1",
             index === tools.length - 1 && "sm:col-span-2 sm:flex-row",
           ]}
         >
           {tool.thumb && (
             <div class:list={[
-              "relative aspect-[2/1] overflow-hidden border-b border-line bg-surface-0",
+              "relative aspect-[2/1] overflow-hidden border-b border-line bg-surface-1",
               index === tools.length - 1 && "sm:aspect-auto sm:w-[46%] sm:shrink-0 sm:border-b-0 sm:border-r",
             ]}>
               <img
@@ -81,15 +82,15 @@ const tools = [
               />
             </div>
           )}
-          <div class:list={["p-6", index === tools.length - 1 && "sm:flex sm:flex-col sm:justify-center"]}>
-          <div class="flex items-center gap-3 mb-3">
-            <span class="font-mono text-[10px] uppercase tracking-[0.14em] text-accent border border-accent/40 rounded px-2 py-0.5">
+          <div class:list={["p-7", index === tools.length - 1 && "sm:flex sm:flex-col sm:justify-center"]}>
+          <div class="flex items-center gap-3">
+            <span class="label border border-line px-2 py-0.5 text-accent">
               {tool.badge}
             </span>
           </div>
-          <h2 class="text-xl font-semibold mb-2">{tool.title}</h2>
-          <p class="text-sm text-fg-muted mb-4">{tool.text}</p>
-          <span class="font-mono text-xs text-accent group-hover:text-accent-light transition-colors">
+          <h2 class="mt-4 text-[19px] font-semibold tracking-tight">{tool.title}</h2>
+          <p class="mt-2 mb-5 text-sm leading-relaxed text-fg-muted">{tool.text}</p>
+          <span class="link-arrow font-mono text-[11px] uppercase tracking-[0.14em] text-accent">
             {tool.action} →
           </span>
           </div>
@@ -97,7 +98,7 @@ const tools = [
       ))}
     </div>
 
-    <p class="mt-8 max-w-3xl text-sm leading-relaxed text-fg-subtle">
+    <p class="mt-10 max-w-3xl border-t border-line pt-6 text-sm leading-relaxed text-fg-subtle">
       Документация отвечает «как вызвать», инструменты — «как это выглядит и почему проходит»:
       ИНН, СНИЛС, ОГРН, ОГРНИП, КПП, ОКПО и счёт по письму № 515 проверяются теми же алгоритмами,
       что в продукте. Mock-ответ генератора и код подключения — на вкладке «Ответ и код»

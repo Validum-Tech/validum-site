@@ -100,18 +100,16 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
                 </div>
             </aside>
 
-            <article class="lg:col-span-9 min-w-0 overflow-hidden">
+            <article id="doc-body" class="lg:col-span-9 min-w-0 overflow-hidden">
 
-                <div class="mb-16">
-                    <div class="text-xs font-mono text-accent tracking-widest mb-2 uppercase">Документация</div>
-                    <h1 class="text-4xl font-bold tracking-tight mb-4">Документация Validum</h1>
-                    <p class="text-lg text-fg-muted leading-relaxed">
+                <div class="mb-12">
+                    <p class="kicker">Документация</p>
+                    <h1 class="poster-sm mt-4">Документация Validum</h1>
+                    <p class="mt-5 text-[16px] text-fg-muted leading-relaxed">
                         Генератор валидных тестовых данных для российских АБС. Self-hosted, zero-dependency core,
                         детерминированные алгоритмы без LLM.
                     </p>
                 </div>
-
-                <div class="h-px w-full bg-line my-12"></div>
 
                 <section id="install" class="mb-16 scroll-mt-24">
                     <h2 class="text-3xl font-semibold mb-6 flex items-center gap-3">
@@ -245,8 +243,6 @@ testImplementation("io.github.validum-tech:validum-allure:0.5.0")</code></pre>
                         </div>
                     </div>
                 </section>
-
-                <div class="h-px w-full bg-line my-12"></div>
 
                 <div class="mb-12">
                     <div class="text-xs font-mono text-accent tracking-widest mb-2 uppercase">Гайды</div>
@@ -422,8 +418,6 @@ docker run -d -p 8080:8080 \
                         и пространстве имён <code>urn:cbr-ru:ed:v2.0</code>, как у ЦБ.
                     </p>
                 </section>
-
-                <div class="h-px w-full bg-line my-12"></div>
 
                 <div class="mb-12">
                     <div class="text-xs font-mono text-accent tracking-widest mb-2 uppercase">Справочник API</div>
@@ -728,6 +722,18 @@ AccountValidator.isValid(account, AccountType.CLAC, "044525225"); // письм�
             </article>
         </div>
     </div>
+<style is:global>
+  /* Редакционная типографика документации: крупные заголовки, волосяные разделители. */
+  #doc-body h1 { font-size: clamp(2rem, 3.6vw, 2.9rem) !important; line-height: 1 !important; letter-spacing: -.035em !important; font-weight: 800 !important; margin-bottom: .75rem !important; }
+  #doc-body h2 { border-top: 1px solid var(--line); padding-top: 1.15rem; margin-top: 2.75rem; font-size: clamp(1.3rem, 2vw, 1.6rem) !important; line-height: 1.2 !important; letter-spacing: -.022em !important; font-weight: 700 !important; }
+  #doc-body h2.text-3xl, #doc-body h2.text-2xl { font-size: clamp(1.3rem, 2vw, 1.6rem) !important; }
+  #doc-body h2 > span { font-size: .78em !important; letter-spacing: .06em; }
+  #doc-body h3 { font-size: 1.02rem !important; letter-spacing: -.012em !important; font-weight: 650 !important; }
+  #doc-body p, #doc-body li { line-height: 1.72; max-width: 70ch; }
+  #doc-body table, #doc-body pre, #doc-body .hairline, #doc-body div:has(> pre) { max-width: none; }
+  #doc-body code { font-size: .92em; }
+  #doc-body table { font-variant-numeric: tabular-nums; }
+</style>
 </BaseLayout>
 
 <style>

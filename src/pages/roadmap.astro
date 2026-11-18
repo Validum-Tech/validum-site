@@ -16,21 +16,22 @@ const items = [
 ---
 
 <BaseLayout title="Планы развития" description="Планы развития Validum: что уже работает в 0.5.0, что запланировано в 0.4.x и дальше, и что сознательно не делаем (транзакции ED101/ED210/ED211).">
-  <div class="max-w-[900px] mx-auto px-6 py-16 lg:py-24">
-    <div class="mb-16">
-      <div class="text-xs font-mono text-accent tracking-widest mb-2 uppercase">Дорожная карта</div>
-      <h1 class="text-4xl sm:text-5xl font-bold tracking-tight mb-4">Что сделано, что дальше</h1>
-      <p class="text-lg text-fg-muted">Открытый план развития. Без обещаний «в Q3». Только факты.</p>
+  <div class="mx-auto max-w-[1000px] px-6 py-16 lg:px-10 lg:py-20">
+    <div class="mb-12">
+      <p class="kicker">Дорожная карта</p>
+      <h1 class="poster mt-4">Что сделано, что дальше</h1>
+      <div class="rule mt-7 max-w-xl"></div>
+      <p class="mt-6 text-[16px] text-fg-muted">Открытый план развития. Без обещаний «в Q3». Только факты.</p>
     </div>
 
-    <div class="space-y-3">
+    <div class="space-y-px bg-line">
       {items.map(item => (
-          <div class:list={["p-6 rounded-xl border flex items-start gap-4", item.status === 'next' ? 'border-metric/45 bg-metric-surface' : 'border-line bg-surface-2']}>
+          <div class:list={["flex items-start gap-5 p-6 transition-colors", item.status === 'next' ? 'bg-metric-surface' : 'bg-surface-0 hover:bg-surface-1']}>
 
-            <div class:list={["w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 border",
-              item.status === 'done' ? 'bg-accent/20 border-accent/40 text-accent' :
-                  item.status === 'next' ? 'bg-metric border-metric text-surface-0 animate-pulse' :
-                      'bg-surface-2 border-line text-fg-muted']}>
+            <div class:list={["flex h-8 w-8 flex-shrink-0 items-center justify-center border",
+              item.status === 'done' ? 'border-accent/40 text-accent' :
+                  item.status === 'next' ? 'border-line text-fg' :
+                      'border-line text-fg-subtle']}>
               {item.status === 'done' ? (
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
               ) : item.status === 'next' ? (
@@ -42,16 +43,16 @@ const items = [
 
             <div class="flex-1">
               <div class="flex items-center gap-3 mb-2 flex-wrap">
-              <span class:list={["text-[10px] font-mono px-2 py-0.5 rounded border uppercase tracking-wider",
-                item.status === 'done' ? 'text-accent border-accent/30 bg-accent/10' :
-                    item.status === 'next' ? 'text-accent-fg border-accent bg-accent' :
-                        'text-fg-muted border-line']}>
+              <span class:list={["label border px-2 py-0.5",
+                item.status === 'done' ? 'border-accent/30 text-accent' :
+                    item.status === 'next' ? 'border-line text-fg' :
+                        'border-line text-fg-subtle']}>
                 {item.status === 'done' ? 'Готово' : item.status === 'next' ? 'Дальше' : 'План'}
               </span>
-                <span class="text-xs font-mono text-fg-muted">{item.tag}</span>
+                <span class="font-mono text-[11px] uppercase tracking-[0.12em] text-fg-subtle">{item.tag}</span>
               </div>
-              <h3 class="text-lg font-semibold mb-1">{item.title}</h3>
-              <p class="text-sm text-fg-muted">{item.desc}</p>
+              <h3 class="text-[17px] font-semibold tracking-tight">{item.title}</h3>
+              <p class="mt-1.5 text-sm leading-relaxed text-fg-muted">{item.desc}</p>
             </div>
           </div>
       ))}

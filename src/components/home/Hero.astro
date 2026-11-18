@@ -1,255 +1,189 @@
 ---
-// src/components/home/Hero.astro
-const badRows = [
-  { label: 'ИНН', value: '779370501281', why: 'контрольная сумма' },
-  { label: 'СНИЛС', value: '43826479517', why: 'контрольное число' },
-  { label: 'Счёт', value: '40817810200006614154', why: 'ключ по 515' },
-  { label: 'Индекс', value: '604831', why: 'чужой регион' },
-];
-const goodRows = [
-  { label: 'ИНН', value: '779370501280', why: 'ok' },
-  { label: 'СНИЛС', value: '43826479516', why: 'ok' },
-  { label: 'Счёт', value: '40817810200006614153', why: '515' },
-  { label: 'Индекс', value: '143500', why: 'МО' },
-];
+// src/components/home/Hero.astro — первый экран в стиле V11:
+// постерная типографика слева, «прибор» с живой генерацией справа, бегущая строка под ними.
 import { EXPECTED_REST_ENDPOINTS, EXPECTED_TEST_COUNT } from '../../lib/content-contract.mjs';
+
+// Проверенные реквизиты для бесконечной ленты: каждое значение сходится по своим правилам.
+const stream = [
+  { label: 'ИНН', value: '779370501280', check: 'ФНС' },
+  { label: 'СНИЛС', value: '43826479516', check: 'ПФР' },
+  { label: 'ОГРН', value: '1027700132195', check: 'ФНС' },
+  { label: 'Счёт', value: '40817810200006614153', check: '515' },
+  { label: 'БИК', value: '044525225', check: 'ED807' },
+  { label: 'КПП', value: '773601001', check: 'ФНС' },
+  { label: 'Индекс', value: '143500', check: 'КЛАДР' },
+  { label: 'Паспорт', value: '4512 345678', check: 'ДУЛ' },
+  { label: 'ОКВЭД', value: '62.01', check: 'ОКВЭД-2' },
+];
+
+const ticker = [
+  'ИНН 779370501280',
+  'СНИЛС 43826479516',
+  'ОГРН 1027700132195',
+  'Счёт 40817810200006614153',
+  'КПП 773601001',
+  'БИК 044525225',
+  'Индекс 143500',
+];
+
+const metrics = [
+  { value: '0', label: 'зависимостей' },
+  { value: EXPECTED_TEST_COUNT, label: 'тестов' },
+  { value: EXPECTED_REST_ENDPOINTS, label: 'эндпоинтов REST' },
+  { value: '≈370', label: 'банков ЦБ' },
+];
 ---
 
-<section class="relative overflow-hidden pt-20 pb-24 lg:pt-28 lg:pb-32 w-full border-b border-line">
+<section class="relative border-b border-line">
+  <div class="mx-auto max-w-[1280px] px-6 pb-12 pt-10 lg:px-10 lg:pb-14 lg:pt-14">
+    <div class="grid items-start gap-12 lg:grid-cols-[1.4fr_.9fr] lg:gap-16">
 
-  <div class="absolute inset-0 bg-gradient-to-r from-danger/10 via-surface-0 via-45% to-surface-0 to-55% to-success/10 pointer-events-none -z-10"></div>
+      <!-- Постер -->
+      <div>
+        <p class="kicker">для АБС, банков и QA-команд</p>
+        <h1 class="poster-hero mt-6">
+          Не пишите<br />
+          генераторы —<br />
+          генерируйте<span class="text-accent">.</span>
+        </h1>
+        <div class="rule mt-8"></div>
+        <p class="mt-6 max-w-[36rem] text-[16px] leading-relaxed text-fg-muted sm:text-[17px]">
+          Валидно по умолчанию. Воспроизводимо до байта: один seed — тот же набор.
+          ИНН, СНИЛС, ОГРН, БИК и счета по 809-П с контрольными суммами, без сети и без LLM.
+        </p>
 
-  <div class="relative max-w-[1000px] mx-auto px-6 text-center z-30 mb-16">
-    <div class="flex justify-center mb-6">
-      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-accent/30 bg-surface-0/80 backdrop-blur text-accent text-xs font-medium">
-        <span class="w-2 h-2 rounded-full bg-accent animate-pulse"></span>
-        Для АБС, банков и стартапов
-      </div>
-    </div>
-
-    <h1 class="text-[30px] sm:text-5xl lg:text-[60px] font-bold tracking-tight leading-[1.08] mb-6">
-      Данные, которые <span class="text-transparent bg-clip-text bg-gradient-to-r from-accent-dark to-accent-light">проходят валидацию</span>
-    </h1>
-
-    <p class="text-base sm:text-lg text-fg-muted leading-relaxed mb-8 max-w-3xl mx-auto">
-      ИНН, СНИЛС, ОГРН, БИК, счета по 809-П и паспорта с проверенными контрольными суммами:
-      одной командой, воспроизводимо по <span class="font-mono text-accent whitespace-nowrap">--seed</span>
-    </p>
-
-    <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
-      <a href="#quickstart" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-accent hover:bg-accent-light text-accent-fg font-semibold px-8 py-3.5 rounded-lg text-sm transition-all shadow-glow-accent-md">
-        Начать работу
-      </a>
-      <a href="/docs" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 border border-line bg-surface-0/80 backdrop-blur hover:bg-surface-3 px-8 py-3.5 rounded-lg text-sm font-medium transition text-fg">
-        Документация
-      </a>
-    </div>
-
-    <div class="mt-7 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 font-mono text-xs text-fg-subtle">
-      <span><span class="text-accent">0</span> зависимостей у ядра</span>
-      <span class="hidden sm:inline text-line">·</span>
-      <span><span class="text-accent">{EXPECTED_TEST_COUNT}</span> тестов</span>
-      <span class="hidden sm:inline text-line">·</span>
-      <span><span class="text-accent">{EXPECTED_REST_ENDPOINTS}</span> эндпоинтов REST</span>
-    </div>
-  </div>
-
-  <!-- Было → стало: 4 реквизита, которые АБС отклонит, и они же после Validum -->
-  <div class="relative z-20 mx-auto w-full max-w-4xl px-6">
-    <div class="grid items-stretch gap-3 sm:grid-cols-[1fr_auto_1fr] sm:gap-0">
-
-      <!-- Как обычно -->
-      <div class="hero-card rounded-2xl border border-danger/35 bg-danger-surface/60 p-4 sm:p-5">
-        <div class="mb-3 flex items-center justify-between gap-2">
-          <span class="font-mono text-[10px] uppercase tracking-[0.16em] text-danger">как обычно</span>
-          <span class="font-mono text-[10px] text-danger/80">отклонит АБС</span>
+        <div class="mt-9 flex flex-wrap items-center gap-x-7 gap-y-4">
+          <a href="#quickstart" class="btn-solid">Начать за 2 минуты</a>
+          <a href="/tools/check" class="link-arrow">как проверяются реквизиты →</a>
         </div>
-        <ul class="space-y-2 font-mono text-[11px] sm:text-xs">
-          {badRows.map((row, i) => (
-            <li
-              class="hero-row hero-row--bad flex items-baseline justify-between gap-3 rounded-lg border border-danger/25 bg-surface-0/50 px-2.5 py-1.5"
-              style={`--i:${i}`}
-            >
-              <span class="shrink-0 text-fg-subtle">{row.label}</span>
-              <span class="truncate text-danger">{row.value}</span>
-              <span class="shrink-0 text-[10px] text-danger/80">{row.why}</span>
-            </li>
+        <p class="mt-4 font-mono text-[11px] uppercase tracking-[0.14em] text-fg-subtle">
+          от seed до набора — одна команда · от набора до теста — ноль правок
+        </p>
+
+        <!-- Четыре цифры продукта: подпись сверху, число крупно -->
+        <div class="mt-12 grid grid-cols-2 gap-px bg-line sm:grid-cols-4">
+          {metrics.map((metric) => (
+            <div class="bg-surface-0 pt-4">
+              <div class="label">{metric.label}</div>
+              <div class="mt-2 font-mono text-[26px] leading-none text-fg">{metric.value}</div>
+            </div>
           ))}
-        </ul>
+        </div>
       </div>
 
-      <!-- Преобразование -->
-      <div class="relative flex items-center justify-center py-2 sm:px-4">
-        <span class="pointer-events-none absolute left-0 right-0 top-1/2 hidden -translate-y-1/2 border-t border-dashed border-line sm:block" aria-hidden="true"></span>
-        <div class="hero-morph relative flex h-12 w-12 items-center justify-center rounded-full border border-accent/50 bg-surface-0 shadow-glow-accent-md">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-accent sm:rotate-0 rotate-90" aria-hidden="true">
-            <path d="M5 12h14" /><path d="m12 5 7 7-7 7" />
-          </svg>
-          <span class="pointer-events-none absolute inset-0 rounded-full border border-accent/40 hero-ring" aria-hidden="true"></span>
+      <!-- Прибор: счётчик + бесконечная лента проверенных реквизитов -->
+      <div class="hairline relative overflow-hidden bg-surface-1">
+        <div class="flex items-center justify-between border-b border-line px-4 py-3 font-mono text-[10px] uppercase tracking-[0.18em] text-fg-subtle">
+          <span>генерация · seed 42</span>
+          <span class="flex items-center gap-2 text-accent">
+            <span class="hero-live h-1.5 w-1.5 rounded-full bg-accent"></span>live
+          </span>
         </div>
-        <span class="absolute -bottom-1 left-1/2 -translate-x-1/2 whitespace-nowrap font-mono text-[10px] text-accent/90 sm:hidden">--seed 42</span>
-      </div>
 
-      <!-- После Validum -->
-      <div class="hero-card relative overflow-hidden rounded-2xl border border-accent/35 bg-accent/[0.06] p-4 sm:p-5">
-        <span class="hero-scan pointer-events-none absolute inset-x-0 top-0 h-16" aria-hidden="true"></span>
-        <div class="mb-3 flex items-center justify-between gap-2">
-          <span class="font-mono text-[10px] uppercase tracking-[0.16em] text-accent">validum --seed 42</span>
-          <span class="font-mono text-[10px] text-accent/80">4 / 4 сходится</span>
+        <div class="px-4 pb-3 pt-4">
+          <div class="num-xl">
+            <span id="hero-counter">1 000 000</span><span class="ml-1.5 font-mono text-[13px] text-fg-subtle">строк</span>
+          </div>
+          <div class="label mt-2">демонстрационный поток, не бенчмарк</div>
         </div>
-        <ul class="space-y-2 font-mono text-[11px] sm:text-xs">
-          {goodRows.map((row, i) => (
-            <li
-              class="hero-row hero-row--ok flex items-baseline justify-between gap-3 rounded-lg border border-accent/20 bg-surface-0/60 px-2.5 py-1.5"
-              style={`--i:${i}`}
-            >
-              <span class="shrink-0 text-fg-subtle">{row.label}</span>
-              <span class="truncate text-fg">{row.value}</span>
-              <span class="shrink-0 text-accent" aria-label={row.why}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12" /></svg>
-              </span>
-            </li>
-          ))}
-        </ul>
+
+        <div class="flow-mask h-[189px] overflow-hidden">
+          <div class="hero-flow" id="hero-rows">
+            {[0, 1].map(() => (
+              <div>
+                {stream.map((row) => (
+                  <div class="grid grid-cols-[68px_minmax(0,1fr)_60px_12px] items-center gap-2 border-b border-line/60 px-4 py-[7px] font-mono text-[11px] text-fg-muted">
+                    <span class="text-fg-subtle">{row.label}</span>
+                    <span class="truncate text-fg">{row.value}</span>
+                    <span class="text-right text-[10px] uppercase tracking-[0.12em] text-fg-subtle">{row.check}</span>
+                    <span class="text-right text-accent">✓</span>
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div class="grid grid-cols-3 border-t border-line">
+          <div class="border-r border-line px-4 py-3">
+            <div class="label">отклонено АБС</div>
+            <div class="mt-1 font-mono text-[17px] text-fg">0</div>
+          </div>
+          <div class="border-r border-line px-4 py-3">
+            <div class="label">проверок в строке</div>
+            <div class="mt-1 font-mono text-[17px] text-fg">6</div>
+          </div>
+          <div class="px-4 py-3">
+            <div class="label">проверок</div>
+            <div class="mt-1 font-mono text-[17px] text-fg" id="hero-checks">6 000 000</div>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="mt-3 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 font-mono text-[10px] text-fg-subtle">
-      <span><span class="text-accent">✔</span> одна и та же строка — без ручной правки</span>
-      <span><span class="text-accent">✔</span> тот же seed даёт тот же файл</span>
-      <span class="text-metric">906 тестов</span>
+    <!-- Бегущая строка: те же реквизиты, что в продукте -->
+    <div class="relative mt-12 overflow-hidden border-y border-line py-3">
+      <div class="hero-ticker flex w-max gap-8 whitespace-nowrap font-mono text-[11px] text-fg-subtle">
+        {[...ticker, ...ticker].map((item) => (
+          <span>{item} <span class="text-accent">✓</span></span>
+        ))}
+      </div>
     </div>
   </div>
 
   <style>
-    .hero-row--bad {
-      animation: heroBad 7s ease-in-out infinite;
-      animation-delay: calc(var(--i) * 120ms);
+    .hero-live {
+      animation: heroPulse 2.4s ease-in-out infinite;
     }
-    .hero-row--ok {
-      animation: heroOk 7s ease-in-out infinite;
-      animation-delay: calc(var(--i) * 160ms + 900ms);
+    @keyframes heroPulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
     }
-    .hero-ring {
-      animation: heroRing 7s ease-out infinite;
+
+    .hero-flow {
+      animation: heroFlow 26s linear infinite;
+      will-change: transform;
     }
-    .hero-scan {
-      background: linear-gradient(180deg, transparent, rgba(16, 185, 129, 0.22), transparent);
-      animation: heroScan 7s ease-in-out infinite;
-      animation-delay: 700ms;
+    @keyframes heroFlow {
+      from { transform: translateY(0); }
+      to { transform: translateY(-50%); }
     }
-    @keyframes heroScan {
-      0%, 10% { transform: translateY(-4rem); opacity: 0; }
-      18% { opacity: 1; }
-      55% { transform: translateY(24rem); opacity: 0; }
-      100% { transform: translateY(24rem); opacity: 0; }
+
+    .hero-ticker {
+      animation: heroTicker 34s linear infinite;
     }
-    @keyframes heroBad {
-      0%, 6% { opacity: 0.35; transform: translateX(-4px); }
-      12%, 16% { opacity: 1; transform: translateX(2px); }
-      20%, 100% { opacity: 0.75; transform: none; }
+    @keyframes heroTicker {
+      to { transform: translateX(-50%); }
     }
-    @keyframes heroOk {
-      0%, 14% { opacity: 0.15; transform: translateY(6px); border-color: rgba(16, 185, 129, 0.12); }
-      24%, 100% { opacity: 1; transform: none; border-color: rgba(16, 185, 129, 0.35); }
-    }
-    @keyframes heroRing {
-      0%, 12% { opacity: 0; transform: scale(0.7); }
-      24% { opacity: 0.9; transform: scale(1); }
-      60%, 100% { opacity: 0; transform: scale(1.9); }
-    }
+
     @media (prefers-reduced-motion: reduce) {
-      .hero-row--bad, .hero-row--ok, .hero-ring, .hero-scan { animation: none; opacity: 1; }
+      .hero-flow, .hero-ticker, .hero-live {
+        animation: none !important;
+      }
     }
   </style>
 
-  <div class="relative max-w-[1000px] mx-auto px-6 z-30">
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-      <div class="p-4 rounded-xl border border-line bg-surface-2 text-center backdrop-blur hover:border-metric/35 transition">
-        <div class="text-metric text-2xl font-bold font-mono mb-1">906</div>
-        <div class="text-[11px] text-fg-muted uppercase tracking-wider">тестов</div>
-      </div>
-      <div class="p-4 rounded-xl border border-line bg-surface-2 text-center backdrop-blur hover:border-metric/35 transition">
-        <div class="text-metric text-2xl font-bold font-mono mb-1">~370</div>
-        <div class="text-[11px] text-fg-muted uppercase tracking-wider">банков ЦБ</div>
-      </div>
-      <div class="p-4 rounded-xl border border-line bg-surface-2 text-center backdrop-blur hover:border-metric/35 transition">
-        <div class="text-metric text-2xl font-bold font-mono mb-1">19</div>
-        <div class="text-[11px] text-fg-muted uppercase tracking-wider">эндпоинтов</div>
-      </div>
-      <div class="p-4 rounded-xl border border-line bg-surface-2 text-center backdrop-blur hover:border-metric/35 transition">
-        <div class="text-metric text-2xl font-bold font-mono mb-1">0</div>
-        <div class="text-[11px] text-fg-muted uppercase tracking-wider">зависимостей</div>
-      </div>
-    </div>
-  </div>
+  <script>
+    // Счётчик демонстрационный: темп визуальный, производительность продукта
+    // на сайте не заявляется (замеров пока нет). Проверки — производная от счётчика.
+    const counter = document.getElementById('hero-counter');
+    const checks = document.getElementById('hero-checks');
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  <div class="absolute bottom-6 left-1/2 -translate-x-1/2 animate-bounce z-30">
-    <a href="#quickstart" aria-label="Прокрутить вниз">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-fg-muted hover:text-accent transition cursor-pointer">
-        <path d="m6 9 6 6 6-6"/>
-      </svg>
-    </a>
-  </div>
+    if (counter && !reduced) {
+      let value = 1_000_000;
+      let last = performance.now();
+      const format = (n: number) => n.toLocaleString('ru-RU').replace(/,/g, ' ');
 
+      const tick = (now: number) => {
+        const dt = Math.min(now - last, 120);
+        last = now;
+        value += Math.round((dt / 1000) * 1800);
+        counter.textContent = format(value);
+        if (checks) checks.textContent = format(value * 6);
+        requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    }
+  </script>
 </section>
-
-<style>
-  @keyframes red-loop {
-    0%    { opacity: 1; transform: translateX(0) scale(1); }
-    4%    { opacity: 0; transform: translateX(200px) scale(0.3); }
-    5%    { opacity: 0; transform: translateX(0) scale(1); }
-    7%, 100% { opacity: 1; transform: translateX(0) scale(1); }
-  }
-
-  .animate-suck-1 { animation: red-loop 15s ease-in-out infinite; animation-delay: 0s; animation-fill-mode: both; }
-  .animate-suck-2 { animation: red-loop 15s ease-in-out infinite; animation-delay: 3s; animation-fill-mode: both; }
-  .animate-suck-3 { animation: red-loop 15s ease-in-out infinite; animation-delay: 6s; animation-fill-mode: both; }
-  .animate-suck-4 { animation: red-loop 15s ease-in-out infinite; animation-delay: 9s; animation-fill-mode: both; }
-  .animate-suck-5 { animation: red-loop 15s ease-in-out infinite; animation-delay: 12s; animation-fill-mode: both; }
-
-  .green-card {
-    opacity: 0;
-    animation-duration: 15s;
-    animation-timing-function: ease-in-out;
-    animation-iteration-count: infinite;
-    animation-fill-mode: both;
-  }
-
-  @keyframes push-stack {
-    0%   { opacity: 0; transform: translate(-50px, 0) scale(0.8); }
-    2%   { opacity: 1; transform: translate(0, 0) scale(1); }
-    20%  { opacity: 1; transform: translate(0, 0) scale(1); }
-    22%  { opacity: 1; transform: translate(0, 100px) scale(1); }
-    40%  { opacity: 1; transform: translate(0, 100px) scale(1); }
-    42%  { opacity: 1; transform: translate(0, 200px) scale(1); }
-    60%  { opacity: 1; transform: translate(0, 200px) scale(1); }
-    62%  { opacity: 1; transform: translate(0, 300px) scale(1); }
-    80%  { opacity: 1; transform: translate(0, 300px) scale(1); }
-    82%  { opacity: 0; transform: translate(0, 400px) scale(0.8); }
-    100% { opacity: 0; transform: translate(0, 400px) scale(0.8); }
-  }
-
-  .animate-push-1 { animation-name: push-stack; animation-delay: 0.3s; z-index: 50; }
-  .animate-push-2 { animation-name: push-stack; animation-delay: 3.3s; z-index: 40; }
-  .animate-push-3 { animation-name: push-stack; animation-delay: 6.3s; z-index: 30; }
-  .animate-push-4 { animation-name: push-stack; animation-delay: 9.3s; z-index: 20; }
-  .animate-push-5 { animation-name: push-stack; animation-delay: 12.3s; z-index: 10; }
-
-  .perspective-1000 { perspective: 1000px; }
-  .backface-hidden { backface-visibility: hidden; }
-  .rotate-y-180 { transform: rotateY(180deg); }
-
-  @keyframes flip-coin {
-    0% { transform: rotateY(0deg); }
-    40% { transform: rotateY(180deg); }
-    50% { transform: rotateY(180deg); }
-    90% { transform: rotateY(360deg); }
-    100% { transform: rotateY(360deg); }
-  }
-
-  .animate-flip-coin {
-    animation: flip-coin 8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-    transform-style: preserve-3d;
-  }
-</style>

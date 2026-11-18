@@ -118,7 +118,7 @@
 @layer base {
     :root {
         /* --- Palette (сырые цвета) --- */
-        --palette-ink-950: #09090b;
+        --palette-ink-950: #000000;
         --palette-ink-900: #121214;
         --palette-ink-800: #18181b;
         --palette-ink-700: #27272a;
@@ -146,7 +146,7 @@
         /* --- Foreground --- */
         --fg:         var(--palette-ink-50);
         --fg-muted:   var(--palette-ink-200);
-        --fg-subtle:  rgba(255, 255, 255, 0.46); /* 4.6:1 на surface-0 — минимум AA для 12–16 px */
+        --fg-subtle:  rgba(255, 255, 255, 0.5); /* 4.6:1 на surface-0 — минимум AA для 12–16 px */
 
         /* --- Borders --- */
         --line:        rgba(255, 255, 255, 0.10);
@@ -177,22 +177,10 @@
         --success-surface: rgba(16, 185, 129, 0.08);
         --success-border:  rgba(16, 185, 129, 0.30);
 
-        /* --- Фон страницы: мягкие источники света сверху (без резких пятен) --- */
-        --page-glow-left: radial-gradient(
-            58rem 30rem at 14% -12%,
-            color-mix(in oklab, var(--accent) 9%, transparent),
-            transparent 70%
-        );
-        --page-glow-right: radial-gradient(
-            44rem 26rem at 88% 6%,
-            color-mix(in oklab, var(--accent-light) 6%, transparent),
-            transparent 72%
-        );
-        --page-glow-depth: linear-gradient(
-            180deg,
-            color-mix(in oklab, var(--accent) 4%, var(--surface-0)) 0,
-            var(--surface-0) 34rem
-        );
+        /* --- Фон страницы: чистый чёрный, без свечений (как в V11) --- */
+        --page-glow-left: none;
+        --page-glow-right: none;
+        --page-glow-depth: none;
 
         /* --- Glows --- */
         --glow-accent-sm:  0 0 15px rgba(16, 185, 129, 0.40);
@@ -206,7 +194,7 @@
 
     html {
         color-scheme: dark;
-        overflow-x: hidden;              /* страховка от горизонтального скролла */
+        overflow-x: clip;                /* clip, а не hidden: hidden ломает position: sticky */
         -webkit-text-size-adjust: 100%;  /* iOS: не увеличивать текст автоматически */
         text-size-adjust: 100%;
     }
@@ -215,16 +203,11 @@
         background-color: var(--surface-0);
         /* Плавный переход от света сверху к чистому фону — как в первой версии витрины,
            но в нашей палитре: сияние из акцента, без чужих цветов. */
-        background-image:
-            var(--page-glow-left),
-            var(--page-glow-right),
-            var(--page-glow-depth);
-        background-repeat: no-repeat;
-        background-attachment: fixed;
+        background-image: none;
         color: var(--fg);
         font-family: var(--font-sans);
         -webkit-font-smoothing: antialiased;
-        overflow-x: hidden;              /* дублируем на body для Safari */
+        overflow-x: clip;                /* дублируем на body; hidden сделал бы body скролл-контейнером */
     }
 
     /* iOS: поля с font-size < 16px вызывают автозум при фокусе */
@@ -344,4 +327,180 @@ textarea:focus-visible {
 }
 .skip-link:focus {
     left: 0;
+}
+
+/* ============================================================================
+   РЕДАКЦИОННЫЙ СЛОЙ (стиль «постер + прибор»)
+   Крупная типографика, тонкие линии, моно-подписи капсом, янтарные числа.
+   Утилиты для всех страниц: не переписывая разметку, задают общий характер.
+   ============================================================================ */
+:root {
+    /* Чистый чёрный фон: постер держится на контрасте, без «тумана» */
+    --page-glow-left: none;
+    --page-glow-right: none;
+}
+
+/* ── Подписи-кикеры ─────────────────────────────────────────────── */
+.kicker {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    line-height: 1;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+}
+.kicker-quiet {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    line-height: 1;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--fg-subtle);
+}
+.label {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    line-height: 1.2;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--fg-subtle);
+}
+
+/* ── Постерная типографика ──────────────────────────────────────── */
+.poster {
+    font-size: clamp(2.6rem, 7vw, 5.4rem);
+    line-height: 0.92;
+    letter-spacing: -0.045em;
+    font-weight: 700;
+    text-wrap: balance;
+}
+.poster-hero {
+    font-size: clamp(2.2rem, 4.8vw, 4.25rem);
+    line-height: 0.9;
+    letter-spacing: -0.045em;
+    font-weight: 800;
+    text-wrap: balance;
+}
+
+@media (max-width: 640px) {
+    .poster-hero {
+        font-size: 2rem;
+        letter-spacing: -0.035em;
+    }
+}
+
+.poster-hero em {
+    font-style: normal;
+    margin-left: 0.1em;
+    color: transparent;
+    -webkit-text-stroke: 1.6px rgba(255, 255, 255, 0.38);
+}
+@supports not (-webkit-text-stroke: 1px black) {
+    .poster-hero em {
+        color: rgba(255, 255, 255, 0.42);
+        -webkit-text-stroke: 0;
+    }
+}
+
+.poster-sm {
+    font-size: clamp(2rem, 4.4vw, 3.4rem);
+    line-height: 1.02;
+    letter-spacing: -0.035em;
+    font-weight: 700;
+    text-wrap: balance;
+}
+.poster-out {
+    color: transparent;
+    -webkit-text-stroke: 1.4px rgba(255, 255, 255, 0.32);
+}
+@supports not (-webkit-text-stroke: 1px black) {
+    .poster-out {
+        color: rgba(255, 255, 255, 0.4);
+    }
+}
+
+/* ── Линии и цифры ──────────────────────────────────────────────── */
+.rule {
+    height: 1px;
+    border: 0;
+    background: var(--line);
+}
+.hairline {
+    border: 1px solid var(--line);
+    border-radius: 3px;
+}
+.num {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+}
+.num-xl {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-size: clamp(2rem, 3.4vw, 2.75rem);
+    line-height: 1;
+    letter-spacing: -0.03em;
+}
+
+/* ── Кнопки ─────────────────────────────────────────────────────── */
+.btn-solid,
+.btn-hairline {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.8rem 1.5rem;
+    border-radius: 3px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+.btn-solid {
+    background: var(--accent);
+    color: var(--accent-fg);
+    border: 1px solid var(--accent);
+}
+.btn-solid:hover {
+    background: var(--accent-light);
+    border-color: var(--accent-light);
+}
+.btn-hairline {
+    border: 1px solid var(--line-strong);
+    color: var(--fg);
+}
+.btn-hairline:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+/* ── Ссылка со стрелкой ─────────────────────────────────────────── */
+.link-arrow {
+    display: inline-flex;
+    align-items: center;
+    min-height: 1.5rem;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--fg-subtle);
+    border-bottom: 1px solid var(--line-strong);
+    padding-bottom: 2px;
+    transition: color 0.15s ease, border-color 0.15s ease;
+}
+.link-arrow:hover {
+    color: var(--fg);
+    border-color: var(--accent);
+}
+
+/* ── Заголовки страниц (общий ритм) ─────────────────────────────── */
+main h1 {
+    text-wrap: balance;
+}
+main h2,
+main h3 {
+    text-wrap: pretty;
+}
+
+/* ── Лента строк: растворяющиеся края ───────────────────────────── */
+.flow-mask {
+    -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 12%, #000 88%, transparent 100%);
+    mask-image: linear-gradient(180deg, transparent 0, #000 12%, #000 88%, transparent 100%);
 }

@@ -1,52 +1,45 @@
 ---
-// src/components/home/Features.astro
+// src/components/home/Features.astro — список строк на волосяных линиях: номер, заголовок, пояснение.
+const items = [
+  {
+    title: 'Контрольные суммы сходятся',
+    text: 'ИНН, СНИЛС, ОГРН и счета по 809-П генерируются по алгоритмам ФНС, ПФР и ЦБ РФ — контрольные суммы сходятся, номер счёта проходит проверку по письму 515.',
+  },
+  {
+    title: 'Каскадные дефолты',
+    text: 'Задал age=16 — паспорт выдан в 14 лет, статус «Действительный». Всё логично связано.',
+  },
+  {
+    title: 'Безопасность',
+    text: 'Zero-dependency core. Никаких LLM и сетевых вызовов. Аудируется за час.',
+  },
+  {
+    title: 'Явный выбор банка',
+    text: '.bik("044525225") — и вы получаете ПАО Сбербанк. Невалидный БИК вызовет ошибку 400, а не молчаливый откат.',
+  },
+];
 ---
 
-<section class="relative py-24 border-t border-line">
-  <div class="max-w-[1200px] mx-auto px-6">
-    <div class="mb-16 text-center">
-      <div class="text-xs font-mono text-accent tracking-widest mb-3 uppercase">02 / Почему Validum</div>
-      <h2 class="text-3xl sm:text-5xl font-bold tracking-tight mb-4">Больше, чем просто Faker</h2>
-      <p class="text-fg-muted max-w-2xl mx-auto">Валидность контрольных сумм, каскадные дефолты и работа в закрытом контуре.</p>
+<section class="relative border-t border-line py-14 lg:py-16">
+  <div class="mx-auto max-w-[1280px] px-6 lg:px-10">
+    <div class="grid gap-6 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] md:items-end">
+      <div>
+        <p class="kicker">02 / почему validum</p>
+        <h2 class="poster-sm mt-4">Больше, чем просто Faker</h2>
+      </div>
+      <p class="text-fg-muted md:pb-2">Валидность контрольных сумм, каскадные дефолты и работа в закрытом контуре.</p>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+    <div class="rule mt-8"></div>
 
-      <div class="md:col-span-2 p-8 rounded-2xl border border-line bg-surface-2 relative overflow-hidden group hover:border-accent/40 transition-colors">
-        <div class="absolute top-0 right-0 w-64 h-64 bg-accent/5 rounded-full blur-3xl group-hover:bg-accent/10 transition-colors"></div>
-        <div class="relative z-10">
-          <div class="w-12 h-12 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center mb-6 text-accent">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
-          </div>
-          <h3 class="text-2xl font-semibold mb-3">Контрольные суммы сходятся</h3>
-          <p class="text-fg-muted leading-relaxed max-w-md">ИНН, СНИЛС, ОГРН и счета по 809-П генерируются по алгоритмам ФНС, ПФР и ЦБ РФ — контрольные суммы сходятся, номер счёта проходит проверку по письму 515.</p>
-        </div>
-      </div>
-
-      <div class="p-8 rounded-2xl border border-line bg-surface-2 relative group hover:border-accent/40 transition-colors">
-        <div class="w-12 h-12 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center mb-6 text-accent">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" x2="6" y1="3" y2="15"/><circle cx="18" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M18 9a9 9 0 0 1-9 9"/></svg>
-        </div>
-        <h3 class="text-xl font-semibold mb-3">Каскадные дефолты</h3>
-        <p class="text-fg-muted leading-relaxed text-sm">Задал <code>age=16</code> — паспорт выдан в 14 лет, статус «Действительный». Всё логично связано.</p>
-      </div>
-
-      <div class="p-8 rounded-2xl border border-line bg-surface-2 relative group hover:border-accent/40 transition-colors">
-        <div class="w-12 h-12 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center mb-6 text-accent">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="10" x="3" y="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-        </div>
-        <h3 class="text-xl font-semibold mb-3">Безопасность</h3>
-        <p class="text-fg-muted leading-relaxed text-sm">Zero-dependency core. Никаких LLM и сетевых вызовов. Аудируется за час.</p>
-      </div>
-
-      <div class="md:col-span-2 p-8 rounded-2xl border border-line bg-surface-2 relative overflow-hidden group hover:border-accent/40 transition-colors">
-        <div class="w-12 h-12 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center mb-6 text-accent">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/><path d="M10 6h4"/><path d="M10 10h4"/><path d="M10 14h4"/><path d="M10 18h4"/></svg>
-        </div>
-        <h3 class="text-2xl font-semibold mb-3">Явный выбор банка</h3>
-        <p class="text-fg-muted leading-relaxed max-w-md"><code>.bik("044525225")</code> — и вы получаете ПАО Сбербанк. Невалидный БИК вызовет ошибку 400, а не молчаливый откат.</p>
-      </div>
-
-    </div>
+    <ul class="mt-0">
+      {items.map((item, index) => (
+        <li class="grid gap-x-8 gap-y-2 border-b border-line py-6 md:grid-cols-[3rem_minmax(0,1fr)_minmax(0,1fr)] md:items-baseline">
+          <span class="font-mono text-[10px] uppercase tracking-[0.18em] text-fg-subtle">0{index + 1}</span>
+          <h3 class="text-[19px] font-semibold tracking-tight text-fg">{item.title}</h3>
+          <p class="max-w-[38rem] text-sm leading-relaxed text-fg-muted">{item.text}</p>
+        </li>
+      ))}
+    </ul>
   </div>
 </section>
