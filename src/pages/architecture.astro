@@ -5,12 +5,12 @@ const stats = [
   { value: '4', label: 'модуля' },
   { value: '19', label: 'эндпоинтов REST' },
   { value: '10', label: 'команд CLI' },
-  { value: '906', label: 'тестов' },
+  { value: '912', label: 'тестов' },
 ];
 
 const modules = [
   { name: 'validum-core', note: 'Java 17+ · ноль зависимостей' },
-  { name: 'validum-api', note: 'Spring Boot 3.5.7 · :8080' },
+  { name: 'validum-api', note: 'Spring Boot 4.1.2 · :8080' },
   { name: 'validum-cli', note: 'Picocli · fat-jar ~15 МБ' },
   { name: 'validum-allure', note: 'JUnit 5 Extension' },
 ];
@@ -42,7 +42,7 @@ const cards = [
     dot: 'bg-accent/50',
     title: 'Данные и справочники',
     items: [
-      'ED807.xml: около 1,4 тыс. записей ЦБ, фильтр PtType=20 → около 370 банков',
+      'ED807.xml: 1360 участников ЦБ, фильтр PtType=20 → около 370 банков',
       'Справочник БИК обязателен: <code>VALIDUM_BIK_FILE</code> или <code>data/ED807.xml</code>; без файла — 503 <code>bik_source_missing</code>, демо-набора нет',
       'ОКВЭД-2: 3069 кодов (ОК 029-2014) у ЮЛ и ИП — код и наименование; явный код проверяется по справочнику',
       'Ресурсы: адреса из КЛАДР (90 субъектов, ~125 тыс. населённых пунктов, ~2 млн улиц), 100 + 190 имён, 310 тайных слов, 1 менеджер',
@@ -53,9 +53,9 @@ const cards = [
     dot: 'bg-accent-dark',
     title: 'Сборка и поставка',
     items: [
-      'Gradle 8.14 · Java 17+ (API — 21) · 4 модуля · configuration-cache',
+      'Gradle 9.9.1 · Java 17+ (все модули) · 4 модуля · configuration-cache',
       'CI: ubuntu + Corretto 21, <code>./gradlew build</code>, отчёты тестов в артефактах',
-      '906 тестов: 660 core · 92 api · 100 cli · 21 allure',
+      '912 тестов: 682 core · 92 api · 117 cli · 21 allure',
       'Docker: multi-stage образ, порт 8080, <code>./data:/app/data:ro</code>',
     ],
   },
@@ -139,7 +139,7 @@ const cards = [
           <path d="M5 11 11 5M6 5h5v5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
       </a>
-      <span>Схема отражает структуру репозитория: 4 модуля Gradle, 19 эндпоинтов, 10 команд CLI, 906 тестов.</span>
+      <span>Схема отражает структуру репозитория: 4 модуля Gradle, 19 эндпоинтов, 10 команд CLI, 912 тестов.</span>
     </div>
 
     <script>
@@ -167,7 +167,7 @@ const cards = [
 
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-4">
       <p class="text-xs font-mono text-fg-muted">
-        Диаграмма · 19 эндпоинтов · 10 команд · 4 модуля · 906 тестов
+        Диаграмма · 19 эндпоинтов · 10 команд · 4 модуля · 912 тестов
       </p>
       <div class="flex flex-wrap items-center gap-3">
         <a href="/diagrams/validum-architecture.html?theme=dark"

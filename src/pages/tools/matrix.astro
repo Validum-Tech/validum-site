@@ -1,0 +1,13 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ToolFrame from '../../components/ToolFrame.astro';
+---
+
+<BaseLayout
+  title="Реквизиты ФЛ, ИП и ЮЛ"
+  description="Реквизиты ФЛ, ИП и ЮЛ в Validum: 69 / 72 / 21 колонка плоской выдачи, форматы и чем проверяется каждое значение."
+>
+  <h1 class="sr-only">Реквизиты ФЛ, ИП и ЮЛ</h1>
+  <p class="sr-only">Таблица реквизитов профилей Validum: реквизиты физического лица, ИП и юридического лица, форматы выдачи и валидаторы для каждого значения.</p>
+  <ToolFrame src="/tools/matrix.html" title="Реквизиты ФЛ, ИП и ЮЛ" hint="справочник · 0.7.0" />
+</BaseLayout>

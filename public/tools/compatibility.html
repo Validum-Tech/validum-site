@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="ru" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<title>Validum · совместимость: формат, ОС и JDK</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="/tools/_theme.css?v=1">
+<style>
+:root{--surface-0:#09090b;--surface-1:rgba(255,255,255,.02);--surface-2:rgba(255,255,255,.03);
+--surface-3:rgba(255,255,255,.06);--fg:#fafafa;--fg-muted:#a1a1aa;--fg-subtle:rgba(255,255,255,.45);
+--line:rgba(255,255,255,.10);--line-strong:rgba(255,255,255,.18);--accent:#10b981;--accent-2:#34d399;
+--red:#ef4444;--amber:#f5b544;--mono:'JetBrains Mono',ui-monospace,monospace;--sans:'Inter',system-ui,sans-serif}
+*{box-sizing:border-box}
+body{margin:0;background:var(--surface-0);color:var(--fg);font-family:var(--sans);font-size:15px;line-height:1.6}
+.wrap{max-width:1200px;margin:0 auto;padding:0 24px}
+header{padding:34px 0 4px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-2);display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.tag{border:1px solid rgba(16,185,129,.5);border-radius:6px;padding:1px 7px;font-size:10.5px;letter-spacing:.08em}
+h1{font-size:32px;line-height:1.15;margin:10px 0 8px;letter-spacing:-.02em}
+.lead{color:var(--fg-muted);max-width:72ch;margin:0}
+h2.sect{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--fg-subtle);
+margin:28px 0 12px;display:flex;align-items:center;gap:10px}
+h2.sect::after{content:"";flex:1;height:1px;background:var(--line)}
+.table{border:1px solid var(--line);border-radius:2px;overflow:hidden}
+.thead,.trow{display:grid;grid-template-columns:minmax(0,1.5fr) 92px 92px 104px 96px minmax(0,1.15fr);
+gap:8px;padding:9px 14px;align-items:center}
+.thead{background:var(--surface-2);font-family:var(--mono);font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--fg-subtle)}
+.thead span:nth-child(2),.thead span:nth-child(3),.thead span:nth-child(4),.thead span:nth-child(5){text-align:center}
+.trow{border-top:1px solid var(--line);font-size:13.5px}
+.trow:hover{background:var(--surface-1)}
+.trow .f{font-family:var(--mono);font-size:12.5px;color:var(--fg)}
+.trow .f small{display:block;font-family:var(--sans);font-size:11.5px;color:var(--fg-subtle);margin-top:1px}
+.trow .y,.trow .n,.trow .q{text-align:center;font-family:var(--mono);font-size:13px}
+.trow .y{color:var(--accent-2)}
+.trow .n{color:rgba(255,255,255,.28)}
+.trow .q{color:rgba(255,255,255,.2)}
+.trow .w{font-size:12px;color:var(--fg-muted)}
+.trow .w code{font-family:var(--mono);font-size:11px;color:var(--accent-2)}
+.group{border-top:1px solid var(--line);background:var(--surface-2);padding:6px 14px;
+font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--fg-subtle)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:2px}
+.card{background:var(--surface-0);padding:14px 16px}
+.card h3{margin:0 0 6px;font-size:14.5px;display:flex;gap:8px;align-items:center}
+.card h3 code{font-family:var(--mono);font-size:11.5px;color:var(--accent-2)}
+.card p{margin:0;font-size:12.5px;color:var(--fg-muted);line-height:1.5}
+.card ul{margin:8px 0 0;padding-left:16px;font-size:12px;color:var(--fg-muted);line-height:1.6}
+pre{margin:0;background:var(--surface-1);border:1px solid var(--line);border-radius:2px;padding:14px 16px;
+font-family:var(--mono);font-size:12px;line-height:1.65;overflow-x:auto;color:var(--fg)}
+pre .c{color:var(--fg-subtle)}
+.note{margin:22px 0 0;padding-top:14px;border-top:1px solid var(--line);font-size:12.5px;color:var(--fg-subtle);max-width:80ch}
+.warn{margin-top:14px;border-left:2px solid rgba(245,181,68,.6);padding:8px 14px;background:rgba(245,181,68,.05);
+font-size:12.5px;color:var(--fg-muted)}
+.warn b{color:var(--fg)}
+@media (max-width:860px){
+  .thead,.trow{grid-template-columns:minmax(0,1fr) 44px 44px 44px 40px;padding:9px 10px}
+  .trow .w{grid-column:1 / -1;color:var(--fg-subtle);font-size:11.5px}
+  .thead .w{display:none}
+  h1{font-size:24px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <p class="eyebrow">инструменты validum <span class="tag">совместимость</span></p>
+  <h1>Где и на чём это проверено</h1>
+  <p class="lead">
+    Только то, что реально гоняется в CI. Три джобы — Linux на JDK 21, Linux на JDK 17 и Windows на JDK 21 —
+    прогоняют полный набор тестов, включая каждый формат выдачи. macOS в CI нет: там прогон ручной,
+    и это честно помечено, а не закрашено зелёным.
+  </p>
+</header>
+
+<h2 class="sect">форматы и среды</h2>
+<div class="table">
+  <div class="thead">
+    <span>формат</span><span>linux · 21</span><span>linux · 17</span><span>windows · 21</span><span>macos</span><span class="w">чем проверено</span>
+  </div>
+  <div id="rows"></div>
+</div>
+
+<h2 class="sect">что делает CI</h2>
+<div class="cards">
+  <div class="card">
+    <h3><code>build</code> · ubuntu-latest · JDK 21</h3>
+    <p>Полный <code>./gradlew build</code>: тесты, fat jar, смоук собранного jar, демо-прогон 17/17, предрелизная проверка, публичный аудит снимка, смоук потребителя на JDK 17 и живой REST.</p>
+    <ul><li>912 тестов</li><li>19 эндпоинтов проверяются live</li></ul>
+  </div>
+  <div class="card">
+    <h3><code>build-jdk17</code> · ubuntu-latest · JDK 17</h3>
+    <p>Тот же <code>./gradlew build</code>, но на JDK 17 — страховка от случайного API из 21. Все модули собираются с <code>--release 17</code>.</p>
+    <ul><li>байткод 61</li><li>весь API поднят на 17</li></ul>
+  </div>
+  <div class="card">
+    <h3><code>windows</code> · windows-latest · JDK 21</h3>
+    <p>Сборка и тесты на Windows: пути, кодировка консоли, PowerShell-скрипты и <code>gradlew.bat</code>. Ловит то, что Linux прощает.</p>
+    <ul><li>CRLF и cp866</li><li><code>test.ps1</code></li></ul>
+  </div>
+  <div class="card">
+    <h3>Docker · сборка образа</h3>
+    <p>На PR собирает обе платформы без публикации и прогоняет контейнер; на теге — публикует <code>amd64</code> и <code>arm64</code>.</p>
+    <ul><li>smoke: <code>/actuator/health</code></li><li>теги <code>latest</code> и версия</li></ul>
+  </div>
+</div>
+
+<h2 class="sect">как проверить у себя</h2>
+<pre><span class="c"># полный набор тестов — то же, что гоняет CI</span>
+./gradlew build
+
+<span class="c"># весь предрелизный контур: тесты, jar, демо, REST, потребитель</span>
+./tools/verify-all.ps1 -Fresh -Strict      <span class="c"># Windows</span>
+./tools/verify-all.sh  --fresh --strict    <span class="c"># Linux / macOS</span>
+
+<span class="c"># только интересующий формат</span>
+./gradlew :validum-core:test --tests "*CsvForExcelTest*"
+java -jar validum.jar generate individual --seed 42 --format sql --dialect postgres</pre>
+
+<div class="warn">
+  <b>Свой JDK или своя ОС?</b> Мы собираем и тестируем на 17 и 21; для других версий гарантий нет, но проверка занимает
+  один прогон <code>./gradlew build</code> — он и есть критерий. Если JDK новее 21, Gradle предупредит о deprecated-фичах,
+  а не упадёт.
+</div>
+
+<p class="note">
+  Сверено 20.11.2026 с <code>.github/workflows/ci.yml</code> (релиз 0.7.0, 912 тестов). Значения «не гоняется» означают,
+  что проверки нет в CI — это не заявление о неработоспособности. Форматы: <code>json</code>, <code>json-array</code>,
+  <code>json-nested</code>, <code>csv</code>, <code>csv-semicolon</code> (он же csv-excel), <code>sql</code> с диалектами
+  postgres / oracle / mysql, набор <code>set</code> с четырьмя файлами и откатом.
+</p>
+
+</div>
+
+<script>
+const Y = '<span class="y">✓</span>';
+const NO = '<span class="n">—</span>';
+const groups = [
+  { title: 'обмен и файлы', rows: [
+    ['json', 'один объект профиля', Y, Y, Y, NO, '<code>OutputFormatTest</code>, <code>NestedFormatTest</code>'],
+    ['json-array', 'массив без обёртки', Y, Y, Y, NO, '<code>OutputFormatTest</code>'],
+    ['json-nested', 'группы как в REST-DTO', Y, Y, Y, NO, '<code>NestedWriterTest</code>, <code>NestedFormatTest</code>'],
+    ['csv', '69 колонок, запятая', Y, Y, Y, NO, '<code>CsvExporterTest</code>'],
+    ['csv-semicolon', 'BOM, «;», для Excel', Y, Y, Y, NO, '<code>CsvForExcelTest</code>, <code>RussianHeadersTest</code>'],
+  ]},
+  { title: 'нагрузка в БД и набор', rows: [
+    ['sql', 'DDL + INSERT, 3 диалекта', Y, Y, Y, NO, '<code>SqlExporterTest</code>'],
+    ['set', '4 файла + relations', Y, Y, Y, NO, '<code>SetRunnerTest</code>, <code>SetSummaryTest</code>'],
+    ['teardown', 'DELETE обратным порядком', Y, Y, Y, NO, '<code>SetTeardownTest</code>, <code>TeardownSqlTest</code>'],
+  ]},
+  { title: 'точки входа', rows: [
+    ['cli · fat jar', 'один jar, офлайн', Y, Y, Y, NO, '<code>CliSmokeTest</code>, смоук собранного jar'],
+    ['rest · boot jar', '19 эндпоинтов live', Y, NO, NO, NO, 'шаг <code>rest-smoke</code> в джобе <code>build</code>'],
+    ['consumer · maven', 'ядро из Central на JDK 17', Y, NO, NO, NO, '<code>consumer-smoke</code> (байткод 61)'],
+  ]},
+];
+let html = '';
+for (const g of groups) {
+  html += `<div class="group">${g.title}</div>`;
+  for (const [f, hint, a, b, c, d, note] of g.rows) {
+    html += `<div class="trow"><span class="f">${f}<small>${hint}</small></span>${a}${b}${c}${d}<span class="w">${note}</span></div>`;
+  }
+}
+document.getElementById('rows').innerHTML = html;
+
+function report() {
+  const h = document.documentElement.scrollHeight;
+  if (window.parent !== window) parent.postMessage({ type: 'validum:height', height: h }, '*');
+}
+window.addEventListener('load', report);
+window.addEventListener('resize', report);
+</script>
+</body>
+</html>

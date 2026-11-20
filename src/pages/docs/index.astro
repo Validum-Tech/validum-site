@@ -118,23 +118,26 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
                     <p class="text-fg-muted mb-6">
                         Validum состоит из 4 модулей: <code>validum-core</code> (zero-dep),
                         <code>validum-api</code> (Spring Boot), <code>validum-cli</code> (Picocli),
-                        <code>validum-allure</code> (JUnit 5).
+                        <code>validum-allure</code> (JUnit 5/6).
                     </p>
 
                     <h3 class="text-xl font-semibold mb-3">Docker (рекомендуется)</h3>
-                    <p class="text-sm text-fg-muted mb-3">Не требует JDK. Образ ~250 МБ. Мультистейдж сборка.</p>
+                    <p class="text-sm text-fg-muted mb-3">Готовый образ — <code>pavelwhite64/validum-api:0.7.0</code> (amd64 и arm64), или собрать самому: не требует JDK, мультистейдж ~420 МБ.</p>
                     <div class="code-block mb-4">
-            <pre><code class="language-bash">git clone https://github.com/Validum-Tech/validum.git
-cd validum
+            <pre><code class="language-bash"># готовый образ (справочник ЦБ монтируется томом)
+docker run -d -p 8080:8080 -v $(pwd)/data/ED807.xml:/app/data/ED807.xml:ro \
+  --name validum pavelwhite64/validum-api:0.7.0
+
+# или из исходников
+git clone https://github.com/Validum-Tech/validum.git && cd validum
 docker build -f validum-api/Dockerfile -t validum-api .
-docker run -d -p 8080:8080 --name validum validum-api
 
 # Проверка
 curl http://localhost:8080/actuator/health</code></pre>
                     </div>
 
                     <h3 class="text-xl font-semibold mb-3">CLI (fat JAR)</h3>
-                    <p class="text-sm text-fg-muted mb-3">Работает offline. Только JDK 21+. ~15 МБ — справочники адресов и банков внутри.</p>
+                    <p class="text-sm text-fg-muted mb-3">Работает offline. JDK 17+. ~15 МБ — справочники адресов и банков внутри.</p>
                     <div class="code-block mb-4">
             <pre><code class="language-bash">./gradlew :validum-cli:shadowJar
 java -jar validum-cli/build/libs/validum.jar --help</code></pre>
@@ -145,8 +148,9 @@ java -jar validum-cli/build/libs/validum.jar --help</code></pre>
                         Публикуется в Maven Central — репозиторий подключать не нужно:
                     </p>
                     <div class="code-block mb-4">
-                        <pre><code class="language-gradle">testImplementation("io.github.validum-tech:validum-core:0.5.0")
-testImplementation("io.github.validum-tech:validum-allure:0.5.0")</code></pre>
+                        <pre><code class="language-gradle">testImplementation("io.github.validum-tech:validum-core:0.7.0")
+testImplementation("io.github.validum-tech:validum-allure:0.7.0")
+testImplementation("io.github.validum-tech:validum-api:0.7.0")</code></pre>
                     </div>
                 </section>
 

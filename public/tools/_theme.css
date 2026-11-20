@@ -177,6 +177,49 @@ code {
   display: none !important;
 }
 
+/* ── канон шапки инструмента: один вид во всех страницах ───────────── */
+.wrap {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+header {
+  padding: 34px 0 4px;
+}
+h1 {
+  font-size: 32px;
+  line-height: 1.15;
+  margin: 10px 0 8px;
+  letter-spacing: -0.02em;
+}
+.lead {
+  color: var(--fg-muted);
+  max-width: 72ch;
+  margin: 0;
+}
+h2.sect {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--fg-subtle);
+  margin: 28px 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+h2.sect::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+@media (max-width: 640px) {
+  h1 {
+    font-size: 24px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0.001ms !important;

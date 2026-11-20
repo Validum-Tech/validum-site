@@ -8,10 +8,10 @@
  */
 
 /** Версия продукта, о которой заявляет витрина. Должна совпадать с package.json. */
-export const SITE_VERSION = '0.5.0';
+export const SITE_VERSION = '0.7.0';
 
 /** Сколько тестов в продукте на эту версию (итог `.\test.ps1 test`). */
-export const EXPECTED_TEST_COUNT = 906;
+export const EXPECTED_TEST_COUNT = 912;
 
 /** Корневых команд CLI (включая `version`). */
 export const EXPECTED_CLI_COMMANDS = 10;
@@ -20,7 +20,7 @@ export const EXPECTED_CLI_COMMANDS = 10;
 export const EXPECTED_REST_ENDPOINTS = 19;
 
 /** Устаревшие версии: допустимы только рядом с оговоркой. */
-export const DEPRECATED_VERSIONS = ['0.2.0', '0.3.0', '0.4.0', '0.4.1'];
+export const DEPRECATED_VERSIONS = ['0.2.0', '0.3.0', '0.4.0', '0.4.1', '0.5.0', '0.6.0'];
 
 /** Оговорка, которая разрешает упоминать старое число или версию. */
 export const SOFTENER = /(не меньше|не менее|более|свыше|начиная с|около|минимум|≈|~|±)/i;

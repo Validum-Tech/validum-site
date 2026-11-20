@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="ru" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<title>Validum · реквизиты ФЛ, ИП и ЮЛ</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="/tools/_theme.css?v=1">
+<style>
+:root{--surface-0:#09090b;--surface-1:rgba(255,255,255,.02);--surface-2:rgba(255,255,255,.03);
+--surface-3:rgba(255,255,255,.06);--fg:#fafafa;--fg-muted:#a1a1aa;--fg-subtle:rgba(255,255,255,.45);
+--line:rgba(255,255,255,.10);--line-strong:rgba(255,255,255,.18);--accent:#10b981;--accent-2:#34d399;
+--red:#ef4444;--amber:#f5b544;--mono:'JetBrains Mono',ui-monospace,monospace;--sans:'Inter',system-ui,sans-serif}
+*{box-sizing:border-box}
+body{margin:0;background:var(--surface-0);color:var(--fg);font-family:var(--sans);font-size:15px;line-height:1.6}
+.wrap{max-width:1200px;margin:0 auto;padding:0 24px}
+header{padding:34px 0 4px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-2);display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.tag{border:1px solid rgba(16,185,129,.5);border-radius:6px;padding:1px 7px;font-size:10.5px;letter-spacing:.08em}
+h1{font-size:32px;line-height:1.15;margin:10px 0 8px;letter-spacing:-.02em}
+.lead{color:var(--fg-muted);max-width:72ch;margin:0}
+.bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:18px 0 0;padding:14px 0;border-block:1px solid var(--line)}
+.chip{border:1px solid var(--line);background:transparent;color:var(--fg-muted);border-radius:2px;
+padding:6px 12px;font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;cursor:pointer}
+.chip[aria-pressed="true"]{border-color:var(--accent);color:var(--accent-2);background:rgba(16,185,129,.08)}
+.counter{margin-left:auto;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--fg-subtle)}
+.counter b{color:var(--fg);font-size:14px}
+h2.sect{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--fg-subtle);
+margin:28px 0 12px;display:flex;align-items:center;gap:10px}
+h2.sect::after{content:"";flex:1;height:1px;background:var(--line)}
+.table{border:1px solid var(--line);border-radius:2px;overflow:hidden}
+.thead,.trow{display:grid;grid-template-columns:minmax(0,1.6fr) 56px 56px 56px minmax(0,1.3fr);
+gap:10px;padding:9px 14px;align-items:center}
+.thead{background:var(--surface-2);font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--fg-subtle)}
+.thead span:nth-child(2),.thead span:nth-child(3),.thead span:nth-child(4){text-align:center}
+.trow{border-top:1px solid var(--line);font-size:13.5px}
+.trow:hover{background:var(--surface-1)}
+.trow.dim{opacity:.32}
+.trow .f{font-family:var(--mono);font-size:12.5px;color:var(--fg)}
+.trow .f small{display:block;font-family:var(--sans);font-size:11.5px;color:var(--fg-subtle);margin-top:1px}
+.trow .y,.trow .n{text-align:center;font-family:var(--mono);font-size:13px}
+.trow .y{color:var(--accent-2)}
+.trow .n{color:rgba(255,255,255,.18)}
+.trow .w{font-size:12px;color:var(--fg-muted)}
+.trow .w a{color:var(--accent-2);text-decoration:none;border-bottom:1px solid rgba(16,185,129,.35)}
+.group{border-top:1px solid var(--line);background:var(--surface-2);padding:6px 14px;
+font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--fg-subtle)}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:2px}
+.card{background:var(--surface-0);padding:14px 16px}
+.card h3{margin:0 0 6px;font-size:14.5px;display:flex;gap:8px;align-items:center}
+.card h3 code{font-family:var(--mono);font-size:11.5px;color:var(--accent-2)}
+.card p{margin:0;font-size:12.5px;color:var(--fg-muted);line-height:1.5}
+.card .examples{margin-top:8px;font-family:var(--mono);font-size:11px;color:var(--fg-subtle);display:flex;flex-direction:column;gap:2px}
+.card .examples b{color:var(--fg-muted);font-weight:400}
+pre{margin:0;background:var(--surface-1);border:1px solid var(--line);border-radius:2px;padding:14px 16px;
+font-family:var(--mono);font-size:12px;line-height:1.65;overflow-x:auto;color:var(--fg)}
+pre .c{color:var(--fg-subtle)}
+.note{margin:22px 0 0;padding-top:14px;border-top:1px solid var(--line);font-size:12.5px;color:var(--fg-subtle);max-width:80ch}
+.warn{margin-top:14px;border-left:2px solid rgba(245,181,68,.6);padding:8px 14px;background:rgba(245,181,68,.05);
+font-size:12.5px;color:var(--fg-muted)}
+.warn b{color:var(--fg)}
+@media (max-width:760px){
+  .thead,.trow{grid-template-columns:minmax(0,1fr) 40px 40px 40px;padding:9px 10px}
+  .trow .w{grid-column:1 / -1;color:var(--fg-subtle);font-size:11.5px}
+  .thead .w{display:none}
+  h1{font-size:24px}
+  .counter{margin-left:0;width:100%}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <p class="eyebrow">инструменты validum <span class="tag">реквизиты</span></p>
+  <h1>Что есть у ФЛ, ИП и ЮЛ</h1>
+  <p class="lead">
+    Один экран — вся поверхность профилей. Слева реквизит, дальше три колонки: кто его получает,
+    и чем он проверяется в продукте. Ниже — форматы выдачи и валидаторы, которые можно позвать отдельно.
+  </p>
+  <div class="bar">
+    <button class="chip" data-entity="fl" aria-pressed="true">физлицо</button>
+    <button class="chip" data-entity="ip" aria-pressed="false">ИП</button>
+    <button class="chip" data-entity="ul" aria-pressed="false">юрлицо</button>
+    <span class="counter">колонок в плоской выдаче: <b id="counter">69</b></span>
+  </div>
+</header>
+
+<h2 class="sect">реквизиты и проверки</h2>
+<div class="table" id="table"></div>
+
+<h2 class="sect">форматы выдачи</h2>
+<div class="cards">
+  <div class="card">
+    <h3><code>--format json</code> один объект</h3>
+    <p>Профиль целиком, вложенные группы <code>passport</code>, <code>addresses</code>, <code>bank</code>, <code>cards</code>.</p>
+    <div class="examples"><span><b>REST</b> POST /api/v1/generate/individual</span><span><b>CLI</b> --format json</span></div>
+  </div>
+  <div class="card">
+    <h3><code>--format json-array</code> массив</h3>
+    <p>Список профилей без обёртки — удобно для <code>jq</code> и загрузки в Mongo.</p>
+    <div class="examples"><span><b>REST</b> POST …/batch?format=json-array</span><span><b>CLI</b> --format json-array</span></div>
+  </div>
+  <div class="card">
+    <h3><code>--format csv</code> машинный</h3>
+    <p>69 колонок, запятая, без BOM. Для конвейеров и загрузчиков.</p>
+    <div class="examples"><span><b>REST</b> POST …/batch?format=csv</span><span><b>CLI</b> --format csv</span></div>
+  </div>
+  <div class="card">
+    <h3><code>--format csv-semicolon</code> для Excel</h3>
+    <p>BOM, <code>;</code>, русские заголовки, длинные числа обёрнуты <code>="…"</code> — Excel не съедает нули.</p>
+    <div class="examples"><span><b>аlias</b> csv-excel</span><span><b>CLI</b> --format csv-semicolon</span></div>
+  </div>
+  <div class="card">
+    <h3><code>--format sql</code> засев БД</h3>
+    <p>DDL + INSERT, типы по колонке: <code>terrorist</code>/<code>blocked</code> — boolean, <code>age</code> — целое, остальное текст.</p>
+    <div class="examples"><span><b>диалекты</b> postgres · oracle · mysql</span><span><b>CLI</b> --format sql --dialect postgres</span></div>
+  </div>
+  <div class="card">
+    <h3><code>--format json-nested</code> как в REST</h3>
+    <p>Профиль объектом, группы те же, что в DTO: passport, addresses, bank, cards.</p>
+    <div class="examples"><span><b>CLI</b> --format json-nested</span><span><b>с 0.5.0</b></span></div>
+  </div>
+</div>
+
+<h2 class="sect">валидаторы отдельно</h2>
+<div class="cards">
+  <div class="card">
+    <h3><code>inn</code></h3>
+    <p>10 и 12 знаков: контрольные разряды по весам ФНС.</p>
+    <div class="examples"><span>779370501280 <b>✓</b></span><span>779370501281 <b>✗</b></span></div>
+  </div>
+  <div class="card">
+    <h3><code>snils</code></h3>
+    <p>11 знаков, контрольное число по mod 101.</p>
+    <div class="examples"><span>43826479516 <b>✓</b></span><span>43826479517 <b>✗</b></span></div>
+  </div>
+  <div class="card">
+    <h3><code>ogrn</code> / <code>ogrnip</code></h3>
+    <p>13 знаков (ОГРН, mod 11) и 15 знаков (ОГРНИП, mod 13).</p>
+    <div class="examples"><span>1027700132195 <b>✓ ОГРН</b></span><span>728009516384617 <b>✓ ОГРНИП</b></span></div>
+  </div>
+  <div class="card">
+    <h3><code>account</code></h3>
+    <p>20 цифр, ключ по письму ЦБ № 515 с условным номером из БИК.</p>
+    <div class="examples"><span>40817810200006614153 <b>✓ 40817</b></span><span>40702810300000004643 <b>✓ 40702</b></span></div>
+  </div>
+  <div class="card">
+    <h3><code>kpp</code> · <code>okpo</code> · <code>bik</code></h3>
+    <p>КПП — 9 знаков с серией подразделения, ОКПО — 8–10, БИК — 9 и есть в справочнике ЦБ.</p>
+    <div class="examples"><span>773601001 <b>✓ КПП</b></span><span>044525225 <b>✓ БИК</b></span></div>
+  </div>
+  <div class="card">
+    <h3>паспорт · адрес · ОКВЭД</h3>
+    <p>ДУЛ по правилам ФНС: срок 20/45, тип для нерезидента; индекс — префикс субъекта по КЛАДР; код — из справочника.</p>
+    <div class="examples"><span>4512 345678 <b>паспорт РФ</b></span><span>143500 <b>индекс МО</b></span></div>
+  </div>
+</div>
+
+<h2 class="sect">как позвать</h2>
+<pre><span class="c"># сгенерировать и проверить сразу</span>
+java -jar validum.jar generate individual --seed 42 --count 3 --format csv > out.csv
+java -jar validum.jar coverage --file out.csv
+
+<span class="c"># то же по REST</span>
+curl -s localhost:8080/api/v1/generate/individual -H 'Content-Type: application/json' \
+  -d '{"seed":42,"age":34}'
+curl -s localhost:8080/api/v1/validate/inn -H 'Content-Type: application/json' \
+  -d '{"inn":"779370501280"}'
+
+<span class="c"># юрлицо: ОГРН, КПП, ОКПО, ОКВЭД и счёт 40702</span>
+java -jar validum.jar generate organization --seed 42 --count 2 --format json-nested</pre>
+
+<p class="note">
+  Колонки: <b>69</b> у физлица, <b>72</b> у ИП (профиль ФЛ + <code>ogrnip</code>, <code>okved</code>, <code>okvedName</code>) и
+  <b>21</b> у юрлица. Пресет <code>--fields short</code> оставляет 15 человеческих колонок — остальное остаётся в JSON.
+  Значения на этой странице — примеры из продукта; генератор и валидаторы работают офлайн.
+</p>
+
+<div class="warn">
+  <b>Чего в матрице нет намеренно:</b> четыре вида ДУЛ (миграционная карта, свидетельства о рождении и смерти,
+  паспорт моряка) не реализованы, пока нет акта с разрядностью; встроенного демо-справочника БИК тоже нет —
+  без файла <code>ED807.xml</code> банковские поля дают ошибку, а не «примерные» цифры.
+</div>
+
+</div>
+
+<script>
+/* ── данные матрицы: сверено с flattener-ами в core ─────────────────────── */
+const GROUPS = [
+  ['идентификация', [
+    ['personId', 'стабильный идентификатор набора', 1,1,0, 'детерминирован от seed'],
+    ['employerOgrn', 'работодатель в том же наборе', 1,1,0, 'связь <code>type:"set"</code>'],
+    ['fullName', 'ФИО', 1,1,0, 'генератор имён (+<code>--unique-name</code>)'],
+    ['gender', 'пол', 1,1,0, 'MALE | FEMALE'],
+    ['birthDate', 'дата рождения', 1,1,0, 'не позже <code>asOf</code>'],
+    ['age', 'возраст', 1,1,0, '0–110, когорты <code>--age-distribution</code>'],
+    ['familyStatus', 'семейное положение', 1,1,0, '—'],
+    ['isResident', 'резидентство', 1,1,0, '<code>--residency</code>'],
+    ['citizenship', 'гражданство', 1,1,0, 'ISO-код страны'],
+    ['organizationName', 'название организации', 0,0,1, '7 ОПФ'],
+    ['organizationType', 'ОПФ', 0,0,1, 'LLC · JSC · PJSC · NCO …'],
+  ]],
+  ['реквизиты', [
+    ['inn', 'ИНН', 1,1,1, 'контрольные разряды ФНС'],
+    ['snils', 'СНИЛС', 1,1,0, 'mod 101'],
+    ['ogrn', 'ОГРН', 0,0,1, 'mod 11'],
+    ['ogrnip', 'ОГРНИП', 0,1,0, 'mod 13'],
+    ['kpp', 'КПП', 0,0,1, 'серия подразделения'],
+    ['okpo', 'ОКПО', 0,0,1, 'справочник'],
+    ['okopf', 'ОКОПФ', 0,0,1, 'код из справочника'],
+    ['okfs', 'ОКФС', 0,0,1, 'код из справочника'],
+    ['okogu', 'ОКОГУ', 0,0,1, 'код из справочника'],
+    ['okved', 'ОКВЭД-2 + название', 0,1,1, '3069 кодов, сверка по справочнику'],
+    ['budget', 'бюджетный признак', 0,0,1, 'флаг'],
+    ['swift', 'SWIFT', 0,0,1, '—'],
+  ]],
+  ['паспорт и ДУЛ', [
+    ['passportSeries … passportCountry', '8 полей паспорта', 1,1,0, 'проверка типа и срока 20/45'],
+    ['documents', 'ДУЛ: паспорт, права, военник …', 1,1,0, '<code>DocumentRules</code> по возрасту'],
+  ]],
+  ['адреса — 8 полей × 3', [
+    ['registration', 'регистрация', 1,1,0, 'КЛАДР + индекс субъекта'],
+    ['post', 'почтовый', 1,1,0, 'КЛАДР'],
+    ['current', 'фактический', 1,1,0, 'КЛАДР'],
+  ]],
+  ['контакты и служебное', [
+    ['mobile · email', '4 поля на контакт', 1,1,0, 'формат и статус'],
+    ['secretWord · categoryClient · accountPackage · personalManager', 'служебные поля', 1,1,0, 'менеджер — из <code>managers.txt</code>'],
+  ]],
+  ['банк и счёт', [
+    ['bankBik · bankName · bankCorrAccount · bankCity · bankRegion', '5 полей банка', 1,1,1, 'справочник ED807 (368 банков)'],
+    ['account', 'расчётный счёт', 1,1,1, 'ключ по письму № 515: 40817 у ФЛ и ИП, 40702 у ЮЛ'],
+    ['cardPan · cardExpiry · cardOutcome · cardCount', 'карты «Мир»', 1,1,0, 'BIN 220000–220499, Luhn'],
+  ]],
+  ['флаги', [
+    ['terrorist · blocked', 'негативные признаки', 1,1,1, 'boolean в SQL'],
+  ]],
+];
+
+const table = document.getElementById('table');
+const counter = document.getElementById('counter');
+let entity = 'fl';
+
+function render() {
+  const idx = { fl: 2, ip: 3, ul: 4 }[entity];
+  const cols = { fl: 69, ip: 72, ul: 21 };
+  counter.textContent = cols[entity];
+  let html = '<div class="thead"><span>реквизит</span><span>ФЛ</span><span>ИП</span><span>ЮЛ</span><span class="w">чем проверяется</span></div>';
+  for (const [group, rows] of GROUPS) {
+    html += `<div class="group">${group}</div>`;
+    for (const [name, desc, fl, ip, ul, why] of rows) {
+      const has = [fl, ip, ul][idx - 2];
+      const dim = has ? '' : ' dim';
+      const mark = (v) => v ? '<span class="y">✓</span>' : '<span class="n">—</span>';
+      html += `<div class="trow${dim}">
+        <span class="f">${name}<small>${desc}</small></span>
+        <span>${mark(fl)}</span><span>${mark(ip)}</span><span>${mark(ul)}</span>
+        <span class="w">${why}</span>
+      </div>`;
+    }
+  }
+  table.innerHTML = html;
+}
+
+document.querySelectorAll('.chip').forEach((chip) => {
+  chip.addEventListener('click', () => {
+    entity = chip.dataset.entity;
+    document.querySelectorAll('.chip').forEach((c) => c.setAttribute('aria-pressed', String(c === chip)));
+    render();
+  });
+});
+
+const fromUrl = new URLSearchParams(location.search).get('entity');
+if (fromUrl && ['fl', 'ip', 'ul'].includes(fromUrl)) {
+  document.querySelector(`.chip[data-entity="${fromUrl}"]`).click();
+} else {
+  render();
+}
+
+/* высота для iframe на сайте */
+(function () {
+  let last = 0;
+  function report() {
+    try {
+      const el = document.querySelector('.wrap') || document.body;
+      const h = Math.ceil(el.getBoundingClientRect().height) + 8;
+      if (h === last || h < 400 || h > 20000) return;
+      last = h;
+      if (window.parent && window.parent !== window) {
+        window.parent.postMessage({ type: 'validum-tool-height', height: h }, '*');
+      }
+    } catch (e) { /* standalone */ }
+  }
+  window.addEventListener('load', report);
+  window.addEventListener('resize', report);
+  document.addEventListener('click', () => setTimeout(report, 120), true);
+  if (window.ResizeObserver) new ResizeObserver(report).observe(document.body);
+  setTimeout(report, 300);
+})();
+</script>
+</body>
+</html>

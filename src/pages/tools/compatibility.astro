@@ -1,0 +1,13 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ToolFrame from '../../components/ToolFrame.astro';
+---
+
+<BaseLayout
+  title="Совместимость: формат, ОС и JDK"
+  description="Матрица совместимости Validum: какие форматы выдачи, точки входа и ОС реально проверяются в CI — Linux JDK 17/21, Windows JDK 21, macOS вручную."
+>
+  <h1 class="sr-only">Совместимость: формат, ОС и JDK</h1>
+  <p class="sr-only">Матрица совместимости Validum: форматы JSON, CSV, CSV для Excel, SQL и набор set против сред Linux JDK 17, Linux JDK 21, Windows JDK 21 и macOS; плюс описание джоб CI.</p>
+  <ToolFrame src="/tools/compatibility.html" title="Совместимость: формат, ОС и JDK" hint="справочник · 0.7.0" />
+</BaseLayout>

@@ -1,0 +1,13 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ToolFrame from '../../components/ToolFrame.astro';
+---
+
+<BaseLayout
+  title="Связанный набор"
+  description="Организации, люди и ИП в одном прогоне: связь человек → работодатель через employerOgrn, порядок вставки и скрипт отката."
+>
+  <h1 class="sr-only">Связанный набор</h1>
+  <p class="sr-only">Интерактивная схема набора Validum: организации, люди и ИП со связью employerOgrn, порядок вставки и обратный откат.</p>
+  <ToolFrame src="/tools/set.html" title="Связанный набор" hint="интерактив · 0.7.0" />
+</BaseLayout>

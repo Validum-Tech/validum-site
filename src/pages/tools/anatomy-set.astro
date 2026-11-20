@@ -1,0 +1,13 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ToolFrame from '../../components/ToolFrame.astro';
+---
+
+<BaseLayout
+  title="Анатомия набора"
+  description="Четыре файла набора Validum: колонки организаций, людей, ИП и таблицы связей, порядок загрузки и скрипт отката."
+>
+  <h1 class="sr-only">Анатомия набора</h1>
+  <p class="sr-only">Разбор файлов набора Validum: set-organizations.csv, set-individuals.csv, set-ip.csv, set-relations.csv и set-teardown.sql — колонки, ключи, связи и порядок вставки.</p>
+  <ToolFrame src="/tools/anatomy-set.html" title="Анатомия набора" hint="интерактив · 0.7.0" />
+</BaseLayout>
