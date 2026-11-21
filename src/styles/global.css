@@ -468,6 +468,14 @@ textarea:focus-visible {
     border: 1px solid var(--line-strong);
     color: var(--fg);
 }
+.btn-solid:disabled,
+.btn-solid:disabled:hover {
+    background: transparent;
+    border-color: var(--line);
+    color: var(--fg-subtle);
+    cursor: not-allowed;
+}
+
 .btn-hairline:hover {
     border-color: var(--accent);
     color: var(--accent);
@@ -503,4 +511,33 @@ main h3 {
 .flow-mask {
     -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 12%, #000 88%, transparent 100%);
     mask-image: linear-gradient(180deg, transparent 0, #000 12%, #000 88%, transparent 100%);
+}
+
+/* ── Полоса прокрутки: тонкая, в тон фона (без системных стрелок) ─ */
+html {
+    scrollbar-color: #23272a #08090a;
+    scrollbar-gutter: stable;
+}
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+::-webkit-scrollbar-track {
+    background: #08090a;
+}
+::-webkit-scrollbar-thumb {
+    background: #23272a;
+    border: 2px solid #08090a;
+    border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #2f3437;
+}
+::-webkit-scrollbar-button {
+    display: none;
+    width: 0;
+    height: 0;
+}
+::-webkit-scrollbar-corner {
+    background: transparent;
 }

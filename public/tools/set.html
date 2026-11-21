@@ -68,6 +68,41 @@ pre .k{color:var(--accent-2)}
 footer{margin:34px 0 40px;color:var(--fg-subtle);font-size:13px;border-top:1px solid var(--line);padding-top:16px}
 footer code{font-family:var(--mono);font-size:12px;color:var(--fg-muted)}
 @media(max-width:900px){.stage{grid-template-columns:minmax(0,1fr)}.panel{position:static}}
+
+  /* кастомный дропдаун поверх нативного select: в тёмной теме нативный список не читается */
+  .dd { position: relative; }
+  .dd-btn {
+    width: 100%; padding: 8px 30px 8px 10px; background: var(--surface-1); color: var(--fg);
+    border: 1px solid var(--line); border-radius: 2px; font-family: var(--mono); font-size: 12px;
+    text-align: left; cursor: pointer; position: relative; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .dd-btn:hover { border-color: rgba(255,255,255,.22); }
+  .dd-btn:focus-visible { outline: none; border-color: var(--accent); }
+  .dd-btn::after {
+    content: ''; position: absolute; right: 11px; top: 50%; width: 6px; height: 6px; margin-top: -4px;
+    border-right: 1px solid var(--fg-subtle); border-bottom: 1px solid var(--fg-subtle); transform: rotate(45deg);
+  }
+  .dd-list {
+    position: absolute; z-index: 30; left: 0; top: calc(100% + 4px); margin: 0; padding: 4px;
+    min-width: 100%; width: max-content; max-width: min(20rem, 92vw);
+    list-style: none; background: #0d0d0f; border: 1px solid rgba(255,255,255,.14); border-radius: 2px;
+    box-shadow: 0 18px 40px rgba(0,0,0,.6); max-height: 260px; overflow: auto;
+  }
+  .dd-list[hidden] { display: none; }
+  .dd-item {
+    padding: 7px 9px; font-family: var(--mono); font-size: 12px; color: var(--fg-muted);
+    border-radius: 2px; cursor: pointer; white-space: nowrap;
+  }
+  .dd-item:hover, .dd-item:focus-visible { background: rgba(255,255,255,.06); color: var(--fg); outline: none; }
+  .dd-item[aria-selected="true"] { color: var(--accent); }
+
+  /* полоса прокрутки в тон фона */
+  html { scrollbar-color: #23272a #08090a; }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: #08090a; }
+  ::-webkit-scrollbar-thumb { background: #23272a; border: 2px solid #08090a; border-radius: 999px; }
+  ::-webkit-scrollbar-thumb:hover { background: #2f3437; }
+  ::-webkit-scrollbar-button { display: none; width: 0; height: 0; }
 </style>
 <link rel="stylesheet" href="/tools/_theme.css?v=1">
 </head>
@@ -88,19 +123,36 @@ footer code{font-family:var(--mono);font-size:12px;color:var(--fg-muted)}
           <option>3</option><option selected>5</option><option>8</option>
         </select></div>
       <div class="field"><label for="orgs">организаций</label>
-        <select id="orgs"><option selected>1</option><option>2</option></select></div>
+        <select id="orgs"><option selected>1</option><option>2</option><option>3</option><option>5</option><option>8</option></select></div>
       <div class="field"><label for="okved">ОКВЭД</label>
         <select id="okved">
           <option value="62.01" selected>62.01 · разработка ПО</option>
+          <option value="62.02">62.02 · консультации в IT</option>
+          <option value="62.09">62.09 · прочие IT-услуги</option>
+          <option value="63.11">63.11 · обработка данных</option>
           <option value="64.19">64.19 · банковские услуги</option>
+          <option value="64.20">64.20 · холдинги</option>
+          <option value="65.11">65.11 · страхование жизни</option>
           <option value="41.20">41.20 · строительство</option>
+          <option value="42.21">42.21 · инженерные сети</option>
+          <option value="46.90">46.90 · оптовая торговля</option>
+          <option value="47.11">47.11 · розничная торговля</option>
+          <option value="49.41">49.41 · грузоперевозки</option>
+          <option value="86.21">86.21 · медицинская практика</option>
+          <option value="96.09">96.09 · прочие услуги</option>
         </select></div>
       <div class="field"><label for="region">регион</label>
         <select id="region">
           <option value="77" selected>Москва</option>
-          <option value="50">Московская</option>
           <option value="78">Санкт-Петербург</option>
+          <option value="50">Московская</option>
+          <option value="47">Ленинградская</option>
           <option value="16">Татарстан</option>
+          <option value="23">Краснодарский</option>
+          <option value="61">Ростовская</option>
+          <option value="66">Свердловская</option>
+          <option value="74">Челябинская</option>
+          <option value="54">Новосибирская</option>
         </select></div>
       <button class="btn" id="rebuild">собрать набор</button>
     </div>
@@ -160,7 +212,9 @@ const MALE=['Иван','Пётр','Сергей','Алексей','Дмитри�
 const FEMALE=['Мария','Анна','Ольга','Ирина','Елена','Наталья','Татьяна','Светлана','Вера','Ксения','Полина','Дарья'];
 const MPATR=['Иванович','Петрович','Сергеевич','Алексеевич','Дмитриевич','Андреевич','Николаевич','Михайлович','Фёдорович','Валентинович'];
 const FPATR=['Ивановна','Петровна','Сергеевна','Алексеевна','Дмитриевна','Андреевна','Николаевна','Михайловна','Фёдоровна','Валентиновна'];
-const ORG=['Ромашка','Вектор','Северный ветер','Атлас','Кварц','Ланит-Сервис','Заря','Прогресс'];
+const ORG=['Ромашка','Восход','Заря','Прогресс','Северная звезда','Гранит','Спектр',
+           'Азимут','Радуга','Импульс','Ориентир','Кристалл','Маяк','Вектор',
+           'Стрела','Полярная','Гелиос','Орбита','Титан','Атлант'];
 const ORGFORM=[['ООО','Общество с ограниченной ответственностью'],['АО','Акционерное общество']];
 const BANKS=[
   ['044525225','ПАО Сбербанк','30101810400000000225','Москва'],
@@ -225,9 +279,17 @@ function build(){
   const banks=Array.from({length:state.orgs},(_,i)=>BANKS[(state.seed+i)%BANKS.length]);
   const regionName=REGIONS[state.region][0];
 
+  const usedOrgNames=new Set();
   const orgs=Array.from({length:state.orgs},(_,i)=>{
-    const bank=banks[i];const form=ORGFORM[Math.floor(rnd()*ORGFORM.length)];
-    const brand=ORG[Math.floor(rnd()*ORG.length)];
+    const bank=banks[i];
+    let form=ORGFORM[Math.floor(rnd()*ORGFORM.length)];
+    let brand=ORG[Math.floor(rnd()*ORG.length)];
+    // названия внутри набора не повторяются, пока не исчерпан пул (ОПФ × бренд)
+    for(let tries=0; tries<40 && usedOrgNames.has(form[0]+'|'+brand); tries++){
+      form=ORGFORM[Math.floor(rnd()*ORGFORM.length)];
+      brand=ORG[Math.floor(rnd()*ORG.length)];
+    }
+    usedOrgNames.add(form[0]+'|'+brand);
     return {
       name:`${form[0]} «${brand}»`,
       full:`${form[1]} «${brand}»`,
@@ -371,6 +433,78 @@ document.getElementById('rebuild').addEventListener('click',()=>{readControls();
   el.addEventListener('change',()=>{readControls();render();});
 });
 render();
+
+/* Нативный <select> в тёмной теме рисует белый список. Строим поверх свой,
+   оставляя select источником истины: его change-обработчики продолжают работать. */
+(function enhanceSelects(){
+  document.querySelectorAll('select').forEach((sel) => {
+    if (sel.dataset.enhanced) return;
+    sel.dataset.enhanced = '1';
+    sel.style.display = 'none';
+    sel.setAttribute('aria-hidden', 'true');
+
+    const wrap = document.createElement('div');
+    wrap.className = 'dd';
+    sel.parentNode.insertBefore(wrap, sel);
+    wrap.appendChild(sel);
+
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'dd-btn';
+    btn.setAttribute('aria-haspopup', 'listbox');
+    btn.setAttribute('aria-expanded', 'false');
+    wrap.appendChild(btn);
+
+    const list = document.createElement('ul');
+    list.className = 'dd-list';
+    list.setAttribute('role', 'listbox');
+    list.hidden = true;
+    wrap.appendChild(list);
+
+    const label = () => (sel.options[sel.selectedIndex] || {}).text || '';
+    const sync = () => { btn.textContent = label(); };
+
+    Array.from(sel.options).forEach((opt) => {
+      const li = document.createElement('li');
+      li.className = 'dd-item';
+      li.setAttribute('role', 'option');
+      li.dataset.value = opt.value;
+      li.textContent = opt.text;
+      if (opt.selected) li.setAttribute('aria-selected', 'true');
+      li.addEventListener('click', () => {
+        sel.value = opt.value;
+        list.querySelectorAll('.dd-item').forEach((n) => n.removeAttribute('aria-selected'));
+        li.setAttribute('aria-selected', 'true');
+        sync(); close();
+        sel.dispatchEvent(new Event('change', { bubbles: true }));
+      });
+      list.appendChild(li);
+    });
+
+    const open = () => {
+      list.hidden = false; btn.setAttribute('aria-expanded', 'true');
+      const cur = list.querySelector('.dd-item[aria-selected="true"]') || list.firstElementChild;
+      cur && cur.focus();
+    };
+    const close = () => { list.hidden = true; btn.setAttribute('aria-expanded', 'false'); };
+
+    btn.addEventListener('click', (e) => { e.stopPropagation(); list.hidden ? open() : close(); });
+    btn.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowDown' || e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); }
+    });
+    list.addEventListener('keydown', (e) => {
+      const items = Array.from(list.querySelectorAll('.dd-item'));
+      const i = items.indexOf(document.activeElement);
+      if (e.key === 'Escape') { close(); btn.focus(); }
+      else if (e.key === 'ArrowDown') { e.preventDefault(); (items[i + 1] || items[0]).focus(); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); (items[i - 1] || items[items.length - 1]).focus(); }
+      else if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); document.activeElement.click(); }
+    });
+    document.addEventListener('click', (e) => { if (!wrap.contains(e.target)) close(); });
+
+    sync();
+  });
+})();
 </script>
 
 <script>

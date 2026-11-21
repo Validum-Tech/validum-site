@@ -80,6 +80,14 @@ pre .c{color:var(--fg-subtle)}
   .cell:nth-child(odd){border-right:none}
   h1{font-size:24px}
 }
+
+  /* полоса прокрутки в тон фона */
+  html { scrollbar-color: #23272a #08090a; }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: #08090a; }
+  ::-webkit-scrollbar-thumb { background: #23272a; border: 2px solid #08090a; border-radius: 999px; }
+  ::-webkit-scrollbar-thumb:hover { background: #2f3437; }
+  ::-webkit-scrollbar-button { display: none; width: 0; height: 0; }
 </style>
 </head>
 <body>
@@ -209,15 +217,18 @@ const FILES = {
     name: 'set-individuals.csv',
     meta: '69 колонок',
     groups: [
-      ['идентификация', [['personId','ключ'],['employerOgrn','ссылка'],['fullName',''],['gender',''],['birthDate',''],['age',''],['familyStatus',''],['isResident',''],['citizenship','']]],
-      ['реквизиты', [['inn',''],['snils','']]],
-      ['паспорт', [['passportSeries',''],['passportNumber',''],['passportIssuedBy',''],['passportIssueDate',''],['passportExpirationDate',''],['passportDepartmentCode',''],['passportType',''],['passportCountry','']]],
-      ['адреса × 3', [['registrationRegion…Formatted','8 полей'],['postRegion…Formatted','8 полей'],['currentRegion…Formatted','8 полей']]],
-      ['контакты', [['mobileType…Status','4 поля'],['emailType…Status','4 поля']]],
-      ['служебное', [['secretWord',''],['categoryClient',''],['accountPackage',''],['personalManager','']]],
-      ['банк и счёт', [['bankBik',''],['bankName',''],['bankCorrAccount',''],['bankCity',''],['bankRegion',''],['account','40817']]],
-      ['карты «Мир»', [['cardPan',''],['cardExpiry',''],['cardOutcome',''],['cardCount','']]],
-      ['служебные', [['documents',''],['terrorist',''],['blocked',''],['asOf','']]],
+      ["идентификация", [["personId","ключ"],["employerOgrn","ссылка"],["fullName",""],["gender",""],["birthDate",""],["age",""],["familyStatus",""],["inn",""],["snils",""]]],
+      ["паспорт", [["passportSeries",""],["passportNumber",""],["passportIssuedBy",""],["passportIssueDate",""],["passportExpirationDate",""],["passportDepartmentCode",""],["passportType",""],["passportCountry",""]]],
+      ["адрес регистрации", [["registrationRegion",""],["registrationRegionType",""],["registrationPostalCode",""],["registrationCity",""],["registrationStreet",""],["registrationBuilding",""],["registrationApartment",""],["registrationFormatted",""]]],
+      ["почтовый адрес", [["postRegion",""],["postRegionType",""],["postPostalCode",""],["postCity",""],["postStreet",""],["postBuilding",""],["postApartment",""],["postFormatted",""]]],
+      ["фактический адрес", [["currentRegion",""],["currentRegionType",""],["currentPostalCode",""],["currentCity",""],["currentStreet",""],["currentBuilding",""],["currentApartment",""],["currentFormatted",""]]],
+      ["контакты · телефон", [["mobileType","MOBILE"],["mobileValue",""],["mobileDescription",""],["mobileStatus",""]]],
+      ["контакты · email", [["emailType","EMAIL"],["emailValue",""],["emailDescription",""],["emailStatus",""]]],
+      ["служебное", [["secretWord",""],["categoryClient",""],["accountPackage",""],["personalManager",""]]],
+      ["флаги", [["terrorist",""],["blocked",""]]],
+      ["банк и счёт", [["bankBik",""],["bankName",""],["bankCorrAccount",""],["bankCity",""],["bankRegion",""],["account","40817"]]],
+      ["карты «Мир»", [["cardPan",""],["cardExpiry",""],["cardOutcome",""],["cardCount",""]]],
+      ["служебные", [["documents",""],["isResident",""],["citizenship",""],["asOf",""]]],
     ],
     sample: 'personId,employerOgrn,fullName,gender,birthDate,age,familyStatus,inn,snils,passportSeries…,registrationCity,…,account,cardPan,…,documents,isResident,citizenship,asOf\npd-364c37,8628243389381,Воробьёв Пётр Фёдорович,MALE,1992-03-14,34,Женат/Замужем,782955940289,66491204508,4512…,Москва,…,40817810500001650383,2200 51** **** 4839,…,паспорт РФ|RF|4512 345678,true,RU,2026-11-20',
   },
@@ -225,9 +236,20 @@ const FILES = {
     name: 'set-ip.csv',
     meta: '72 колонки',
     groups: [
-      ['поверх профиля ФЛ', [['ogrnip','ключ'],['personId',''],['employerOgrn','ссылка'],['fullName','«ИП Автотеста»'],['inn',''],['snils',''],['account','40817']]],
-      ['деятельность', [['okved',''],['okvedName','']]],
-      ['всё остальное', [['колонки ФЛ','65 колонок'],['паспорт, адреса, банк','без изменений']]],
+      ["идентификация ИП", [["ogrnip","ключ"]]],
+      ["идентификация", [["personId","ключ"],["employerOgrn","ссылка"],["fullName",""],["gender",""],["birthDate",""],["age",""],["familyStatus",""],["inn",""],["snils",""]]],
+      ["паспорт", [["passportSeries",""],["passportNumber",""],["passportIssuedBy",""],["passportIssueDate",""],["passportExpirationDate",""],["passportDepartmentCode",""],["passportType",""],["passportCountry",""]]],
+      ["адрес регистрации", [["registrationRegion",""],["registrationRegionType",""],["registrationPostalCode",""],["registrationCity",""],["registrationStreet",""],["registrationBuilding",""],["registrationApartment",""],["registrationFormatted",""]]],
+      ["почтовый адрес", [["postRegion",""],["postRegionType",""],["postPostalCode",""],["postCity",""],["postStreet",""],["postBuilding",""],["postApartment",""],["postFormatted",""]]],
+      ["фактический адрес", [["currentRegion",""],["currentRegionType",""],["currentPostalCode",""],["currentCity",""],["currentStreet",""],["currentBuilding",""],["currentApartment",""],["currentFormatted",""]]],
+      ["контакты · телефон", [["mobileType","MOBILE"],["mobileValue",""],["mobileDescription",""],["mobileStatus",""]]],
+      ["контакты · email", [["emailType","EMAIL"],["emailValue",""],["emailDescription",""],["emailStatus",""]]],
+      ["служебное", [["secretWord",""],["categoryClient",""],["accountPackage",""],["personalManager",""]]],
+      ["флаги", [["terrorist",""],["blocked",""]]],
+      ["банк и счёт", [["bankBik",""],["bankName",""],["bankCorrAccount",""],["bankCity",""],["bankRegion",""],["account","40817"]]],
+      ["карты «Мир»", [["cardPan",""],["cardExpiry",""],["cardOutcome",""],["cardCount",""]]],
+      ["служебные", [["documents",""],["isResident",""],["citizenship",""],["asOf",""]]],
+      ["деятельность", [["okved",""],["okvedName",""]]],
     ],
     sample: 'ogrnip,personId,employerOgrn,fullName,…,inn,snils,…,account,…,okved,okvedName\n728009516384617,pd-91f03,8628243389381,Виноградова Татьяна ИП Автотеста,…,250759496166,…,40817810500000015154,…,62.01,Разработка ПО',
   },

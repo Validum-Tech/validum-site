@@ -146,6 +146,8 @@ const groups: { kicker: string; tools: Tool[] }[] = [
                   height="397"
                   class="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]"
                 />
+                <!-- мягкое растворение снизу: превью не обрывается резкой линией -->
+                <div class="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-surface-0/90 to-transparent"></div>
               </div>
               <div class="p-7 sm:flex sm:flex-col sm:justify-center">
                 <div class="flex items-center gap-3">

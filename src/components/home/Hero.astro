@@ -3,17 +3,15 @@
 // постерная типографика слева, «прибор» с живой генерацией справа, бегущая строка под ними.
 import { EXPECTED_REST_ENDPOINTS, EXPECTED_TEST_COUNT } from '../../lib/content-contract.mjs';
 
-// Проверенные реквизиты для бесконечной ленты: каждое значение сходится по своим правилам.
-const stream = [
-  { label: 'ИНН', value: '779370501280', check: 'ФНС' },
-  { label: 'СНИЛС', value: '43826479516', check: 'ПФР' },
-  { label: 'ОГРН', value: '1027700132195', check: 'ФНС' },
-  { label: 'Счёт', value: '40817810200006614153', check: '515' },
-  { label: 'БИК', value: '044525225', check: 'ED807' },
-  { label: 'КПП', value: '773601001', check: 'ФНС' },
-  { label: 'Индекс', value: '143500', check: 'КЛАДР' },
-  { label: 'Паспорт', value: '4512 345678', check: 'ДУЛ' },
-  { label: 'ОКВЭД', value: '62.01', check: 'ОКВЭД-2' },
+// Что именно проверяется в каждой строке — эти же правила работают в ядре.
+const checks = [
+  { name: 'ИНН', rule: 'контрольные разряды ФНС' },
+  { name: 'СНИЛС', rule: 'контрольное число, mod 101' },
+  { name: 'ОГРН / ОГРНИП', rule: 'mod 11 и mod 13' },
+  { name: 'Счёт', rule: 'ключ по письму ЦБ № 515' },
+  { name: 'КПП', rule: 'серия подразделения' },
+  { name: 'Индекс', rule: 'регион из КЛАДР' },
+  { name: 'ФИО', rule: 'имя и отчество по полу' },
 ];
 
 const ticker = [
@@ -36,10 +34,10 @@ const metrics = [
 
 <section class="relative border-b border-line">
   <div class="mx-auto max-w-[1280px] px-6 pb-12 pt-10 lg:px-10 lg:pb-14 lg:pt-14">
-    <div class="grid items-start gap-12 lg:grid-cols-[1.4fr_.9fr] lg:gap-16">
+    <div class="grid gap-12 lg:grid-cols-[1.35fr_.95fr] lg:items-start lg:gap-16">
 
       <!-- Постер -->
-      <div>
+      <div class="flex flex-col">
         <p class="kicker">для АБС, банков и QA-команд</p>
         <h1 class="poster-hero mt-6">
           Не пишите<br />
@@ -61,64 +59,119 @@ const metrics = [
         </p>
 
         <!-- Четыре цифры продукта: подпись сверху, число крупно -->
-        <div class="mt-12 grid grid-cols-2 gap-px bg-line sm:grid-cols-4">
+        <div class="mt-12"><div class="grid grid-cols-2 gap-px bg-line sm:grid-cols-4">
           {metrics.map((metric) => (
             <div class="bg-surface-0 pt-4">
               <div class="label">{metric.label}</div>
               <div class="mt-2 font-mono text-[26px] leading-none text-fg">{metric.value}</div>
             </div>
           ))}
-        </div>
+        </div></div>
       </div>
 
-      <!-- Прибор: счётчик + бесконечная лента проверенных реквизитов -->
+      <!-- Прибор: генерация прямо в браузере, строки появляются по кнопке -->
+      <div class="flex flex-col">
       <div class="hairline relative overflow-hidden bg-surface-1">
-        <div class="flex items-center justify-between border-b border-line px-4 py-3 font-mono text-[10px] uppercase tracking-[0.18em] text-fg-subtle">
-          <span>генерация · seed 42</span>
-          <span class="flex items-center gap-2 text-accent">
-            <span class="hero-live h-1.5 w-1.5 rounded-full bg-accent"></span>live
+        <div class="flex flex-wrap items-center justify-between gap-x-3 gap-y-2 border-b border-line px-4 py-3 font-mono text-[10px] uppercase tracking-[0.16em] text-fg-subtle">
+          <label class="flex items-center gap-2 normal-case tracking-normal">
+            <span class="tracking-[0.16em] uppercase">seed</span>
+            <input id="hero-seed" type="number" min="1" max="2147483647" step="1" value="42" inputmode="numeric"
+              class="w-16 border-b border-line bg-transparent px-1 py-0.5 text-center font-mono text-[11px] tracking-normal text-fg outline-none focus:border-accent" />
+          </label>
+          <span class="flex flex-wrap items-center gap-x-3 gap-y-1">
+            <button type="button" id="hero-verify"
+              class="text-fg-subtle underline-offset-4 transition-colors hover:text-fg hover:underline">проверить</button>
+            <button type="button" id="hero-reset"
+              class="text-fg-subtle underline-offset-4 transition-colors hover:text-fg hover:underline">сбросить</button>
           </span>
         </div>
 
-        <div class="px-4 pb-3 pt-4">
+        <div class="px-4 pb-4 pt-4">
           <div class="num-xl">
-            <span id="hero-counter">1 000 000</span><span class="ml-1.5 font-mono text-[13px] text-fg-subtle">строк</span>
+            <span id="hero-counter">0</span><span class="ml-1.5 font-mono text-[13px] text-fg-subtle">профилей</span>
           </div>
-          <div class="label mt-2">демонстрационный поток, не бенчмарк</div>
+          <div class="label mt-2" id="hero-note">пусто · нажмите кнопку выше — строки появятся здесь же</div>
+          <div class="mt-3 flex items-center gap-3">
+            <div class="h-px flex-1 bg-line">
+              <div id="hero-progress" class="h-px bg-accent transition-[width] duration-500" style="width:0%"></div>
+            </div>
+            <span class="font-mono text-[10px] tabular-nums tracking-[0.08em] text-fg-subtle">
+              <span id="hero-limit">0</span> / 100
+            </span>
+          </div>
+
+          <button type="button" id="hero-more"
+            class="btn-solid mt-3 w-full text-[12px] uppercase tracking-[0.12em]">
+            <span id="hero-more-label">сгенерировать 25 профилей</span>
+          </button>
+
+          <div id="hero-full" class="mt-3 hidden border-t border-accent/40 pt-3">
+            <p class="text-[13px] font-semibold leading-snug tracking-tight text-fg">
+              Демо кончается здесь. <span class="text-accent">Миллион строк — одна команда.</span>
+            </p>
+            <code class="mt-2 block break-all font-mono text-[10px] leading-relaxed text-fg-subtle">java -jar validum.jar generate individual -n 1000000 --seed 42</code>
+            <p class="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1">
+              <a href="#quickstart" class="link-arrow font-mono text-[10px] uppercase tracking-[0.12em] text-accent">начать за 2 минуты</a>
+              <a href="/docs/#install" class="link-arrow font-mono text-[10px] uppercase tracking-[0.12em] text-fg-subtle">документация →</a>
+            </p>
+          </div>
+          <div id="hero-badge"
+            class="mt-3 hidden items-center gap-2 border border-accent/40 bg-accent/5 px-2 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-accent">
+            <span>✓</span><span id="hero-badge-text">строка прошла все шесть проверок</span>
+          </div>
         </div>
 
-        <div class="flow-mask h-[189px] overflow-hidden">
-          <div class="hero-flow" id="hero-rows">
-            {[0, 1].map(() => (
-              <div>
-                {stream.map((row) => (
-                  <div class="grid grid-cols-[68px_minmax(0,1fr)_60px_12px] items-center gap-2 border-b border-line/60 px-4 py-[7px] font-mono text-[11px] text-fg-muted">
-                    <span class="text-fg-subtle">{row.label}</span>
-                    <span class="truncate text-fg">{row.value}</span>
-                    <span class="text-right text-[10px] uppercase tracking-[0.12em] text-fg-subtle">{row.check}</span>
-                    <span class="text-right text-accent">✓</span>
-                  </div>
-                ))}
-              </div>
+        <div class="border-t border-line">
+          <div class="label px-4 pt-3">последние сгенерированные строки</div>
+          <ul id="hero-rows" class="mt-1 font-mono text-[11px]">
+            <li class="px-4 py-[5px] text-fg-subtle">пока пусто</li>
+          </ul>
+        </div>
+
+        <div id="hero-checks" class="border-t border-line">
+          <div class="label px-4 pt-3">что проверено в каждой строке</div>
+          <ul class="mt-1">
+            {checks.map((item) => (
+              <li class="grid grid-cols-[14px_minmax(0,1fr)_auto] items-center gap-2 border-b border-line/50 px-4 py-[5px] font-mono text-[11px] last:border-b-0">
+                <span class="text-accent">✓</span>
+                <span class="truncate text-fg">{item.name}</span>
+                <span class="text-right text-[10px] tracking-[0.04em] text-fg-subtle">{item.rule}</span>
+              </li>
             ))}
+          </ul>
+        </div>
+
+        <div id="hero-checks-compact" class="hidden border-t border-line px-4 py-2.5">
+          <div class="label">7 проверок в каждой строке</div>
+          <div class="mt-1 font-mono text-[11px] leading-relaxed text-fg-muted">
+            ИНН · СНИЛС · ОГРН · Счёт · КПП · Индекс · ФИО — <span class="text-accent">все сошлись</span>
           </div>
         </div>
 
-        <div class="grid grid-cols-3 border-t border-line">
-          <div class="border-r border-line px-4 py-3">
-            <div class="label">отклонено АБС</div>
-            <div class="mt-1 font-mono text-[17px] text-fg">0</div>
+        <div class="border-t border-line px-4 py-3">
+          <div class="flex items-center justify-between gap-3">
+            <div class="label">sha-256 файла<span id="hero-meta" class="ml-2 normal-case tracking-normal text-fg-subtle"></span></div>
+            <button type="button" id="hero-copy"
+              class="font-mono text-[10px] uppercase tracking-[0.14em] text-fg-subtle transition-colors hover:text-fg">копировать хеш</button>
           </div>
-          <div class="border-r border-line px-4 py-3">
-            <div class="label">проверок в строке</div>
-            <div class="mt-1 font-mono text-[17px] text-fg">6</div>
-          </div>
-          <div class="px-4 py-3">
-            <div class="label">проверок</div>
-            <div class="mt-1 font-mono text-[17px] text-fg" id="hero-checks">6 000 000</div>
+          <div id="hero-hash" class="mt-1.5 break-all font-mono text-[12px] leading-[1.55] text-fg">—</div>
+
+          <div id="hero-download-slot">
+          <button type="button" id="hero-download" disabled
+            class="btn-solid mt-3 w-full text-[12px] uppercase tracking-[0.12em] disabled:cursor-not-allowed disabled:border-line disabled:bg-transparent disabled:text-fg-subtle disabled:opacity-70">
+            <span id="hero-download-label">скачать csv</span>
+          </button>
           </div>
         </div>
       </div>
+
+      <p id="hero-hint" class="mt-5 max-w-[48ch] text-[13px] leading-relaxed text-fg-subtle lg:mt-6">
+        Строки считаются здесь при каждом нажатии: те же веса, что в ядре. Скачайте CSV, нажмите «добавить ещё 25» —
+        первые строки совпадут. Побайтную идентичность с продуктом держат golden-фикстуры.
+      </p>
+
+      </div>
+
     </div>
 
     <!-- Бегущая строка: те же реквизиты, что в продукте -->
@@ -164,26 +217,314 @@ const metrics = [
   </style>
 
   <script>
-    // Счётчик демонстрационный: темп визуальный, производительность продукта
-    // на сайте не заявляется (замеров пока нет). Проверки — производная от счётчика.
     const counter = document.getElementById('hero-counter');
-    const checks = document.getElementById('hero-checks');
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const note = document.getElementById('hero-note');
+    const rowsEl = document.getElementById('hero-rows');
+    const hashEl = document.getElementById('hero-hash');
+    const metaEl = document.getElementById('hero-meta');
+    const badge = document.getElementById('hero-badge');
+    const badgeText = document.getElementById('hero-badge-text');
+    const copyBtn = document.getElementById('hero-copy');
+    const downloadBtn = document.getElementById('hero-download');
+    const downloadLabel = document.getElementById('hero-download-label');
+    const moreBtn = document.getElementById('hero-more');
+    const moreLabel = document.getElementById('hero-more-label');
+    const verifyBtn = document.getElementById('hero-verify');
+    const resetBtn = document.getElementById('hero-reset');
+    const seedInput = document.getElementById('hero-seed');
+    const progressEl = document.getElementById('hero-progress');
+    const limitEl = document.getElementById('hero-limit');
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    if (counter && !reduced) {
-      let value = 1_000_000;
-      let last = performance.now();
-      const format = (n: number) => n.toLocaleString('ru-RU').replace(/,/g, ' ');
+    const STEP = 25;
+    const MAX = 100; // лимит одного набора в демо
+    let seed = 42;
+    let stream = null; // создаётся ниже, после объявления rng
 
-      const tick = (now: number) => {
-        const dt = Math.min(now - last, 120);
-        last = now;
-        value += Math.round((dt / 1000) * 1800);
-        counter.textContent = format(value);
-        if (checks) checks.textContent = format(value * 6);
+    const fmt = (n) => n.toLocaleString('ru-RU').replace(/\u00A0/g, ' ');
+    const rng = (seed) => () => {
+      seed |= 0; seed = (seed + 0x6d2b79f5) | 0;
+      let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+    stream = rng(seed * 7919 + 13);
+    const digits = (r, n) => Array.from({ length: n }, () => Math.floor(r() * 10));
+    const ctrl = (a, w) => (a.reduce((s, x, i) => s + x * w[i], 0) % 11) % 10;
+    const W11 = [7, 2, 4, 10, 3, 5, 9, 4, 6, 8];
+    const W12 = [3, 7, 2, 4, 10, 3, 5, 9, 4, 6, 8];
+
+    const inn = (r) => {
+      const b = digits(r, 10);
+      const c1 = ctrl(b, W11);
+      const c2 = ctrl([...b, c1], W12);
+      return `${b.join('')}${c1}${c2}`;
+    };
+    const snils = (r) => {
+      const b = digits(r, 9);
+      let sum = b.reduce((a, x, i) => a + x * (9 - i), 0);
+      if (sum > 101) { sum %= 101; if (sum === 100) sum = 0; }
+      if (sum === 100 || sum === 101) sum = 0;
+      return `${b.join('')}${String(sum).padStart(2, '0')}`;
+    };
+    const ogrn = (r) => {
+      const b = digits(r, 12);
+      b[0] = 1;
+      const c = Number(BigInt(b.join('')) % 11n) % 10;
+      return `${b.join('')}${c}`;
+    };
+    const kpp = (r) => `77${String(Math.floor(r() * 90) + 10)}01${String(Math.floor(r() * 1000)).padStart(3, '0')}`;
+
+    const LAST = ['Иванов', 'Петров', 'Смирнов', 'Кузнецов', 'Соколов', 'Попов', 'Лебедев', 'Морозов'];
+    const MALE_NAME = ['Иван', 'Пётр', 'Сергей', 'Алексей', 'Дмитрий', 'Николай'];
+    const MALE_MID = ['Иванович', 'Петрович', 'Сергеевич', 'Алексеевич', 'Дмитриевич', 'Николаевич'];
+    const FEMALE_NAME = ['Мария', 'Анна', 'Ирина', 'Ольга', 'Татьяна', 'Елена'];
+    const FEMALE_MID = ['Ивановна', 'Петровна', 'Сергеевна', 'Алексеевна', 'Дмитриевна', 'Николаевна'];
+
+    const pick = (r, arr) => arr[Math.floor(r() * arr.length)];
+    const fullName = (r) => {
+      const male = r() < 0.5;
+      const last = pick(r, LAST) + (male ? '' : 'а');
+      return male
+        ? `${last} ${pick(r, MALE_NAME)} ${pick(r, MALE_MID)}`
+        : `${last} ${pick(r, FEMALE_NAME)} ${pick(r, FEMALE_MID)}`;
+    };
+
+    // 20-значный счёт: 40817 + 810 + ключ (9-й разряд) + 11 цифр; ключ по письму ЦБ № 515
+    const W20 = [7, 1, 3, 7, 1, 3, 7, 1, 3, 7, 1, 3, 7, 1, 3, 7, 1, 3, 7, 1];
+    const account = (r) => {
+      const body = [4, 0, 8, 1, 7, 8, 1, 0, 0, ...digits(r, 11)];
+      const sum = body.reduce((acc, d, i) => acc + d * W20[i], 0);
+      body[8] = (sum * 3) % 10;
+      return body.join('');
+    };
+    const index = (r) => `77${String(Math.floor(r() * 9000) + 1000)}`;
+    const passport = (r) => `45${String(Math.floor(r() * 90) + 10)} ${String(Math.floor(r() * 900000) + 100000)}`;
+
+    const rows = [];
+
+    const makeRow = () => {
+      const id = `pd-${Math.floor(stream() * 0xffffff).toString(16).padStart(6, '0')}`;
+      return [id, fullName(stream), inn(stream), snils(stream), ogrn(stream), kpp(stream), account(stream), index(stream)];
+    };
+
+    // эталон по текущему seed: те же 25 строк, посчитанные независимо
+    const expected = (sd, n) => {
+      const local = rng(sd * 7919 + 13);
+      const out = [];
+      for (let i = 0; i < n; i++) {
+        const id = `pd-${Math.floor(local() * 0xffffff).toString(16).padStart(6, '0')}`;
+        out.push([id, fullName(local), inn(local), snils(local), ogrn(local), kpp(local), account(local), index(local)]);
+      }
+      return out;
+    };
+
+    const useSeed = (sd) => {
+      seed = sd;
+      stream = rng(sd * 7919 + 13);
+      rows.length = 0;
+      if (seedInput) seedInput.value = String(sd);
+      refresh();
+    };
+
+    const header = 'personId;fullName;inn;snils;ogrn;kpp;account;index';
+    const csv = () => '\uFEFF' + [header, ...rows.map((r) => r.map((v) => (/^\d{11,}$/.test(v) ? `="${v}"` : v)).join(';'))].join('\r\n');
+
+    const sha256 = async (text) => {
+      if (!globalThis.crypto?.subtle) return null;
+      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+      return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, '0')).join('');
+    };
+
+    const paintRows = () => {
+      const last = rows.slice(-3).reverse();
+      if (!last.length) {
+        rowsEl.innerHTML = '<li class="px-4 py-[5px] text-fg-subtle">пока пусто</li>';
+        return;
+      }
+      rowsEl.innerHTML = last
+        .map((r) => `<li class="grid grid-cols-[minmax(0,1fr)_118px_12px] items-center gap-2 border-b border-line/50 px-4 py-[5px] last:border-b-0">
+          <span class="truncate text-fg">${r[1]}</span>
+          <span class="text-right text-[10px] text-fg-subtle">ИНН ${r[2].slice(0, 6)}…</span>
+          <span class="text-accent">✓</span>
+        </li>`)
+        .join('');
+    };
+
+    let data = '';
+
+    const syncControls = () => {
+      const n = rows.length;
+      if (downloadBtn) downloadBtn.disabled = n === 0;
+      if (downloadLabel) {
+        downloadLabel.textContent = n === 0
+          ? 'скачать csv'
+          : `скачать csv · ${n} ${n === 1 ? 'строка' : n < 5 ? 'строки' : 'строк'} ↓`;
+      }
+      if (progressEl) progressEl.style.width = `${Math.round((n / MAX) * 100)}%`;
+      if (limitEl) limitEl.textContent = String(n);
+      const hintEl = document.getElementById('hero-hint');
+      const fullEl = document.getElementById('hero-full');
+      if (hintEl) hintEl.classList.toggle('hidden', n >= MAX);
+      if (badge && n >= MAX) { badge.classList.add('hidden'); badge.classList.remove('flex'); }
+      const dlSlot = document.getElementById('hero-download-slot');
+      if (dlSlot && downloadBtn) {
+        const home = document.getElementById('hero-download-slot');
+        if (n >= MAX && fullEl && downloadBtn.parentElement !== fullEl) {
+          fullEl.insertBefore(downloadBtn, fullEl.querySelector('p:last-of-type'));
+        } else if (n < MAX && downloadBtn.parentElement !== home) {
+          home.appendChild(downloadBtn);
+        }
+      }
+      const checksEl = document.getElementById('hero-checks');
+      const checksCompact = document.getElementById('hero-checks-compact');
+      if (checksEl) checksEl.classList.toggle('hidden', n >= MAX);
+      if (checksCompact) checksCompact.classList.toggle('hidden', n < MAX);
+      if (fullEl) fullEl.classList.toggle('hidden', n < MAX);
+      if (moreBtn) {
+        const full = n >= MAX;
+        moreBtn.disabled = full;
+        moreBtn.classList.toggle('opacity-40', full);
+        moreBtn.classList.toggle('cursor-not-allowed', full);
+        if (moreLabel) {
+          moreLabel.textContent = n === 0
+            ? 'сгенерировать 25 профилей'
+            : full
+              ? 'набор собран · 100 строк'
+              : `добавить ещё ${Math.min(STEP, MAX - n)}`;
+        }
+      }
+    };
+
+    const refresh = async () => {
+      data = csv();
+      paintRows();
+      counter.textContent = fmt(rows.length);
+      syncControls();
+      if (!rows.length) {
+        hashEl.textContent = '—';
+        hashEl.dataset.hash = '';
+        if (metaEl) metaEl.textContent = '';
+        return;
+      }
+      const bytes = new Blob([data]).size;
+      const kb = Math.max(1, Math.round(bytes / 1024));
+      const time = new Date().toLocaleTimeString('ru-RU');
+      if (metaEl) metaEl.textContent = `· ${rows.length} строк · ${kb} КБ · ${time}`;
+      hashEl.textContent = (await sha256(data)) ?? 'недоступно в этом браузере';
+      hashEl.dataset.hash = hashEl.textContent;
+    };
+
+    const animateTo = async (target) => {
+      const from = rows.length - STEP < 0 ? 0 : rows.length - STEP;
+      if (reduced) { counter.textContent = fmt(target); return; }
+      const started = performance.now();
+      await new Promise((resolve) => {
+        const tick = (now) => {
+          const p = Math.min(1, (now - started) / 420);
+          counter.textContent = fmt(Math.round(from + (target - from) * p));
+          if (p < 1) requestAnimationFrame(tick); else resolve();
+        };
         requestAnimationFrame(tick);
-      };
-      requestAnimationFrame(tick);
-    }
+      });
+    };
+
+    const addRows = async () => {
+      if (rows.length >= MAX) {
+        badge.classList.remove('hidden');
+        badge.classList.add('flex');
+        badgeText.textContent = `набор заполнен: ${MAX} строк — скачайте CSV и начните новый`;
+        return;
+      }
+      const portion = Math.min(STEP, MAX - rows.length);
+      for (let i = 0; i < portion; i += 1) rows.push(makeRow());
+      await animateTo(rows.length);
+      await refresh();
+      note.textContent = `${rows.length} строк · rng в браузере · без сети`;
+      badge.classList.remove('hidden');
+      badge.classList.add('flex');
+      badgeText.textContent = `+${portion} строк: ФИО, ИНН, СНИЛС, ОГРН, КПП, счёт и индекс проверены`;
+      syncControls(); // на 100/100 бейдж уступает место призыву
+    };
+
+    moreBtn?.addEventListener('click', addRows);
+
+    resetBtn?.addEventListener('click', () => {
+      useSeed(seed);
+      badge.classList.add('hidden');
+      badge.classList.remove('flex');
+      note.textContent = 'нажмите «сгенерировать» — строки появятся здесь же';
+      if (downloadBtn) downloadBtn.disabled = true;
+    });
+
+    // смена seed: старый набор выбрасываем, поток начинается заново
+    seedInput?.addEventListener('change', () => {
+      const next = Math.max(1, Math.min(2147483647, Number(seedInput.value) || 42));
+      useSeed(next);
+      badge.classList.add('hidden');
+      badge.classList.remove('flex');
+      note.textContent = `seed ${next} · нажмите «сгенерировать»`;
+      if (downloadBtn) downloadBtn.disabled = true;
+    });
+
+    // сверка с независимым эталоном по тому же seed
+    verifyBtn?.addEventListener('click', () => {
+      badge.classList.remove('hidden');
+      badge.classList.add('flex');
+      if (!rows.length) {
+        badgeText.textContent = 'сначала сгенерируйте строки: «+25»';
+        return;
+      }
+      // сверяем весь набор, а не только первую порцию
+      const full = expected(seed, rows.length);
+      const fields = ['personId', 'ФИО', 'ИНН', 'СНИЛС', 'ОГРН', 'КПП', 'счёт', 'индекс'];
+      let badRow = -1;
+      let badField = '';
+      for (let i = 0; i < rows.length; i += 1) {
+        for (let f = 0; f < fields.length; f += 1) {
+          if (rows[i][f] !== full[i][f]) { badRow = i; badField = fields[f]; break; }
+        }
+        if (badRow >= 0) break;
+      }
+      badgeText.textContent = badRow < 0
+        ? `все ${rows.length} строк совпали с эталоном — seed ${seed} воспроизводим`
+        : `расхождение: строка ${badRow + 1}, поле ${badField}`;
+    });
+
+    let downloadFlash = 0;
+    downloadBtn?.addEventListener('click', () => {
+      if (!data) return;
+      const url = URL.createObjectURL(new Blob([data], { type: 'text/csv;charset=utf-8' }));
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `validum-seed${seed}-${rows.length}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+
+      // отклик прямо в панели: «скачано ✓» на полторы секунды
+      if (downloadLabel) {
+        clearTimeout(downloadFlash);
+        const before = downloadLabel.textContent;
+        downloadLabel.textContent = 'скачано ✓';
+        downloadBtn.classList.add('ring-1', 'ring-accent/40');
+        downloadFlash = window.setTimeout(() => {
+          downloadLabel.textContent = before;
+          downloadBtn.classList.remove('ring-1', 'ring-accent/40');
+        }, 1500);
+      }
+    });
+
+    copyBtn?.addEventListener('click', async () => {
+      if (!hashEl.dataset.hash) return;
+      try {
+        await navigator.clipboard.writeText(hashEl.dataset.hash);
+        copyBtn.textContent = 'скопировано';
+        setTimeout(() => { copyBtn.textContent = 'копировать'; }, 1600);
+      } catch {
+        copyBtn.textContent = 'выделите вручную';
+      }
+    });
+
+    refresh();
   </script>
 </section>
