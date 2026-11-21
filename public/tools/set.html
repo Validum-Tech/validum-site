@@ -1,0 +1,534 @@
+<!doctype html>
+<html lang="ru" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<title>Validum · связанный набор: организации, люди, ИП</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+:root{--surface-0:#09090b;--surface-1:rgba(255,255,255,.02);--surface-2:rgba(255,255,255,.03);
+--surface-3:rgba(255,255,255,.06);--fg:#fafafa;--fg-muted:#a1a1aa;--fg-subtle:rgba(255,255,255,.35);
+--line:rgba(255,255,255,.10);--line-strong:rgba(255,255,255,.18);--accent:#10b981;--accent-2:#34d399;
+--red:#ef4444;--amber:#f59e0b;--mono:'JetBrains Mono',ui-monospace,monospace;--sans:'Inter',system-ui,sans-serif}
+*{box-sizing:border-box}
+body{margin:0;background:var(--surface-0);color:var(--fg);font-family:var(--sans);font-size:15px;line-height:1.6}
+.wrap{max-width:1200px;margin:0 auto;padding:0 24px}
+header{padding:34px 0 4px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-2);display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.tag{border:1px solid rgba(16,185,129,.5);border-radius:6px;padding:1px 7px;font-size:10.5px;letter-spacing:.08em}
+h1{font-size:32px;line-height:1.15;margin:10px 0 8px;letter-spacing:-.02em}
+.lead{color:var(--fg-muted);max-width:72ch;margin:0}
+.bar{display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end;margin:18px 0 0;padding:14px 0;border-block:1px solid var(--line)}
+.field{display:flex;flex-direction:column;gap:5px;min-width:0}
+.field label{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--fg-subtle)}
+.field input,.field select{background:var(--surface-2);border:1px solid var(--line);border-radius:2px;padding:7px 10px;
+color:var(--fg);font-family:var(--mono);font-size:13px;outline:none;min-width:110px}
+.field input:focus,.field select:focus{border-color:var(--accent)}
+.btn{border:1px solid var(--accent);background:rgba(16,185,129,.12);color:var(--accent-2);border-radius:2px;
+padding:8px 14px;font-family:var(--sans);font-size:13.5px;cursor:pointer;height:33px}
+.btn.ghost{border-color:var(--line);background:transparent;color:var(--fg-muted)}
+.stage{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:26px;margin:22px 0 0;align-items:start}
+.stage>*{min-width:0}
+h2.sect{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--fg-subtle);
+margin:0 0 10px;display:flex;align-items:center;gap:10px}
+h2.sect::after{content:"";flex:1;height:1px;background:var(--line)}
+.org,.person,.ip{border:1px solid var(--line);border-radius:2px;background:var(--surface-1);padding:14px;margin-bottom:10px}
+.org{border-left:2px solid rgba(16,185,129,.6)}
+.person{border-left:2px solid rgba(255,255,255,.18);padding:11px 14px}
+.ip{border-left:2px solid rgba(245,158,11,.6)}
+.org .title,.ip .title{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.org .title b,.ip .title b{font-size:15.5px}
+.org .sub,.person .sub,.ip .sub{font-family:var(--mono);font-size:11.5px;color:var(--fg-subtle)}
+.grid2{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:4px 14px;margin-top:10px}
+.kv{display:flex;flex-direction:column;min-width:0}
+.kv .k{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--fg-subtle)}
+.kv .v{font-family:var(--mono);font-size:12.5px;word-break:break-all}
+.link{display:inline-flex;gap:6px;align-items:center;font-family:var(--mono);font-size:11px;color:var(--accent-2);
+border:1px solid rgba(16,185,129,.35);border-radius:999px;padding:1px 8px;margin-top:8px}
+.panel{position:sticky;top:16px;border:1px solid var(--line);border-radius:2px;background:var(--surface-1);padding:16px}
+.panel h3{margin:0 0 12px;font-size:15px}
+.files{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:7px}
+.files li{display:flex;gap:8px;align-items:baseline;font-family:var(--mono);font-size:12px;color:var(--fg-muted)}
+.files .n{color:var(--fg);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.files .w{margin-left:auto;color:var(--fg-subtle);font-size:10.5px;white-space:nowrap}
+.order{display:flex;flex-direction:column;gap:6px;margin:12px 0 0}
+.step{display:flex;gap:9px;align-items:flex-start;font-size:13px;color:var(--fg-muted);line-height:1.45}
+.step code{font-size:11px;white-space:nowrap}
+.step>span:last-child{min-width:0;overflow-wrap:anywhere}
+.step .i{width:18px;height:18px;border-radius:50%;border:1px solid var(--line-strong);display:flex;align-items:center;
+justify-content:center;font-family:var(--mono);font-size:10px;color:var(--fg-subtle);flex:none}
+.step.rev .i{border-color:rgba(239,68,68,.5);color:#fca5a5}
+.checks{margin:14px 0 0;padding:10px 0 0;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:5px}
+.check{display:flex;gap:8px;align-items:center;font-family:var(--mono);font-size:11.5px;color:var(--fg-muted)}
+.check .m{color:var(--accent-2)}
+.cmdbox{margin:26px 0 0;border:1px solid var(--line);border-radius:2px;background:var(--surface-1)}
+.cmdbox h2{margin:0;padding:12px 14px;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+color:var(--fg-subtle);border-bottom:1px solid var(--line)}
+pre{margin:0;padding:14px;overflow:auto;font-family:var(--mono);font-size:12.5px;line-height:1.65;color:var(--fg-muted)}
+pre .k{color:var(--accent-2)}
+footer{margin:34px 0 40px;color:var(--fg-subtle);font-size:13px;border-top:1px solid var(--line);padding-top:16px}
+footer code{font-family:var(--mono);font-size:12px;color:var(--fg-muted)}
+@media(max-width:900px){.stage{grid-template-columns:minmax(0,1fr)}.panel{position:static}}
+
+  /* кастомный дропдаун поверх нативного select: в тёмной теме нативный список не читается */
+  .dd { position: relative; }
+  .dd-btn {
+    width: 100%; padding: 8px 30px 8px 10px; background: var(--surface-1); color: var(--fg);
+    border: 1px solid var(--line); border-radius: 2px; font-family: var(--mono); font-size: 12px;
+    text-align: left; cursor: pointer; position: relative; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .dd-btn:hover { border-color: rgba(255,255,255,.22); }
+  .dd-btn:focus-visible { outline: none; border-color: var(--accent); }
+  .dd-btn::after {
+    content: ''; position: absolute; right: 11px; top: 50%; width: 6px; height: 6px; margin-top: -4px;
+    border-right: 1px solid var(--fg-subtle); border-bottom: 1px solid var(--fg-subtle); transform: rotate(45deg);
+  }
+  .dd-list {
+    position: absolute; z-index: 30; left: 0; top: calc(100% + 4px); margin: 0; padding: 4px;
+    min-width: 100%; width: max-content; max-width: min(20rem, 92vw);
+    list-style: none; background: #0d0d0f; border: 1px solid rgba(255,255,255,.14); border-radius: 2px;
+    box-shadow: 0 18px 40px rgba(0,0,0,.6); max-height: 260px; overflow: auto;
+  }
+  .dd-list[hidden] { display: none; }
+  .dd-item {
+    padding: 7px 9px; font-family: var(--mono); font-size: 12px; color: var(--fg-muted);
+    border-radius: 2px; cursor: pointer; white-space: nowrap;
+  }
+  .dd-item:hover, .dd-item:focus-visible { background: rgba(255,255,255,.06); color: var(--fg); outline: none; }
+  .dd-item[aria-selected="true"] { color: var(--accent); }
+
+  /* полоса прокрутки в тон фона */
+  html { scrollbar-color: #23272a #08090a; }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: #08090a; }
+  ::-webkit-scrollbar-thumb { background: #23272a; border: 2px solid #08090a; border-radius: 999px; }
+  ::-webkit-scrollbar-thumb:hover { background: #2f3437; }
+  ::-webkit-scrollbar-button { display: none; width: 0; height: 0; }
+</style>
+<link rel="stylesheet" href="/tools/_theme.css?v=1">
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Инструменты Validum <span class="tag">Связанный набор</span></div>
+    <h1>Набор, который держится вместе</h1>
+    <p class="lead">Один прогон создаёт организации, людей и ИП, где каждый работодатель существует в том же наборе.
+    Связь держится на <code>employerOgrn</code>: сначала вставляются организации, потом люди, потом ИП — а откат
+    идёт обратным порядком.</p>
+
+    <div class="bar">
+      <div class="field"><label for="seed">seed</label>
+        <input id="seed" type="number" value="42" min="0" max="999999"></div>
+      <div class="field"><label for="people">людей</label>
+        <select id="people">
+          <option>3</option><option selected>5</option><option>8</option>
+        </select></div>
+      <div class="field"><label for="orgs">организаций</label>
+        <select id="orgs"><option selected>1</option><option>2</option><option>3</option><option>5</option><option>8</option></select></div>
+      <div class="field"><label for="okved">ОКВЭД</label>
+        <select id="okved">
+          <option value="62.01" selected>62.01 · разработка ПО</option>
+          <option value="62.02">62.02 · консультации в IT</option>
+          <option value="62.09">62.09 · прочие IT-услуги</option>
+          <option value="63.11">63.11 · обработка данных</option>
+          <option value="64.19">64.19 · банковские услуги</option>
+          <option value="64.20">64.20 · холдинги</option>
+          <option value="65.11">65.11 · страхование жизни</option>
+          <option value="41.20">41.20 · строительство</option>
+          <option value="42.21">42.21 · инженерные сети</option>
+          <option value="46.90">46.90 · оптовая торговля</option>
+          <option value="47.11">47.11 · розничная торговля</option>
+          <option value="49.41">49.41 · грузоперевозки</option>
+          <option value="86.21">86.21 · медицинская практика</option>
+          <option value="96.09">96.09 · прочие услуги</option>
+        </select></div>
+      <div class="field"><label for="region">регион</label>
+        <select id="region">
+          <option value="77" selected>Москва</option>
+          <option value="78">Санкт-Петербург</option>
+          <option value="50">Московская</option>
+          <option value="47">Ленинградская</option>
+          <option value="16">Татарстан</option>
+          <option value="23">Краснодарский</option>
+          <option value="61">Ростовская</option>
+          <option value="66">Свердловская</option>
+          <option value="74">Челябинская</option>
+          <option value="54">Новосибирская</option>
+        </select></div>
+      <button class="btn" id="rebuild">собрать набор</button>
+    </div>
+  </header>
+
+  <div class="stage">
+    <div>
+      <h2 class="sect">организации</h2>
+      <div id="orgsHost"></div>
+
+      <h2 class="sect" style="margin-top:22px">люди <span style="color:var(--fg-subtle);text-transform:none;letter-spacing:0">· ссылаются на ОГРН</span></h2>
+      <div id="peopleHost"></div>
+
+      <h2 class="sect" style="margin-top:22px">ИП</h2>
+      <div id="ipHost"></div>
+    </div>
+
+    <aside class="panel">
+      <h3>Набор целиком</h3>
+      <ul class="files" id="files"></ul>
+
+      <div class="order">
+        <div class="step"><span class="i">1</span> организации — они ни на кого не ссылаются</div>
+        <div class="step"><span class="i">2</span> люди — <code>employerOgrn</code> уже существует</div>
+        <div class="step"><span class="i">3</span> ИП — тоже с работодателем</div>
+        <div class="step rev"><span class="i">↩</span><span>откат: <code>validum_ip</code> → <code>validum_individual</code> → <code>validum_organization</code></span></div>
+      </div>
+
+      <div class="checks" id="checks"></div>
+    </aside>
+  </div>
+
+  <div class="cmdbox">
+    <h2>Спецификация и команда</h2>
+    <pre id="spec"></pre>
+  </div>
+
+  <footer>Набор собирается теми же правилами, что в продукте: ОГРН (13 знаков, остаток по модулю 11),
+  ИНН ФЛ/ИП (12 знаков, два контрольных разряда), СНИЛС (mod 101), счёт по письму Банка России № 515.
+  Ссылка <code>employerOgrn</code> указывает на ОГРН из этого же набора — в АБС такая вставка не упадёт на внешнем ключе.
+  Страница автономная: значения считаются в браузере и служат иллюстрацией, реальные данные даёт
+  <code>validum generate --spec set.json</code>.</footer>
+</div>
+
+<script>
+const W10=[2,4,10,3,5,9,4,6,8], W11=[7,2,4,10,3,5,9,4,6,8], W12=[3,7,2,4,10,3,5,9,4,6,8],
+      W20=[7,1,3,7,1,3,7,1,3,7,1,3,7,1,3,7,1,3,7,1];
+
+function mulberry32(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);
+  t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296;};}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+const SURNAMES=['Смирнов','Иванов','Кузнецов','Соколов','Попов','Лебедев','Козлов','Новиков','Морозов','Петров',
+  'Волков','Соловьёв','Васильев','Зайцев','Павлов','Семёнов','Голубев','Виноградов','Богданов','Воробьёв',
+  'Соколовский','Троицкий','Шевченко','Коваленко','Ковальчук','Рабинович','Петросян'];
+const MALE=['Иван','Пётр','Сергей','Алексей','Дмитрий','Андрей','Николай','Михаил','Григорий','Фёдор','Семён','Платон'];
+const FEMALE=['Мария','Анна','Ольга','Ирина','Елена','Наталья','Татьяна','Светлана','Вера','Ксения','Полина','Дарья'];
+const MPATR=['Иванович','Петрович','Сергеевич','Алексеевич','Дмитриевич','Андреевич','Николаевич','Михайлович','Фёдорович','Валентинович'];
+const FPATR=['Ивановна','Петровна','Сергеевна','Алексеевна','Дмитриевна','Андреевна','Николаевна','Михайловна','Фёдоровна','Валентиновна'];
+const ORG=['Ромашка','Восход','Заря','Прогресс','Северная звезда','Гранит','Спектр',
+           'Азимут','Радуга','Импульс','Ориентир','Кристалл','Маяк','Вектор',
+           'Стрела','Полярная','Гелиос','Орбита','Титан','Атлант'];
+const ORGFORM=[['ООО','Общество с ограниченной ответственностью'],['АО','Акционерное общество']];
+const BANKS=[
+  ['044525225','ПАО Сбербанк','30101810400000000225','Москва'],
+  ['044525974','АО «ТБанк»','30101810145250000974','Москва'],
+  ['044525187','Банк ВТБ (ПАО)','30101810700000000187','Москва'],
+  ['044525823','Газпромбанк (АО)','30101810200000000823','Москва'],
+];
+const REGIONS={'77':['Москва','г. Москва'],'50':['Московская','обл'],'78':['Санкт-Петербург','г. Санкт-Петербург'],
+  '16':['Татарстан','Респ']};
+
+const r=n=>Math.floor(Math.random()*n);
+const plural=(n,a)=>n%10===1&&n%100!==11?a[0]:(n%10>=2&&n%10<=4&&(n%100<10||n%100>=20)?a[1]:a[2]);
+const rows=n=>n+' '+plural(n,['строка','строки','строк']);
+function inn10(rnd){const d=Array.from({length:9},()=>Math.floor(rnd()*10));
+  let s=0;for(let i=0;i<9;i++)s+=d[i]*W10[i];return d.join('')+((s%11)%10);}
+function inn12(rnd){const d=Array.from({length:10},()=>Math.floor(rnd()*10));
+  let a=0,b=0;for(let i=0;i<10;i++)a+=d[i]*W11[i];const c1=(a%11)%10;d.push(c1);
+  for(let i=0;i<11;i++)b+=d[i]*W12[i];const c2=(b%11)%10;d.push(c2);return d.join('');}
+function ogrn13(rnd){let s='';for(let i=0;i<12;i++)s+=Math.floor(rnd()*10);
+  const ctrl=Number(BigInt(s)%11n)%10;return s+ctrl;}
+function ogrnip15(rnd){let s='';for(let i=0;i<14;i++)s+=Math.floor(rnd()*10);
+  const ctrl=Number(BigInt(s)%13n)%10;return s+ctrl;}
+function snils(rnd){let s='';for(let i=0;i<9;i++)s+=Math.floor(rnd()*10);
+  let sum=0;for(let i=0;i<9;i++)sum+=Number(s[i])*(9-i);
+  let c=sum%101;if(c===100||c===101)c=0;return s+String(c).padStart(2,'0');}
+function account(balance,currency,bik,rnd){
+  const p=bik.slice(6,9).split('').map(Number);
+  const head=(balance+currency).split('').map(Number);
+  const dept=[0,0,0,0];
+  const tail=Array.from({length:7},()=>Math.floor(rnd()*10));
+  const d=[...head,0,...dept,...tail];
+  let sum=p[0]*7+p[1]*1+p[2]*3;
+  for(let i=0;i<20;i++)sum+=(i===8?0:d[i])*W20[i];
+  d[8]=(sum*3)%10;
+  return d.join('');
+}
+function kpp(region,rnd){const tax=`${region}${String(Math.floor(rnd()*90)+10)}`;const reason=['01','02','03','04'][r(4)];
+  const seq=String(Math.floor(rnd()*900)+100);return tax+reason+seq;}
+
+/* --- проверки (те же формулы, что в валидаторах продукта) --- */
+const chk={
+  inn12:v=>{const d=v.split('').map(Number);let a=0,b=0;
+    for(let i=0;i<10;i++)a+=d[i]*W11[i];const c1=(a%11)%10;
+    for(let i=0;i<11;i++)b+=d[i]*W12[i];const c2=(b%11)%10;return c1===d[10]&&c2===d[11];},
+  inn10:v=>{const d=v.split('').map(Number);let s=0;
+    for(let i=0;i<9;i++)s+=d[i]*W10[i];return ((s%11)%10)===d[9];},
+  ogrn13:v=>Number(BigInt(v.slice(0,12))%11n)%10===Number(v[12]),
+  ogrnip15:v=>Number(BigInt(v.slice(0,14))%13n)%10===Number(v[14]),
+  snils:v=>{const d=v.split('').map(Number);let s=0;
+    for(let i=0;i<9;i++)s+=d[i]*(9-i);let c=s%101;if(c===100||c===101)c=0;
+    return c===Number(String(d[9])+String(d[10]));},
+  account:(v,bik)=>{const d=v.split('').map(Number);const p=bik.slice(6,9).split('').map(Number);
+    let s=p[0]*7+p[1]*1+p[2]*3;
+    for(let i=0;i<20;i++)s+=(i===8?0:d[i])*W20[i];
+    return ((s*3)%10)===d[8];},
+};
+
+let state={seed:42,people:5,orgs:1,okved:'62.01',region:'77'};
+
+function build(){
+  const rnd=mulberry32(state.seed*7919+13);
+  const banks=Array.from({length:state.orgs},(_,i)=>BANKS[(state.seed+i)%BANKS.length]);
+  const regionName=REGIONS[state.region][0];
+
+  const usedOrgNames=new Set();
+  const orgs=Array.from({length:state.orgs},(_,i)=>{
+    const bank=banks[i];
+    let form=ORGFORM[Math.floor(rnd()*ORGFORM.length)];
+    let brand=ORG[Math.floor(rnd()*ORG.length)];
+    // названия внутри набора не повторяются, пока не исчерпан пул (ОПФ × бренд)
+    for(let tries=0; tries<40 && usedOrgNames.has(form[0]+'|'+brand); tries++){
+      form=ORGFORM[Math.floor(rnd()*ORGFORM.length)];
+      brand=ORG[Math.floor(rnd()*ORG.length)];
+    }
+    usedOrgNames.add(form[0]+'|'+brand);
+    return {
+      name:`${form[0]} «${brand}»`,
+      full:`${form[1]} «${brand}»`,
+      ogrn:ogrn13(rnd), kpp:kpp(state.region,rnd), okved:state.okved,
+      bank,bik:bank[0],
+      account:account('40702','810',bank[0],rnd),
+      region:regionName,
+    };
+  });
+
+  const people=[];
+  const seenNames=new Set();
+  while(people.length<state.people){
+    const male=rnd()<0.5;
+    const surnameBase=SURNAMES[Math.floor(rnd()*SURNAMES.length)];
+    const surname=male?surnameBase:femaleSurname(surnameBase);
+    const first=male?MALE[Math.floor(rnd()*MALE.length)]:FEMALE[Math.floor(rnd()*FEMALE.length)];
+    const patron=male?MPATR[Math.floor(rnd()*MPATR.length)]:FPATR[Math.floor(rnd()*FPATR.length)];
+    const fullName=`${surname} ${first} ${patron}`;
+    if(seenNames.has(fullName)) continue;   // ФИО в наборе не повторяются
+    seenNames.add(fullName);
+    const bank=banks[Math.floor(rnd()*banks.length)];
+    const employer=orgs[Math.floor(rnd()*orgs.length)];
+    people.push({
+      fullName, male,
+      inn:inn12(rnd), snils:snils(rnd),
+      bik:bank[0],
+      account:account('40817','810',bank[0],rnd),
+      employerOgrn:employer.ogrn, employer:employer.name,
+    });
+  }
+
+  const ips=Array.from({length:Math.max(1,Math.round(state.orgs))},()=>{
+    const male=rnd()<0.5;
+    const surnameBase=SURNAMES[Math.floor(rnd()*SURNAMES.length)];
+    const surname=male?surnameBase:femaleSurname(surnameBase);
+    const first=male?MALE[Math.floor(rnd()*MALE.length)]:FEMALE[Math.floor(rnd()*FEMALE.length)];
+    const bank=banks[Math.floor(rnd()*banks.length)];
+    const employer=orgs[Math.floor(rnd()*orgs.length)];
+    return {
+      fullName:`${surname} ${first} ИП`,
+      ogrnip:ogrnip15(rnd), inn:inn12(rnd), okved:state.okved,
+      bik:bank[0], account:account('40817','810',bank[0],rnd),
+      employerOgrn:employer.ogrn,
+    };
+  });
+
+  return {orgs,people,ips,seed:state.seed};
+}
+
+function femaleSurname(base){
+  if(base.endsWith('ский')||base.endsWith('цкий'))return base.slice(0,-2)+'ая';
+  if(/ко$|енко$|ук$|юк$|ич$|ян$/.test(base))return base;
+  return base+'а';
+}
+
+function render(){
+  const data=build();
+  const kv=(k,v)=>`<div class="kv"><span class="k">${k}</span><span class="v">${esc(v)}</span></div>`;
+
+  document.getElementById('orgsHost').innerHTML=data.orgs.map(o=>`
+    <div class="org">
+      <div class="title"><b>${esc(o.name)}</b><span class="sub">${esc(o.full)}</span></div>
+      <div class="sub" style="margin-top:2px">ОКВЭД ${esc(o.okved)} · ${esc(o.region)}</div>
+      <div class="grid2">
+        ${kv('ОГРН',o.ogrn)}${kv('КПП',o.kpp)}
+        ${kv('БИК',o.bik)}${kv('Счёт 40702',o.account)}
+      </div>
+    </div>`).join('');
+
+  document.getElementById('peopleHost').innerHTML=data.people.map(p=>`
+    <div class="person">
+      <div class="title"><b>${esc(p.fullName)}</b></div>
+      <div class="grid2">
+        ${kv('ИНН',p.inn)}${kv('СНИЛС',p.snils)}${kv('Счёт 40817',p.account)}
+      </div>
+      <span class="link">работодатель · ОГРН ${p.employerOgrn}</span>
+    </div>`).join('');
+
+  document.getElementById('ipHost').innerHTML=data.ips.map(i=>`
+    <div class="ip">
+      <div class="title"><b>${esc(i.fullName)}</b><span class="sub">ОКВЭД ${esc(i.okved)}</span></div>
+      <div class="grid2">
+        ${kv('ОГРНИП',i.ogrnip)}${kv('ИНН',i.inn)}${kv('Счёт 40817',i.account)}
+      </div>
+      <span class="link">работодатель · ОГРН ${i.employerOgrn}</span>
+    </div>`).join('');
+
+  const files=[
+    ['set-organizations.csv','организации', rows(data.orgs.length)],
+    ['set-individuals.csv','люди', rows(data.people.length)],
+    ['set-ip.csv','ИП', rows(data.ips.length)],
+    ['set-relations.csv','связи · personId → employerOgrn', rows(data.people.length+data.ips.length)],
+    ['set-teardown.sql','откат · 3 таблицы', 'DELETE'],
+  ];
+  document.getElementById('files').innerHTML=files.map(([n,w,c])=>
+    `<li><span class="n">${esc(n)}</span><span class="w">${esc(c)}</span></li>`).join('');
+
+  const allNames=new Set([...data.people.map(p=>p.fullName),...data.ips.map(i=>i.fullName)]);
+  const checks=[
+    ['ОГРН сходится', data.orgs.every(o=>chk.ogrn13(o.ogrn))],
+    ['ОГРНИП сходится', data.ips.every(i=>chk.ogrnip15(i.ogrnip))],
+    ['ИНН людей и ИП сходятся', data.people.every(p=>chk.inn12(p.inn))&&data.ips.every(i=>chk.inn12(i.inn))],
+    ['СНИЛС сходится', data.people.every(p=>chk.snils(p.snils))],
+    ['Счета по 515 сходятся', data.orgs.every(o=>chk.account(o.account,o.bik))
+      &&data.people.every(p=>chk.account(p.account,p.bik))&&data.ips.every(i=>chk.account(i.account,i.bik))],
+    ['работодатель есть в наборе', [...data.people,...data.ips].every(x=>data.orgs.some(o=>o.ogrn===x.employerOgrn))],
+    ['ФИО не повторяются', allNames.size===data.people.length+data.ips.length],
+  ];
+  document.getElementById('checks').innerHTML=checks.map(([t,ok])=>
+    `<div class="check"><span class="m">${ok?'✓':'✗'}</span>${esc(t)}</div>`).join('');
+
+  const spec={
+    type:'set',
+    seed:state.seed,
+    asOf:'2026-11-15',
+    output:'out/set.csv',
+    members:[
+      {name:'orgs',kind:'organization',count:data.orgs.length},
+      {name:'people',kind:'individual',count:data.people.length,employer:'orgs'},
+      {name:'ip',kind:'ip',count:data.ips.length,employer:'orgs'},
+    ],
+  };
+  document.getElementById('spec').innerHTML=
+    '<span class="k">// set.json</span>\n'+esc(JSON.stringify(spec,null,2))+'\n\n'+
+    '<span class="k"># одной командой</span>\n'+
+    esc('java -jar validum.jar generate --spec set.json --output out/set.csv')+'\n'+esc('java -jar validum.jar coverage --file out/set-individuals.csv');
+}
+
+function readControls(){
+  state.seed=Number(document.getElementById('seed').value)||42;
+  state.people=Number(document.getElementById('people').value);
+  state.orgs=Number(document.getElementById('orgs').value);
+  state.okved=document.getElementById('okved').value;
+  state.region=document.getElementById('region').value;
+}
+
+document.getElementById('rebuild').addEventListener('click',()=>{readControls();render();});
+['seed','people','orgs','okved','region'].forEach(id=>{
+  const el=document.getElementById(id);
+  el.addEventListener('change',()=>{readControls();render();});
+});
+render();
+
+/* Нативный <select> в тёмной теме рисует белый список. Строим поверх свой,
+   оставляя select источником истины: его change-обработчики продолжают работать. */
+(function enhanceSelects(){
+  document.querySelectorAll('select').forEach((sel) => {
+    if (sel.dataset.enhanced) return;
+    sel.dataset.enhanced = '1';
+    sel.style.display = 'none';
+    sel.setAttribute('aria-hidden', 'true');
+
+    const wrap = document.createElement('div');
+    wrap.className = 'dd';
+    sel.parentNode.insertBefore(wrap, sel);
+    wrap.appendChild(sel);
+
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'dd-btn';
+    btn.setAttribute('aria-haspopup', 'listbox');
+    btn.setAttribute('aria-expanded', 'false');
+    wrap.appendChild(btn);
+
+    const list = document.createElement('ul');
+    list.className = 'dd-list';
+    list.setAttribute('role', 'listbox');
+    list.hidden = true;
+    wrap.appendChild(list);
+
+    const label = () => (sel.options[sel.selectedIndex] || {}).text || '';
+    const sync = () => { btn.textContent = label(); };
+
+    Array.from(sel.options).forEach((opt) => {
+      const li = document.createElement('li');
+      li.className = 'dd-item';
+      li.setAttribute('role', 'option');
+      li.dataset.value = opt.value;
+      li.textContent = opt.text;
+      if (opt.selected) li.setAttribute('aria-selected', 'true');
+      li.addEventListener('click', () => {
+        sel.value = opt.value;
+        list.querySelectorAll('.dd-item').forEach((n) => n.removeAttribute('aria-selected'));
+        li.setAttribute('aria-selected', 'true');
+        sync(); close();
+        sel.dispatchEvent(new Event('change', { bubbles: true }));
+      });
+      list.appendChild(li);
+    });
+
+    const open = () => {
+      list.hidden = false; btn.setAttribute('aria-expanded', 'true');
+      const cur = list.querySelector('.dd-item[aria-selected="true"]') || list.firstElementChild;
+      cur && cur.focus();
+    };
+    const close = () => { list.hidden = true; btn.setAttribute('aria-expanded', 'false'); };
+
+    btn.addEventListener('click', (e) => { e.stopPropagation(); list.hidden ? open() : close(); });
+    btn.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowDown' || e.key === 'Enter' || e.key === ' ') { e.preventDefault(); open(); }
+    });
+    list.addEventListener('keydown', (e) => {
+      const items = Array.from(list.querySelectorAll('.dd-item'));
+      const i = items.indexOf(document.activeElement);
+      if (e.key === 'Escape') { close(); btn.focus(); }
+      else if (e.key === 'ArrowDown') { e.preventDefault(); (items[i + 1] || items[0]).focus(); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); (items[i - 1] || items[items.length - 1]).focus(); }
+      else if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); document.activeElement.click(); }
+    });
+    document.addEventListener('click', (e) => { if (!wrap.contains(e.target)) close(); });
+
+    sync();
+  });
+})();
+</script>
+
+<script>
+/* Сообщаем высоту родителю: набор меняет длину при смене количества людей. */
+(function () {
+  var last = 0;
+  function report() {
+    try {
+      var el = document.querySelector('.wrap') || document.body;
+      var h = Math.ceil(el.getBoundingClientRect().height) + 8;
+      if (h === last || h < 400 || h > 20000) return;
+      last = h;
+      if (window.parent && window.parent !== window) {
+        window.parent.postMessage({ type: 'validum-tool-height', height: h }, '*');
+      }
+    } catch (e) { /* standalone-режим */ }
+  }
+  window.addEventListener('load', report);
+  window.addEventListener('resize', report);
+  document.addEventListener('click', function () { setTimeout(report, 120); }, true);
+  document.addEventListener('change', function () { setTimeout(report, 120); }, true);
+  if (window.ResizeObserver) { new ResizeObserver(report).observe(document.body); }
+  setTimeout(report, 300);
+})();
+</script>
+</body>
+</html>

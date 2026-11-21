@@ -5,33 +5,34 @@ const items = [
   { status: "done", tag: "P0.1 — P0.3", title: "Данные в ресурсах", desc: "ФИО (3.8 млн), адреса из КЛАДР (90 субъектов), email/секретные слова/менеджеры — вынесены из кода." },
   { status: "done", tag: "P1.2 — P1.4", title: "Batch, Validation API, экспорт", desc: "3 batch-эндпоинта (до 10 000 профилей), 8 валидаторов, CSV / JSON Array." },
   { status: "done", tag: "P2.2 — P2.3", title: "7 ОПФ + ОКПО/ОГРНИП", desc: "LLC, JSC, PJSC, NCO, FOUNDATION, SE (ГУП), ME (МУП). 8 валидаторов всего." },
-  { status: "done", tag: "P3.1 — P3.3", title: "CLI, Allure, .bik", desc: "Fat JAR на Picocli, JUnit 5 Extension, явный выбор банка. 906 тестов." },
+  { status: "done", tag: "P3.1 — P3.3", title: "CLI, Allure, .bik", desc: "Fat JAR на Picocli, JUnit 5/6 Extension, явный выбор банка. 912 тестов." },
   { status: "done", tag: "P4.1", title: "Импорт CSV (дозаполнение)", desc: "Свой CSV дозаполняется валидными данными: REST /fill, CLI fill, документы в трёх режимах — inline, JSON, split." },
-  { status: "done", tag: "Октябрь", title: "Участники ЦБ, счета по 515, ДУЛ, ED807/ED808", desc: "17 типов участников, 12 типов счетов с ключом по письму ЦБ № 515, 11 видов ДУЛ, 9 сценариев, экспорт XML ЦБ, Docker. 906 тестов." },
-  { status: "done", tag: "P1.1", title: "Maven Central", desc: "Пакеты io.github.validum-tech:validum-core и validum-allure публикуются из CI; текущая версия 0.6.0." },
-  { status: "done", tag: "P2.4", title: "ЮЛ: банк и счёт", desc: "Юридическое лицо получает банк и расчётный счёт — покрытие как у ФЛ и ИП." },
+  { status: "done", tag: "Октябрь", title: "Участники ЦБ, счета по 515, ДУЛ, ED807/ED808", desc: "17 типов участников, 12 типов счетов с ключом по письму ЦБ № 515, 11 видов ДУЛ, 9 сценариев, экспорт XML ЦБ, Docker. 912 тестов." },
   { status: "done", tag: "0.6.0", title: "Тулчейн: Boot 4, Gradle 9, JUnit 6", desc: "Spring Boot 4.1.2, Gradle 9.9.1, shadow 9.6.1, JUnit 6.1.3, Jackson 2.23.0, JaCoCo 0.8.16, AssertJ 3.27.7. API перешёл на Java 17 — весь продукт собирается одним порогом." },
+  { status: "done", tag: "P1.1", title: "Maven Central", desc: "Пакеты io.github.validum-tech:validum-core, validum-allure и validum-api публикуются из CI; текущая версия 0.7.0." },
+  { status: "done", tag: "P2.4", title: "ЮЛ: банк и счёт", desc: "Юридическое лицо получает банк и расчётный счёт — покрытие как у ФЛ и ИП." },
   { status: "plan", tag: "P3.4", title: "Mock API по OpenAPI", desc: "Mock-сервер для сквозных автотестов. Транзакции (платёжные поручения, ED101/ED210/211) по решению владельца не планируются." },
   { status: "plan", tag: "Эмулятор ЦБ", title: "Приём ED807/ED808", desc: "Локальный приёмник сообщений ЦБ для сквозных автотестов. Отложен по решению владельца." },
 ];
 ---
 
-<BaseLayout title="Планы развития">
-  <div class="max-w-[900px] mx-auto px-6 py-16 lg:py-24">
-    <div class="mb-16">
-      <div class="text-xs font-mono text-accent tracking-widest mb-2 uppercase">Дорожная карта</div>
-      <h1 class="text-4xl sm:text-5xl font-bold tracking-tight mb-4">Что сделано, что дальше</h1>
-      <p class="text-lg text-fg-muted">Открытый план развития. Без обещаний «в Q3». Только факты.</p>
+<BaseLayout title="Планы развития" description="Планы развития Validum: что уже работает в 0.5.0, что запланировано в 0.4.x и дальше, и что сознательно не делаем (транзакции ED101/ED210/ED211).">
+  <div class="mx-auto max-w-[1000px] px-6 py-16 lg:px-10 lg:py-20">
+    <div class="mb-12">
+      <p class="kicker">Дорожная карта</p>
+      <h1 class="poster mt-4">Что сделано, что дальше</h1>
+      <div class="rule mt-7 max-w-xl"></div>
+      <p class="mt-6 text-[16px] text-fg-muted">Открытый план развития. Без обещаний «в Q3». Только факты.</p>
     </div>
 
-    <div class="space-y-3">
+    <div class="space-y-px bg-line">
       {items.map(item => (
-          <div class:list={["p-6 rounded-xl border flex items-start gap-4", item.status === 'next' ? 'border-accent/40 bg-accent/5' : 'border-line bg-surface-2']}>
+          <div class:list={["flex items-start gap-5 p-6 transition-colors", item.status === 'next' ? 'bg-metric-surface' : 'bg-surface-0 hover:bg-surface-1']}>
 
-            <div class:list={["w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 border",
-              item.status === 'done' ? 'bg-accent/20 border-accent/40 text-accent' :
-                  item.status === 'next' ? 'bg-accent border-accent text-accent-fg animate-pulse' :
-                      'bg-surface-2 border-line text-fg-muted']}>
+            <div class:list={["flex h-8 w-8 flex-shrink-0 items-center justify-center border",
+              item.status === 'done' ? 'border-accent/40 text-accent' :
+                  item.status === 'next' ? 'border-line text-fg' :
+                      'border-line text-fg-subtle']}>
               {item.status === 'done' ? (
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
               ) : item.status === 'next' ? (
@@ -43,16 +44,16 @@ const items = [
 
             <div class="flex-1">
               <div class="flex items-center gap-3 mb-2 flex-wrap">
-              <span class:list={["text-[10px] font-mono px-2 py-0.5 rounded border uppercase tracking-wider",
-                item.status === 'done' ? 'text-accent border-accent/30 bg-accent/10' :
-                    item.status === 'next' ? 'text-accent-fg border-accent bg-accent' :
-                        'text-fg-muted border-line']}>
+              <span class:list={["label border px-2 py-0.5",
+                item.status === 'done' ? 'border-accent/30 text-accent' :
+                    item.status === 'next' ? 'border-line text-fg' :
+                        'border-line text-fg-subtle']}>
                 {item.status === 'done' ? 'Готово' : item.status === 'next' ? 'Дальше' : 'План'}
               </span>
-                <span class="text-xs font-mono text-fg-muted">{item.tag}</span>
+                <span class="font-mono text-[11px] uppercase tracking-[0.12em] text-fg-subtle">{item.tag}</span>
               </div>
-              <h3 class="text-lg font-semibold mb-1">{item.title}</h3>
-              <p class="text-sm text-fg-muted">{item.desc}</p>
+              <h3 class="text-[17px] font-semibold tracking-tight">{item.title}</h3>
+              <p class="mt-1.5 text-sm leading-relaxed text-fg-muted">{item.desc}</p>
             </div>
           </div>
       ))}

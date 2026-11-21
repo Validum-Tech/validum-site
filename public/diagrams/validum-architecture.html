@@ -4868,19 +4868,29 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
       svg [data-node-id], svg [data-edge-from], svg [data-detail], svg [data-detail-anchor], svg [data-legend-hit], svg { transition: none !important; }
     }
   </style>
+<style id="validum-theme">
+  /* выравнивание с витриной: тёмная схема прокрутки и волосяные скругления */
+  html { color-scheme: dark; }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(255,255,255,.14); border-radius: 2px; }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,.22); }
+  .card { border-radius: 3px; }
+  h1 { letter-spacing: -.012em; }
+</style>
 </head>
 <body>
   <!-- Toolbar: theme, live visual style, trace motion, presentation stage, and export.
        Motion appears only for trace-enabled artifacts and has no shortcut;
        Keyboard: T toggles theme, S cycles style, F toggles the stage, E opens export. -->
   <div class="toolbar" role="toolbar" aria-label="Действия с диаграммой">
-    <a data-validum-back="1" href="../" title="Вернуться на сайт Validum" aria-label="Вернуться на сайт Validum"
+    <a data-validum-back="1" href="/architecture" title="Вернуться туда, откуда пришли" aria-label="Вернуться назад"
        style="display:inline-flex;align-items:center;gap:0.375rem;height:2.25rem;padding:0 0.75rem;margin-right:0.375rem;
               border:1px solid var(--panel-border, rgba(148,163,184,0.35));border-radius:0.6875rem;
               background:color-mix(in srgb, var(--panel, #ffffff) 78%, transparent);
               backdrop-filter:blur(12px);color:var(--text-muted, var(--text, #334155));
               font-family:inherit;font-size:0.8125rem;line-height:1;text-decoration:none;white-space:nowrap;
-              box-shadow:0 1px 2px rgba(15,23,42,0.06);transition:color .14s ease, border-color .14s ease;">← На сайт</a>
+              box-shadow:0 1px 2px rgba(15,23,42,0.06);transition:color .14s ease, border-color .14s ease;">← Назад</a>
     <div class="toolbar-group">
     <button id="btn-theme" type="button"
             title="Переключить тему (T)"
@@ -5500,9 +5510,9 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
           <h3>Сборка и поставка</h3>
         </div>
         <ul>
-          <li>Gradle 9.9.1 · Java 17+ (API — 21) · 4 модуля · configuration-cache</li>
+          <li>Gradle 9.9.1 · Java 17+ (все модули) · 4 модуля · configuration-cache</li>
           <li>CI: ubuntu + Corretto 21, ./gradlew build, отчёты тестов в артефактах</li>
-          <li>906 тестов: 679 core · 92 api · 114 cli · 21 allure</li>
+          <li>912 тестов: 682 core · 92 api · 117 cli · 21 allure</li>
           <li>Docker: multi-stage образ, :8080, ./data:/app/data:ro; docs-сайт на Astro</li>
         </ul>
       </div>
@@ -13861,5 +13871,101 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
       }
     });
   </script>
+<script data-validum-darkonly="1">
+(function () {
+  var root = document.documentElement;
+  // Только тёмная тема: витрина живёт в одной теме, светлая версия — источник расхождений.
+  function lock() {
+    if (root.getAttribute('data-theme') !== 'dark') root.setAttribute('data-theme', 'dark');
+    var btn = document.getElementById('btn-theme');
+    if (btn) btn.style.display = 'none';
+    var light = document.querySelector('[data-format="svg-light"]');
+    if (light && light.closest('[role="menuitem"]')) light.closest('[role="menuitem"]').style.display = 'none';
+    else if (light) light.style.display = 'none';
+  }
+  lock();
+  document.addEventListener('DOMContentLoaded', lock);
+  window.addEventListener('load', function () { lock(); setTimeout(lock, 120); setTimeout(lock, 600); });
+  // Горячая клавиша T больше ничего не переключает.
+  window.addEventListener('keydown', function (e) {
+    if ((e.key === 't' || e.key === 'T') && !/input|textarea|select/i.test((e.target.tagName || ''))) {
+      e.stopPropagation(); e.preventDefault(); lock();
+    }
+  }, true);
+  // «Назад»: возврат на исходную страницу, а не всегда на /architecture.
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest && e.target.closest('[data-validum-back]');
+    if (!a) return;
+    var ref = document.referrer || '';
+    if (ref && ref.indexOf(location.origin) === 0 && history.length > 1) {
+      e.preventDefault();
+      history.back();
+    }
+  });
+})();
+</script>
+
+<script>
+/* Validum: подсветка модуля из родительской страницы и по ?focus=<id> */
+(function () {
+  function focusNode(id) {
+    if (!id) return;
+    try {
+      if (window.Archify && Archify.focus && typeof Archify.focus.set === 'function') {
+        Archify.focus.set(id, { toggle: false });
+      }
+      var el = document.querySelector('[data-node-id="' + id + '"]');
+      if (el && window.Archify && Archify.view && typeof Archify.view.reveal === 'function') {
+        Archify.view.reveal([id], { includeNeighbors: true, reason: 'radar' });
+      }
+      if (el) {
+        try { el.focus({ preventScroll: true }); } catch (_) {}
+        el.scrollIntoView({ block: 'center', inline: 'center', behavior: 'smooth' });
+      }
+    } catch (_) {}
+  }
+  window.addEventListener('message', function (event) {
+    var data = event.data;
+    if (!data || data.type !== 'validum-diagram-focus') return;
+    focusNode(String(data.id));
+  });
+  window.__validumFocus = focusNode;
+  var focus = new URLSearchParams(location.search).get('focus');
+  if (focus) setTimeout(function () { focusNode(focus); }, 400);
+})();
+</script>
+
+<style id="validum-embed-style">
+/* Встраивание в iframe (?embed=1): без внутренней прокрутки и без шапки с гидом */
+html.validum-embed { height: 100%; }
+html.validum-embed body { height: 100%; overflow: hidden !important; }
+html.validum-embed .toolbar,
+html.validum-embed .header,
+html.validum-embed .diagram-guide,
+html.validum-embed .node-finder,
+html.validum-embed .archify-toast { display: none !important; }
+html.validum-embed .container {
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 6px !important;
+  height: 100vh !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0 !important;
+}
+html.validum-embed .diagram-container {
+  flex: 1 1 auto !important;
+  height: auto !important;
+  min-height: 0 !important;
+  margin: 0 !important;
+}
+html.validum-embed ::-webkit-scrollbar { width: 0; height: 0; }
+</style>
+<script>
+(function () {
+  if (new URLSearchParams(location.search).get('embed') !== '1') return;
+  document.documentElement.classList.add('validum-embed');
+})();
+</script>
 </body>
 </html>

@@ -2,23 +2,39 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
-<BaseLayout title="История версий">
-  <div class="max-w-[800px] mx-auto px-6 py-16 lg:py-24">
-    <div class="mb-16">
-      <div class="text-xs font-mono text-accent tracking-widest mb-2 uppercase">Релизы</div>
-      <h1 class="text-4xl sm:text-5xl font-bold tracking-tight mb-4">История версий</h1>
+<BaseLayout title="История версий" description="История версий Validum: изменения по релизам, артефакты в Maven Central и GitHub Releases, обратная совместимость и ломающие изменения.">
+  <div class="mx-auto max-w-[960px] px-6 py-16 lg:px-10 lg:py-20">
+    <div class="mb-10">
+      <p class="kicker">Релизы</p>
+      <h1 class="poster mt-4">История версий</h1>
+      <div class="rule mt-7 max-w-xl"></div>
     </div>
 
-    <div class="border-l-2 border-accent/30 pl-8 space-y-12">
-      <div class="relative">
-        <div class="absolute -left-[41px] top-1 w-5 h-5 rounded-full bg-accent border-4 border-surface-0"></div>
-        <div class="flex items-center gap-4 mb-3 flex-wrap">
-          <h2 class="text-2xl font-bold font-mono">v0.6.0</h2>
-          <span class="px-2 py-0.5 rounded-full bg-accent/10 text-accent text-xs font-mono border border-accent/20">Актуальный релиз</span>
-          <span class="text-sm text-fg-muted font-mono">Ноябрь 2026</span>
+    <div>
+      <div class="border-b border-line py-9">
+        <div class="flex flex-wrap items-baseline gap-x-4 gap-y-2">
+          <h2 class="font-mono text-[19px] font-semibold tracking-tight text-fg">v0.7.0</h2>
+          <span class="label border border-accent/40 px-2 py-0.5 text-accent">Актуальный релиз</span>
+          <span class="font-mono text-[11px] uppercase tracking-[0.12em] text-fg-subtle">Ноябрь 2026</span>
         </div>
-        <p class="text-fg-muted mb-4">Тулчейн переехал на актуальные версии: Spring Boot 4, Gradle 9, JUnit 6. Библиотеки в Maven Central — <code>validum-core:0.6.0</code> и <code>validum-allure:0.6.0</code>, артефакты — в <a href="https://github.com/Validum-Tech/validum/releases/tag/v0.6.0" class="text-accent hover:underline">GitHub Releases</a>.</p>
-        <ul class="space-y-2 text-sm text-fg-muted">
+        <p class="mt-4 max-w-3xl text-sm leading-relaxed text-fg-muted">Инструменты на витрине, честные ФИО и публикация API: <code>validum-core</code>, <code>validum-allure</code> и <code>validum-api</code> в Maven Central, образ <code>pavelwhite64/validum-api</code> в Docker Hub.</p>
+        <ul class="mt-4 space-y-1.5 text-sm leading-relaxed text-fg-muted">
+          <li class="flex gap-2"><span class="text-accent">+</span> <code>validum-api</code> в Maven Central: обычный библиотечный jar, исполняемый — с classifier <code>boot</code></li>
+          <li class="flex gap-2"><span class="text-accent">+</span> Docker Hub: <code>pavelwhite64/validum-api</code> (<code>latest</code>, <code>0.7.0</code>, <code>sha-…</code>), amd64 и arm64</li>
+          <li class="flex gap-2"><span class="text-accent">+</span> <code>--unique-name</code>: ФИО без единого повтора в наборе, требует <code>--seed</code></li>
+          <li class="flex gap-2"><span class="text-accent">+</span> Инструменты: связанный набор, матрица совместимости, анатомия набора</li>
+          <li class="flex gap-2"><span class="text-accent">~</span> Отчество больше не повторяет имя (было «Григорий Григорьевич» у 100% мужчин); пул ФИО <code>38 000 → 12 105 730</code></li>
+          <li class="flex gap-2"><span class="text-accent">+</span> 912 тестов зелёных</li>
+        </ul>
+      </div>
+
+      <div class="border-b border-line py-9">
+        <div class="flex flex-wrap items-baseline gap-x-4 gap-y-2">
+          <h2 class="font-mono text-[19px] font-semibold tracking-tight text-fg">v0.6.0</h2>
+          <span class="font-mono text-[11px] uppercase tracking-[0.12em] text-fg-subtle">Ноябрь 2026</span>
+        </div>
+        <p class="mt-4 max-w-3xl text-sm leading-relaxed text-fg-muted">Тулчейн переехал на актуальные версии: Spring Boot 4, Gradle 9, JUnit 6. Библиотеки в Maven Central — <code>validum-core:0.6.0</code> и <code>validum-allure:0.6.0</code>, артефакты — в <a href="https://github.com/Validum-Tech/validum/releases/tag/v0.6.0" class="text-accent hover:underline">GitHub Releases</a>.</p>
+        <ul class="mt-4 space-y-1.5 text-sm leading-relaxed text-fg-muted">
           <li class="flex gap-2"><span class="text-accent">~</span> Spring Boot <code>3.5.7 → 4.1.2</code>, стартеры <code>spring-boot-starter-webmvc</code>, springdoc <code>3.2.0</code></li>
           <li class="flex gap-2"><span class="text-accent">~</span> Gradle <code>8.14 → 9.9.1</code>, shadow <code>8.3.7 → 9.6.1</code>, публикация через vanniktech <code>0.37.0</code></li>
           <li class="flex gap-2"><span class="text-accent">~</span> JUnit <code>5.11.3 → 6.1.3</code>, Jackson <code>2.18.2 → 2.23.0</code>, JaCoCo <code>0.8.16</code>, AssertJ <code>3.27.7</code></li>
@@ -27,14 +43,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </ul>
       </div>
 
-      <div class="relative">
-        <div class="absolute -left-[41px] top-1 w-5 h-5 rounded-full bg-accent border-4 border-surface-0"></div>
-        <div class="flex items-center gap-4 mb-3 flex-wrap">
-          <h2 class="text-2xl font-bold font-mono">v0.5.0</h2>
-          <span class="text-sm text-fg-muted font-mono">Ноябрь 2026</span>
+      <div class="border-b border-line py-9">
+        <div class="flex flex-wrap items-baseline gap-x-4 gap-y-2">
+          <h2 class="font-mono text-[19px] font-semibold tracking-tight text-fg">v0.5.0</h2>
+          <span class="font-mono text-[11px] uppercase tracking-[0.12em] text-fg-subtle">Ноябрь 2026</span>
         </div>
-        <p class="text-fg-muted mb-4">Пакет «Связанный набор и карты «Мир»»: человек ссылается на работодателя, стенд засевается за один прогон и откатывается одним скриптом. Библиотеки в Maven Central — <code>validum-core:0.5.0</code> и <code>validum-allure:0.5.0</code>, артефакты — в <a href="https://github.com/Validum-Tech/validum/releases/tag/v0.5.0" class="text-accent hover:underline">GitHub Releases</a>.</p>
-        <ul class="space-y-2 text-sm text-fg-muted">
+        <p class="mt-4 max-w-3xl text-sm leading-relaxed text-fg-muted">Пакет «Связанный набор и карты «Мир»»: человек ссылается на работодателя, стенд засевается за один прогон и откатывается одним скриптом. Библиотеки в Maven Central — <code>validum-core:0.5.0</code> и <code>validum-allure:0.5.0</code>, артефакты — в <a href="https://github.com/Validum-Tech/validum/releases/tag/v0.5.0" class="text-accent hover:underline">GitHub Releases</a>.</p>
+        <ul class="mt-4 space-y-1.5 text-sm leading-relaxed text-fg-muted">
           <li class="flex gap-2"><span class="text-accent">+</span> Связь «человек → работодатель»: <code>employerOgrn</code> в плоской выдаче и в <code>describe</code></li>
           <li class="flex gap-2"><span class="text-accent">+</span> Карты «Мир»: <code>--cards N</code>, BIN <code>220000–220499</code>, Луна, срок +2…+5 лет, исходы операций, вторая таблица <code>*-cards.csv</code></li>
           <li class="flex gap-2"><span class="text-accent">+</span> Набор из нескольких сущностей: <code>type: "set"</code> — организации, люди и ИП за один прогон, связи в <code>*-relations.csv</code></li>
@@ -44,28 +59,26 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </ul>
       </div>
 
-      <div class="relative">
-        <div class="absolute -left-[41px] top-1 w-5 h-5 rounded-full bg-accent border-4 border-surface-0"></div>
-        <div class="flex items-center gap-4 mb-3 flex-wrap">
-          <h2 class="text-2xl font-bold font-mono">v0.4.1</h2>
-          <span class="text-sm text-fg-muted font-mono">Ноябрь 2026</span>
+      <div class="border-b border-line py-9">
+        <div class="flex flex-wrap items-baseline gap-x-4 gap-y-2">
+          <h2 class="font-mono text-[19px] font-semibold tracking-tight text-fg">v0.4.1</h2>
+          <span class="font-mono text-[11px] uppercase tracking-[0.12em] text-fg-subtle">Ноябрь 2026</span>
         </div>
-        <p class="text-fg-muted mb-4">Патч к 0.4.0: REST-сервис больше не принимает <code>?fields=</code> молча для JSON-форматов. Библиотеки в Maven Central — <code>validum-core:0.4.1</code> и <code>validum-allure:0.4.1</code>, артефакты — в <a href="https://github.com/Validum-Tech/validum/releases/tag/v0.4.1" class="text-accent hover:underline">GitHub Releases</a>.</p>
-        <ul class="space-y-2 text-sm text-fg-muted">
+        <p class="mt-4 max-w-3xl text-sm leading-relaxed text-fg-muted">Патч к 0.4.0: REST-сервис больше не принимает <code>?fields=</code> молча для JSON-форматов. Библиотеки в Maven Central — <code>validum-core:0.4.1</code> и <code>validum-allure:0.4.1</code>, артефакты — в <a href="https://github.com/Validum-Tech/validum/releases/tag/v0.4.1" class="text-accent hover:underline">GitHub Releases</a>.</p>
+        <ul class="mt-4 space-y-1.5 text-sm leading-relaxed text-fg-muted">
           <li class="flex gap-2"><span class="text-accent">~</span> <code>?fields=</code> с <code>format=json|json-array</code> теперь отвечает <code>400 invalid_argument</code> вместо тихого игнорирования</li>
           <li class="flex gap-2"><span class="text-accent">~</span> Предрелизные смоуки: REST-проверка читает вложенный <code>bank.bik</code>, CI берёт boot-jar, а не <code>-plain.jar</code></li>
           <li class="flex gap-2"><span class="text-accent">+</span> 873 теста зелёных</li>
         </ul>
       </div>
 
-      <div class="relative">
-        <div class="absolute -left-[41px] top-1 w-5 h-5 rounded-full bg-accent border-4 border-surface-0"></div>
-        <div class="flex items-center gap-4 mb-3 flex-wrap">
-          <h2 class="text-2xl font-bold font-mono">v0.4.0</h2>
-          <span class="text-sm text-fg-muted font-mono">Ноябрь 2026</span>
+      <div class="border-b border-line py-9">
+        <div class="flex flex-wrap items-baseline gap-x-4 gap-y-2">
+          <h2 class="font-mono text-[19px] font-semibold tracking-tight text-fg">v0.4.0</h2>
+          <span class="font-mono text-[11px] uppercase tracking-[0.12em] text-fg-subtle">Ноябрь 2026</span>
         </div>
-        <p class="text-fg-muted mb-4">Пакет «Чистые данные и честный контракт»: регионы и почтовые индексы в каждой строке, узкая выдача, честные формулировки проверок, меньше техдолга. Apache 2.0. Артефакты — в <a href="https://github.com/Validum-Tech/validum/releases/tag/v0.4.0" class="text-accent hover:underline">GitHub Releases</a>, библиотеки — в Maven Central.</p>
-        <ul class="space-y-2 text-sm text-fg-muted">
+        <p class="mt-4 max-w-3xl text-sm leading-relaxed text-fg-muted">Пакет «Чистые данные и честный контракт»: регионы и почтовые индексы в каждой строке, узкая выдача, честные формулировки проверок, меньше техдолга. Apache 2.0. Артефакты — в <a href="https://github.com/Validum-Tech/validum/releases/tag/v0.4.0" class="text-accent hover:underline">GitHub Releases</a>, библиотеки — в Maven Central.</p>
+        <ul class="mt-4 space-y-1.5 text-sm leading-relaxed text-fg-muted">
           <li class="flex gap-2"><span class="text-accent">+</span> Субъект адреса в плоской выдаче: <code>registrationRegion</code>, <code>postRegion</code>, <code>currentRegion</code> и типы регионов — 64 колонки</li>
           <li class="flex gap-2"><span class="text-accent">+</span> Реальные почтовые индексы из КЛАДР <code>DOMA.DBF</code> — индекс всегда принадлежит субъекту</li>
           <li class="flex gap-2"><span class="text-accent">+</span> <code>--fields inn,fullName</code> и пресет <code>--fields=short</code>: только нужные колонки (15 вместо 64)</li>
@@ -76,14 +89,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           <li class="flex gap-2"><span class="text-accent">+</span> 872 теста зелёных (660 core · 100 cli · 91 api · 21 allure) и предрелизный чекер <code>tools/release-check.py</code></li>
         </ul>
       </div>
-      <div class="relative">
-        <div class="absolute -left-[41px] top-1 w-5 h-5 rounded-full bg-accent border-4 border-surface-0"></div>
-        <div class="flex items-center gap-4 mb-3 flex-wrap">
-          <h2 class="text-2xl font-bold font-mono">v0.3.0</h2>
-          <span class="text-sm text-fg-muted font-mono">Ноябрь 2026</span>
+      <div class="border-b border-line py-9">
+        <div class="flex flex-wrap items-baseline gap-x-4 gap-y-2">
+          <h2 class="font-mono text-[19px] font-semibold tracking-tight text-fg">v0.3.0</h2>
+          <span class="font-mono text-[11px] uppercase tracking-[0.12em] text-fg-subtle">Ноябрь 2026</span>
         </div>
-        <p class="text-fg-muted mb-4">Пакет «Данные как в реале»: человек с историей, документы по возрасту и региону, нерезиденты, поиск и проверка набора. Apache 2.0. Артефакты — в <a href="https://github.com/Validum-Tech/validum/releases/tag/v0.3.0" class="text-accent hover:underline">GitHub Releases</a>, библиотеки — в Maven Central.</p>
-        <ul class="space-y-2 text-sm text-fg-muted">
+        <p class="mt-4 max-w-3xl text-sm leading-relaxed text-fg-muted">Пакет «Данные как в реале»: человек с историей, документы по возрасту и региону, нерезиденты, поиск и проверка набора. Apache 2.0. Артефакты — в <a href="https://github.com/Validum-Tech/validum/releases/tag/v0.3.0" class="text-accent hover:underline">GitHub Releases</a>, библиотеки — в Maven Central.</p>
+        <ul class="mt-4 space-y-1.5 text-sm leading-relaxed text-fg-muted">
           <li class="flex gap-2"><span class="text-accent">+</span> Java 17 для <code>core</code>, <code>allure</code> и CLI (проверено сборкой на JDK 17); REST остаётся на 21</li>
           <li class="flex gap-2"><span class="text-accent">+</span> <code>personId</code> — идентификатор человека в наборе; <code>--index</code> печатает список, <code>describe --person</code> показывает человека</li>
           <li class="flex gap-2"><span class="text-accent">+</span> <code>--age-range 18-70</code> и <code>--age-distribution realistic</code> — набор без «тысячи девятнадцатилетних»</li>
@@ -97,19 +109,18 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           <li class="flex gap-2"><span class="text-accent">+</span> 846 тестов зелёных (645 core · 92 cli · 88 api · 21 allure)</li>
         </ul>
       </div>
-      <div class="relative">
-        <div class="absolute -left-[41px] top-1 w-5 h-5 rounded-full bg-accent border-4 border-surface-0"></div>
-        <div class="flex items-center gap-4 mb-3 flex-wrap">
-          <h2 class="text-2xl font-bold font-mono">v0.2.0</h2>
-          <span class="text-sm text-fg-muted font-mono">Ноябрь 2026</span>
+      <div class="border-b border-line py-9">
+        <div class="flex flex-wrap items-baseline gap-x-4 gap-y-2">
+          <h2 class="font-mono text-[19px] font-semibold tracking-tight text-fg">v0.2.0</h2>
+          <span class="font-mono text-[11px] uppercase tracking-[0.12em] text-fg-subtle">Ноябрь 2026</span>
         </div>
-        <p class="text-fg-muted mb-4">Пакет «Набор»: воспроизводимость, уникальность и читаемый CSV. Apache 2.0. Артефакты — в <a href="https://github.com/Validum-Tech/validum/releases/tag/v0.2.0" class="text-accent hover:underline">GitHub Releases</a>, библиотеки — в Maven Central.</p>
-        <ul class="space-y-2 text-sm text-fg-muted">
+        <p class="mt-4 max-w-3xl text-sm leading-relaxed text-fg-muted">Пакет «Набор»: воспроизводимость, уникальность и читаемый CSV. Apache 2.0. Артефакты — в <a href="https://github.com/Validum-Tech/validum/releases/tag/v0.2.0" class="text-accent hover:underline">GitHub Releases</a>, библиотеки — в Maven Central.</p>
+        <ul class="mt-4 space-y-1.5 text-sm leading-relaxed text-fg-muted">
           <li class="flex gap-2"><span class="text-accent">+</span> <code>validum-core</code> — zero-dependency ядро, 18 пакетов</li>
           <li class="flex gap-2"><span class="text-accent">+</span> <code>validum-api</code> — Spring Boot 3.5.7, 19 эндпоинтов</li>
           <li class="flex gap-2"><span class="text-accent">+</span> <code>validum-cli</code> — fat JAR ~15 МБ, 9 команд Picocli</li>
           <li class="flex gap-2"><span class="text-accent">+</span> <code>validum-allure</code> — JUnit 5 Extension</li>
-          <li class="flex gap-2"><span class="text-accent">+</span> 370 банков ЦБ РФ из ED807 (1380 участников, 17 типов PtType)</li>
+          <li class="flex gap-2"><span class="text-accent">+</span> около 370 банков ЦБ РФ из ED807 (1360 участников, 17 типов PtType)</li>
           <li class="flex gap-2"><span class="text-accent">+</span> Счета: 12 типов, контрольный ключ по письму ЦБ № 515 (учитывает БИК подразделения)</li>
           <li class="flex gap-2"><span class="text-accent">+</span> ДУЛ: 11 видов документов (СПДУЛ ФНС) и правила их совместимости</li>
           <li class="flex gap-2"><span class="text-accent">+</span> 9 КУС-сценариев готовых профилей, экспорт ED807/ED808 (XML ЦБ)</li>

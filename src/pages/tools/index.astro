@@ -1,0 +1,177 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+interface Tool {
+  href: string;
+  badge: string;
+  thumb: string;
+  title: string;
+  text: string;
+  action: string;
+}
+
+const architecture: Tool = {
+  href: '/architecture',
+  badge: 'схема',
+  thumb: '/tools/thumbs/architecture.png',
+  title: 'Как устроен Validum',
+  text: 'Модули, точки входа, источники данных и форматы выдачи — на одной интерактивной схеме.',
+  action: 'Открыть схему',
+};
+
+const pipeline: Tool = {
+  href: '/tools/pipeline',
+  badge: 'схема',
+  thumb: '/tools/thumbs/pipeline.png',
+  title: 'Откуда берутся данные',
+  text: 'КЛАДР, ОКВЭД и справочник ЦБ внутри продукта; слева источники, справа — форматы выдачи.',
+  action: 'Смотреть пайплайн',
+};
+
+const anatomy: Tool = {
+  href: '/tools/anatomy',
+  badge: 'интерактив',
+  thumb: '/tools/thumbs/anatomy.png',
+  title: 'Анатомия одной записи',
+  text: 'Один профиль и шесть слоёв: что за поле, откуда значение, какое правило и что отобьёт в АБС.',
+  action: 'Разобрать запись',
+};
+
+const check: Tool = {
+  href: '/tools/check',
+  badge: 'инструмент',
+  thumb: '/tools/thumbs/check.png',
+  title: 'Проверка реквизитов',
+  text: 'Вставьте свои ИНН, СНИЛС, счёт или карту — покажем, сходится ли контрольная сумма и что поправить.',
+  action: 'Проверить значение',
+};
+
+const build: Tool = {
+  href: '/tools/build',
+  badge: 'инструмент',
+  thumb: '/tools/thumbs/build.png',
+  title: 'Соберите набор за минуту',
+  text: 'Сущность, возраст, регион, документы, карты и формат — на выходе JSON, строка CSV и готовая команда.',
+  action: 'Собрать набор',
+};
+
+const set: Tool = {
+  href: '/tools/set',
+  badge: 'интерактив',
+  thumb: '/tools/thumbs/set.png',
+  title: 'Связанный набор',
+  text: 'Организации, люди и ИП в одном прогоне: работодатель существует в наборе, откат — обратным порядком.',
+  action: 'Собрать набор',
+};
+
+const compatibility: Tool = {
+  href: '/tools/compatibility',
+  badge: 'справочник',
+  thumb: '/tools/thumbs/compatibility.png',
+  title: 'Совместимость',
+  text: 'Формат × ОС × JDK: что реально гоняется в CI, а что проверяется руками.',
+  action: 'Сверить среду',
+};
+
+const anatomySet: Tool = {
+  href: '/tools/anatomy-set',
+  badge: 'интерактив',
+  thumb: '/tools/thumbs/anatomy-set.png',
+  title: 'Анатомия набора',
+  text: 'Четыре файла набора по колонкам: ключи, внешние ключи, порядок загрузки и обратный откат.',
+  action: 'Разобрать файлы',
+};
+
+const rowProfile: Tool = {
+  href: '/tools/matrix',
+  badge: 'справочник',
+  thumb: '/tools/thumbs/matrix.png',
+  title: 'Реквизиты ФЛ, ИП и ЮЛ',
+  text: 'Что есть у каждого типа: 69 / 72 / 21 колонка, чем проверяется каждое значение.',
+  action: 'Открыть таблицу',
+};
+
+const groups: { kicker: string; tools: Tool[] }[] = [
+  { kicker: 'как устроено', tools: [architecture, pipeline] },
+  { kicker: 'конструкторы', tools: [build, set] },
+  { kicker: 'разбор и проверка', tools: [anatomy, check, compatibility] },
+  { kicker: 'набор и справочник', tools: [anatomySet, rowProfile] },
+];
+---
+
+<BaseLayout
+  title="Инструменты"
+  description="Девять страниц Validum: схема архитектуры, путь данных, разбор записи, проверка реквизитов, конструктор и связанный набор, реквизиты ФЛ/ИП/ЮЛ и матрица совместимости форматов с CI."
+>
+  <section class="mx-auto max-w-[1280px] px-6 pt-16 pb-12 lg:px-10 lg:pt-20">
+    <p class="kicker">Инструменты</p>
+    <h1 class="poster mt-4">Посмотрите, как это работает</h1>
+    <div class="rule mt-7 max-w-xl"></div>
+    <p class="mt-6 max-w-2xl text-[16px] leading-relaxed text-fg-muted">
+      Девять страниц без установки, в четырёх подходах: как устроено внутри, как разобрать одну запись,
+      как собрать свой набор, и на чём это проверено. Всё считается в браузере теми же алгоритмами,
+      что в продукте.
+    </p>
+
+    {groups.map((group, index) => (
+      <div>
+        <p class="kicker mt-14 flex items-center gap-3 border-t border-line pt-6">
+          <span class="font-mono text-[11px] text-fg-subtle">{String(index + 1).padStart(2, '0')}</span>
+          <span class="text-fg-muted">{group.kicker}</span>
+        </p>
+        <div class="mt-6 grid gap-px bg-line sm:grid-cols-2">
+          {group.tools.map((tool, toolIndex) => {
+            const wide = group.tools.length % 2 === 1 && toolIndex === group.tools.length - 1;
+            return (
+            <a
+              href={tool.href}
+              class:list={[
+                'group overflow-hidden bg-surface-0 transition-colors hover:bg-surface-1',
+                wide ? 'flex flex-col sm:col-span-2 sm:flex-row' : 'flex flex-col',
+              ]}
+            >
+              <div
+                class:list={[
+                  'relative overflow-hidden bg-surface-1',
+                  wide
+                    ? 'aspect-[2/1] border-b border-line sm:aspect-auto sm:w-[46%] sm:border-b-0 sm:border-r'
+                    : 'aspect-[2/1] border-b border-line',
+                ]}
+              >
+                <img
+                  src={tool.thumb}
+                  alt={`Превью: ${tool.title}`}
+                  loading="lazy"
+                  width="794"
+                  height="397"
+                  class="h-full w-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.03]"
+                />
+                <!-- мягкое растворение снизу: превью не обрывается резкой линией -->
+                <div class="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-surface-0/90 to-transparent"></div>
+              </div>
+              <div class="p-7 sm:flex sm:flex-col sm:justify-center">
+                <div class="flex items-center gap-3">
+                  <span class="label border border-line px-2 py-0.5 text-accent">{tool.badge}</span>
+                </div>
+                <h2 class="mt-4 text-[19px] font-semibold tracking-tight">{tool.title}</h2>
+                <p class="mt-2 mb-5 text-sm leading-relaxed text-fg-muted">{tool.text}</p>
+                <span class="link-arrow font-mono text-[11px] uppercase tracking-[0.14em] text-accent">
+                  {tool.action} →
+                </span>
+              </div>
+            </a>
+            );
+          })}
+        </div>
+      </div>
+    ))}
+
+    <p class="mt-14 max-w-3xl border-t border-line pt-6 text-sm leading-relaxed text-fg-subtle">
+      Документация отвечает «как вызвать», инструменты — «как это выглядит и почему проходит»:
+      ИНН, СНИЛС, ОГРН, ОГРНИП, КПП, ОКПО и счёт по письму № 515 проверяются теми же алгоритмами,
+      что в продукте. Mock-ответ генератора и код подключения — на вкладке «Ответ и код»
+      в <a href="/tools/build?mode=answer" class="text-accent transition-colors hover:text-accent-light">конструкторе набора</a>;
+      подробности — в <a href="/docs" class="text-accent transition-colors hover:text-accent-light">документации</a>.
+    </p>
+  </section>
+</BaseLayout>

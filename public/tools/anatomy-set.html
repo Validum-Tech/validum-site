@@ -1,0 +1,330 @@
+<!doctype html>
+<html lang="ru" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<title>Validum · анатомия набора: четыре файла и связи</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="/tools/_theme.css?v=1">
+<style>
+:root{--surface-0:#09090b;--surface-1:rgba(255,255,255,.02);--surface-2:rgba(255,255,255,.03);
+--surface-3:rgba(255,255,255,.06);--fg:#fafafa;--fg-muted:#a1a1aa;--fg-subtle:rgba(255,255,255,.45);
+--line:rgba(255,255,255,.10);--line-strong:rgba(255,255,255,.18);--accent:#10b981;--accent-2:#34d399;
+--red:#ef4444;--amber:#f5b544;--mono:'JetBrains Mono',ui-monospace,monospace;--sans:'Inter',system-ui,sans-serif}
+*{box-sizing:border-box}
+body{margin:0;background:var(--surface-0);color:var(--fg);font-family:var(--sans);font-size:15px;line-height:1.6}
+.wrap{max-width:1200px;margin:0 auto;padding:0 24px}
+header{padding:34px 0 4px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-2);display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.tag{border:1px solid rgba(16,185,129,.5);border-radius:6px;padding:1px 7px;font-size:10.5px;letter-spacing:.08em}
+h1{font-size:32px;line-height:1.15;margin:10px 0 8px;letter-spacing:-.02em}
+.lead{color:var(--fg-muted);max-width:72ch;margin:0}
+h2.sect{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--fg-subtle);
+margin:28px 0 12px;display:flex;align-items:center;gap:10px}
+h2.sect::after{content:"";flex:1;height:1px;background:var(--line)}
+
+/* ── схема ─────────────────────────────────────────────── */
+.flow{display:grid;grid-template-columns:1fr 44px 1fr;gap:0;align-items:center;margin-top:6px}
+.flow .col{display:flex;flex-direction:column;gap:10px;min-width:0}
+.node{border:1px solid var(--line);border-radius:2px;background:var(--surface-1);padding:11px 14px;cursor:pointer;
+transition:border-color .15s,background .15s}
+.node:hover{border-color:var(--line-strong);background:var(--surface-2)}
+.node[aria-selected="true"]{border-color:rgba(16,185,129,.55);background:rgba(16,185,129,.06)}
+.node b{display:block;font-family:var(--mono);font-size:12.5px;color:var(--fg)}
+.node span{display:block;font-size:11.5px;color:var(--fg-subtle);margin-top:2px}
+.node .cnt{font-family:var(--mono);font-size:10.5px;color:var(--accent-2);margin-top:5px;letter-spacing:.06em;text-transform:uppercase}
+.linkcol{position:relative;display:flex;align-items:center;justify-content:center;color:var(--fg-subtle);font-family:var(--mono);font-size:16px}
+.linkcol .lbl{position:absolute;bottom:calc(50% + 12px);font-size:9px;letter-spacing:.12em;color:var(--fg-subtle)}
+.rel{border:1px dashed rgba(16,185,129,.4);border-radius:2px;background:rgba(16,185,129,.04);padding:10px 14px;
+font-family:var(--mono);font-size:11.5px;color:var(--fg-muted);margin-top:10px}
+.rel b{color:var(--accent-2);font-weight:400}
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:10px;font-size:12px;color:var(--fg-subtle)}
+.legend i{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--accent);margin-right:6px}
+.legend i.fk{background:transparent;border:1px solid var(--accent)}
+
+/* ── таблица колонок ───────────────────────────────────── */
+.panel{border:1px solid var(--line);border-radius:2px;margin-top:14px;overflow:hidden}
+.panel .head{display:flex;gap:12px;align-items:baseline;flex-wrap:wrap;padding:12px 16px;background:var(--surface-2);
+border-bottom:1px solid var(--line)}
+.panel .head b{font-family:var(--mono);font-size:13px}
+.panel .head span{font-size:12px;color:var(--fg-subtle)}
+.panel .head .meta{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--accent-2);letter-spacing:.06em;text-transform:uppercase}
+.grprow{background:var(--surface-2);border-top:1px solid var(--line);padding:5px 16px;
+font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--fg-subtle)}
+.cols{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:0}
+.cell{border-top:1px solid var(--line);padding:7px 16px;font-family:var(--mono);font-size:12px;
+display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center;min-width:0}
+.cell:nth-child(odd){border-right:1px solid var(--line)}
+.cell .k{color:var(--fg);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cell .t{font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:var(--fg-subtle);white-space:nowrap}
+.cell.key .k{color:var(--accent-2)}
+.cell.fk .k{color:var(--accent-2);border-bottom:1px dashed rgba(16,185,129,.5)}
+pre{margin:14px 0 0;background:var(--surface-1);border:1px solid var(--line);border-radius:2px;padding:14px 16px;
+font-family:var(--mono);font-size:11.5px;line-height:1.7;overflow-x:auto;color:var(--fg-muted)}
+pre b{color:var(--fg);font-weight:400}
+pre .c{color:var(--fg-subtle)}
+
+/* ── порядок ───────────────────────────────────────────── */
+.order{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:2px;margin-top:14px}
+.order .half{background:var(--surface-0);padding:14px 16px}
+.order h3{margin:0 0 10px;font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--fg-subtle)}
+.steps{display:flex;flex-direction:column;gap:7px}
+.step{display:flex;gap:9px;align-items:baseline;font-size:13px;color:var(--fg-muted)}
+.step .i{font-family:var(--mono);font-size:10.5px;color:var(--fg-subtle);width:16px;flex:none}
+.step code{font-family:var(--mono);font-size:11.5px;color:var(--fg)}
+.note{margin:22px 0 0;padding-top:14px;border-top:1px solid var(--line);font-size:12.5px;color:var(--fg-subtle);max-width:80ch}
+@media (max-width:820px){
+  .flow{grid-template-columns:1fr;gap:8px}
+  .linkcol{transform:rotate(90deg);height:26px}
+  .order{grid-template-columns:1fr}
+  .cols{grid-template-columns:1fr}
+  .cell:nth-child(odd){border-right:none}
+  h1{font-size:24px}
+}
+
+  /* полоса прокрутки в тон фона */
+  html { scrollbar-color: #23272a #08090a; }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: #08090a; }
+  ::-webkit-scrollbar-thumb { background: #23272a; border: 2px solid #08090a; border-radius: 999px; }
+  ::-webkit-scrollbar-thumb:hover { background: #2f3437; }
+  ::-webkit-scrollbar-button { display: none; width: 0; height: 0; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <p class="eyebrow">инструменты validum <span class="tag">анатомия набора</span></p>
+  <h1>Четыре файла и один порядок загрузки</h1>
+  <p class="lead">
+    Набор — это не один CSV, а четыре: организации, люди, ИП и таблица связей. Нажмите файл слева или справа,
+    чтобы увидеть его колонки, ключи и пример строки.
+  </p>
+</header>
+
+<h2 class="sect">кто на кого ссылается</h2>
+<div class="flow">
+  <div class="col">
+    <div class="node" data-file="organizations" role="button" tabindex="0" aria-selected="true">
+      <b>set-organizations.csv</b>
+      <span>юрлица — 7 ОПФ, ОКВЭД, банк, счёт 40702</span>
+      <span class="cnt">21 колонка · ключ ogrn</span>
+    </div>
+    <div class="node" data-file="individuals" role="button" tabindex="0" aria-selected="false">
+      <b>set-individuals.csv</b>
+      <span>физлица — ФИО, ИНН, СНИЛС, паспорт, адреса</span>
+      <span class="cnt">69 колонок · ключ personId</span>
+    </div>
+  </div>
+  <div class="linkcol" aria-hidden="true">→<span class="lbl">FK</span></div>
+  <div class="col">
+    <div class="node" data-file="ip" role="button" tabindex="0" aria-selected="false">
+      <b>set-ip.csv</b>
+      <span>ИП — ОГРНИП и ОКВЭД поверх профиля ФЛ</span>
+      <span class="cnt">72 колонки · ключ personId</span>
+    </div>
+    <div class="node" data-file="relations" role="button" tabindex="0" aria-selected="false">
+      <b>set-relations.csv</b>
+      <span>связи человек → работодатель</span>
+      <span class="cnt">2 колонки · 1 строка на сотрудника</span>
+    </div>
+  </div>
+</div>
+<div class="rel">
+  <b>employerOgrn</b> в людях и ИП → <b>ogrn</b> в организациях · <b>personId</b> в связях → <b>personId</b> в людях и ИП
+</div>
+<div class="legend">
+  <span><i></i> ключ таблицы</span>
+  <span><i class="fk"></i> внешний ключ</span>
+  <span>порядок вставки: организации → люди → ИП → связи</span>
+</div>
+
+<h2 class="sect">колонки выбранного файла</h2>
+<div class="panel" id="panel"></div>
+<pre id="sample"></pre>
+
+<h2 class="sect">загрузка и откат</h2>
+<div class="order">
+  <div class="half">
+    <h3>вверх — как ставить</h3>
+    <div class="steps">
+      <div class="step"><span class="i">01</span><span><code>set-organizations.csv</code> — сначала родители</span></div>
+      <div class="step"><span class="i">02</span><span><code>set-individuals.csv</code> — ссылаются на <code>employerOgrn</code></span></div>
+      <div class="step"><span class="i">03</span><span><code>set-ip.csv</code> — тоже со ссылкой на работодателя</span></div>
+      <div class="step"><span class="i">04</span><span><code>set-relations.csv</code> — если связями пользуются отдельно</span></div>
+    </div>
+  </div>
+  <div class="half">
+    <h3>вниз — как убрать</h3>
+    <div class="steps">
+      <div class="step"><span class="i">01</span><span><code>DELETE FROM validum_ip</code> по <code>personId</code></span></div>
+      <div class="step"><span class="i">02</span><span><code>DELETE FROM validum_individual</code> по <code>personId</code></span></div>
+      <div class="step"><span class="i">03</span><span><code>DELETE FROM validum_organization</code> по <code>ogrn</code></span></div>
+      <div class="step"><span class="i">↓</span><span><code>set-teardown.sql</code> — по 200 ключей в одном <code>IN (…)</code></span></div>
+    </div>
+  </div>
+</div>
+
+<h2 class="sect">как собрать</h2>
+<pre><span class="c"># set.json — спецификация набора</span>
+{
+  "type": "set",
+  "seed": 42,
+  "asOf": "2026-11-20",
+  "output": "out/set.csv",
+  "members": [
+    { "name": "orgs",    "kind": "organization", "count": 1 },
+    { "name": "people",  "kind": "individual",   "count": 5, "employer": "orgs" },
+    { "name": "ip",      "kind": "ip",           "count": 1, "employer": "orgs" }
+  ]
+}
+
+<span class="c"># одна команда — пять файлов рядом с out/set.csv</span>
+java -jar validum.jar generate --spec set.json --output out/set.csv
+<span class="c"># → out/set-organizations.csv  out/set-individuals.csv  out/set-ip.csv</span>
+<span class="c"># → out/set-relations.csv      out/set-teardown.sql</span>
+
+<span class="c"># проверить, что связи и суммы сходятся</span>
+java -jar validum.jar coverage --file out/set-individuals.csv
+
+<span class="c"># то же через REST — одна организация, трое сотрудников</span>
+curl -s localhost:8080/api/v1/generate/organization -H 'Content-Type: application/json' \
+  -d '{"seed":42}' | head -20</pre>
+
+<p class="note">
+  Seed каждого участника выводится из общего: <code>seed + номер × 10007</code>, поэтому набор воспроизводится целиком —
+  тот же <code>seed</code> и <code>asOf</code> дают те же файлы. Таблица связей пишется только если хотя бы у одного
+  участника задан <code>employer</code>; скрипт отката — если в спецификации не указано <code>"teardown": false</code>.
+</p>
+
+</div>
+
+<script>
+/* ── колонки по flattener-ам в core (см. export/*ProfileFlattener) ───────── */
+const FILES = {
+  organizations: {
+    name: 'set-organizations.csv',
+    meta: '21 колонка',
+    groups: [
+      ['идентификация', [['organizationName',''],['organizationType','7 ОПФ']]],
+      ['реквизиты', [['ogrn','ключ'],['inn',''],['kpp',''],['okpo',''],['okopf',''],['okfs',''],['okogu',''],['okved',''],['okvedName',''],['budget',''],['swift','']]],
+      ['банк и счёт', [['account','40702'],['bankBik',''],['bankName',''],['bankCorrAccount',''],['bankCity',''],['bankRegion','']]],
+      ['флаги', [['terrorist',''],['blocked','']]],
+    ],
+    sample: 'organizationName,organizationType,ogrn,inn,kpp,okpo,okopf,okfs,okogu,okved,okvedName,budget,swift,terrorist,blocked,account,bankBik,bankName,bankCorrAccount,bankCity,bankRegion\nООО «Ланит-Сервис»,LLC,8628243389381,7712345678,772001726,12345678,12300,16,4210014,62.01,Разработка ПО,false,,false,false,40702810700000004642,044525187,ПАО Сбербанк,30101810400000000225,Москва,77',
+  },
+  individuals: {
+    name: 'set-individuals.csv',
+    meta: '69 колонок',
+    groups: [
+      ["идентификация", [["personId","ключ"],["employerOgrn","ссылка"],["fullName",""],["gender",""],["birthDate",""],["age",""],["familyStatus",""],["inn",""],["snils",""]]],
+      ["паспорт", [["passportSeries",""],["passportNumber",""],["passportIssuedBy",""],["passportIssueDate",""],["passportExpirationDate",""],["passportDepartmentCode",""],["passportType",""],["passportCountry",""]]],
+      ["адрес регистрации", [["registrationRegion",""],["registrationRegionType",""],["registrationPostalCode",""],["registrationCity",""],["registrationStreet",""],["registrationBuilding",""],["registrationApartment",""],["registrationFormatted",""]]],
+      ["почтовый адрес", [["postRegion",""],["postRegionType",""],["postPostalCode",""],["postCity",""],["postStreet",""],["postBuilding",""],["postApartment",""],["postFormatted",""]]],
+      ["фактический адрес", [["currentRegion",""],["currentRegionType",""],["currentPostalCode",""],["currentCity",""],["currentStreet",""],["currentBuilding",""],["currentApartment",""],["currentFormatted",""]]],
+      ["контакты · телефон", [["mobileType","MOBILE"],["mobileValue",""],["mobileDescription",""],["mobileStatus",""]]],
+      ["контакты · email", [["emailType","EMAIL"],["emailValue",""],["emailDescription",""],["emailStatus",""]]],
+      ["служебное", [["secretWord",""],["categoryClient",""],["accountPackage",""],["personalManager",""]]],
+      ["флаги", [["terrorist",""],["blocked",""]]],
+      ["банк и счёт", [["bankBik",""],["bankName",""],["bankCorrAccount",""],["bankCity",""],["bankRegion",""],["account","40817"]]],
+      ["карты «Мир»", [["cardPan",""],["cardExpiry",""],["cardOutcome",""],["cardCount",""]]],
+      ["служебные", [["documents",""],["isResident",""],["citizenship",""],["asOf",""]]],
+    ],
+    sample: 'personId,employerOgrn,fullName,gender,birthDate,age,familyStatus,inn,snils,passportSeries…,registrationCity,…,account,cardPan,…,documents,isResident,citizenship,asOf\npd-364c37,8628243389381,Воробьёв Пётр Фёдорович,MALE,1992-03-14,34,Женат/Замужем,782955940289,66491204508,4512…,Москва,…,40817810500001650383,2200 51** **** 4839,…,паспорт РФ|RF|4512 345678,true,RU,2026-11-20',
+  },
+  ip: {
+    name: 'set-ip.csv',
+    meta: '72 колонки',
+    groups: [
+      ["идентификация ИП", [["ogrnip","ключ"]]],
+      ["идентификация", [["personId","ключ"],["employerOgrn","ссылка"],["fullName",""],["gender",""],["birthDate",""],["age",""],["familyStatus",""],["inn",""],["snils",""]]],
+      ["паспорт", [["passportSeries",""],["passportNumber",""],["passportIssuedBy",""],["passportIssueDate",""],["passportExpirationDate",""],["passportDepartmentCode",""],["passportType",""],["passportCountry",""]]],
+      ["адрес регистрации", [["registrationRegion",""],["registrationRegionType",""],["registrationPostalCode",""],["registrationCity",""],["registrationStreet",""],["registrationBuilding",""],["registrationApartment",""],["registrationFormatted",""]]],
+      ["почтовый адрес", [["postRegion",""],["postRegionType",""],["postPostalCode",""],["postCity",""],["postStreet",""],["postBuilding",""],["postApartment",""],["postFormatted",""]]],
+      ["фактический адрес", [["currentRegion",""],["currentRegionType",""],["currentPostalCode",""],["currentCity",""],["currentStreet",""],["currentBuilding",""],["currentApartment",""],["currentFormatted",""]]],
+      ["контакты · телефон", [["mobileType","MOBILE"],["mobileValue",""],["mobileDescription",""],["mobileStatus",""]]],
+      ["контакты · email", [["emailType","EMAIL"],["emailValue",""],["emailDescription",""],["emailStatus",""]]],
+      ["служебное", [["secretWord",""],["categoryClient",""],["accountPackage",""],["personalManager",""]]],
+      ["флаги", [["terrorist",""],["blocked",""]]],
+      ["банк и счёт", [["bankBik",""],["bankName",""],["bankCorrAccount",""],["bankCity",""],["bankRegion",""],["account","40817"]]],
+      ["карты «Мир»", [["cardPan",""],["cardExpiry",""],["cardOutcome",""],["cardCount",""]]],
+      ["служебные", [["documents",""],["isResident",""],["citizenship",""],["asOf",""]]],
+      ["деятельность", [["okved",""],["okvedName",""]]],
+    ],
+    sample: 'ogrnip,personId,employerOgrn,fullName,…,inn,snils,…,account,…,okved,okvedName\n728009516384617,pd-91f03,8628243389381,Виноградова Татьяна ИП Автотеста,…,250759496166,…,40817810500000015154,…,62.01,Разработка ПО',
+  },
+  relations: {
+    name: 'set-relations.csv',
+    meta: '2 колонки',
+    groups: [
+      ['связь', [['personId','из людей и ИП'],['employerOgrn','из организаций']]],
+    ],
+    sample: 'personId,employerOgrn\npd-364c37,8628243389381\npd-91f03,8628243389381\npd-b03d17,8628243389381',
+  },
+};
+
+const panel = document.getElementById('panel');
+const sample = document.getElementById('sample');
+let current = 'organizations';
+
+function render() {
+  const f = FILES[current];
+  const total = f.groups.reduce((n, g) => n + g[1].length, 0);
+  const plural = (n, forms) => {
+    const a = Math.abs(n) % 100, b = a % 10;
+    if (a > 10 && a < 20) return forms[2];
+    if (b > 1 && b < 5) return forms[1];
+    if (b === 1) return forms[0];
+    return forms[2];
+  };
+  let html = `<div class="head"><b>${f.name}</b><span>${f.groups.length} ${plural(f.groups.length, ['группа', 'группы', 'групп'])} · ${total} ${plural(total, ['поле', 'поля', 'полей'])}</span>
+    <span class="meta">${f.meta}</span></div>`;
+  for (const [group, cols] of f.groups) {
+    html += `<div class="grprow">${group}</div><div class="cols">`;
+    for (const [key, note] of cols) {
+      const isKey = note === 'ключ';
+      const isFk = note === 'ссылка';
+      html += `<div class="cell${isKey ? ' key' : ''}${isFk ? ' fk' : ''}">
+        <span class="k">${key}</span><span class="t">${note}</span></div>`;
+    }
+    html += '</div>';
+  }
+  panel.innerHTML = html;
+  sample.textContent = f.sample;
+  document.querySelectorAll('.node').forEach((n) =>
+    n.setAttribute('aria-selected', String(n.dataset.file === current)));
+}
+
+document.querySelectorAll('.node').forEach((node) => {
+  const pick = () => { current = node.dataset.file; render(); };
+  node.addEventListener('click', pick);
+  node.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(); } });
+});
+
+const fromUrl = new URLSearchParams(location.search).get('file');
+if (fromUrl && FILES[fromUrl]) current = fromUrl;
+render();
+
+/* высота для iframe на сайте */
+(function () {
+  let last = 0;
+  function report() {
+    try {
+      const el = document.querySelector('.wrap') || document.body;
+      const h = Math.ceil(el.getBoundingClientRect().height) + 8;
+      if (h === last || h < 400 || h > 20000) return;
+      last = h;
+      if (window.parent && window.parent !== window) {
+        window.parent.postMessage({ type: 'validum-tool-height', height: h }, '*');
+      }
+    } catch (e) { /* standalone */ }
+  }
+  window.addEventListener('load', report);
+  window.addEventListener('resize', report);
+  document.addEventListener('click', () => setTimeout(report, 120), true);
+  if (window.ResizeObserver) new ResizeObserver(report).observe(document.body);
+  setTimeout(report, 300);
+})();
+</script>
+</body>
+</html>

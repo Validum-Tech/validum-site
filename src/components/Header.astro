@@ -1,74 +1,70 @@
 ---
+// src/components/Header.astro — строка-паспорт: название, навигация, версия и лицензия.
 const navLinks = [
   { href: '/', label: 'Главная' },
   { href: '/docs', label: 'Документация' },
-  { href: '/architecture', label: 'Архитектура' },
+  { href: '/tools', label: 'Инструменты' },
   { href: '/roadmap', label: 'Планы' },
-  { href: '/try', label: 'Попробовать' },
   { href: '/security', label: 'Безопасность' },
   { href: '/changelog', label: 'Изменения' },
 ];
-const currentPath = Astro.url.pathname;
+const currentPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
+const isActive = (href: string) => currentPath === href || currentPath.startsWith(href + '/');
 ---
 
-<header class="sticky top-0 z-50 backdrop-blur-md border-b border-line bg-surface-0/80">
-  <div class="max-w-[1200px] mx-auto px-6 h-16 flex items-center justify-between">
+<header class="sticky top-0 z-50 border-b border-line bg-surface-0">
+  <div class="mx-auto flex h-10 max-w-[1280px] items-center gap-5 px-6 font-mono text-[10px] uppercase tracking-[0.14em] lg:px-10">
 
-    <a href="/" class="flex items-center gap-2.5 group shrink-0">
-      <div class="w-8 h-8 rounded-full border border-accent flex items-center justify-center transition group-hover:shadow-glow-accent-sm bg-surface-0">
-        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter" class="text-accent">
-          <path d="M9 13l3 7 3-7" stroke-width="2.5"/>
-          <path d="M9 13L5 9" /><path d="M7 11L3 7" />
-          <path d="M5 9L5 4L7 4" /><path d="M3 7L3 3L5 3" />
-          <path d="M15 13l4-4" /><path d="M17 11l4-4" />
-          <path d="M19 9L19 4L17 4" /><path d="M21 7L21 3L19 3" />
-          <circle cx="12" cy="13" r="1" fill="currentColor" stroke="none"/>
-        </svg>
-      </div>
-      <span class="font-semibold text-[15px] tracking-tight">Validum</span>
-      <span class="hidden xl:inline text-[11px] font-mono px-1.5 py-0.5 rounded border border-line text-fg-muted">v0.6.0</span>
+    <a href="/" class="inline-flex min-h-6 shrink-0 items-center text-fg-subtle transition-colors hover:text-fg">
+      <span class="text-fg">Validum</span><span class="hidden xl:inline"> · инструмент генерации данных</span>
     </a>
 
-    <nav class="hidden lg:flex items-center gap-4 xl:gap-6">
+    <nav class="ml-auto hidden items-center gap-3.5 lg:flex xl:gap-4">
       {navLinks.map(link => (
           <a
               href={link.href}
               class:list={[
-                "text-sm transition-colors hover:text-accent",
-                currentPath === link.href ? "text-accent" : "text-fg-muted"
+                "inline-flex min-h-6 items-center transition-colors hover:text-fg",
+                isActive(link.href) ? "text-fg" : "text-fg-subtle"
               ]}
+              aria-current={isActive(link.href) ? 'page' : undefined}
           >
             {link.label}
           </a>
       ))}
     </nav>
 
-    <div class="flex items-center gap-2">
-      <a href="https://github.com/Validum-Tech/validum" target="_blank" class="hidden sm:inline text-sm text-fg-muted hover:text-fg transition">GitHub ↗</a>
+    <div class="ml-auto flex items-center gap-2.5 whitespace-nowrap text-fg-subtle lg:ml-0">
+      <span class="hidden items-center gap-1.5 sm:flex">
+        <span class="inline-block h-1 w-1 rounded-full bg-accent" aria-hidden="true"></span>0.7.0 · maven central · apache 2.0
+      </span>
+      <span class="hidden text-line sm:inline" aria-hidden="true">·</span>
+      <a href="https://github.com/Validum-Tech/validum" target="_blank" rel="noopener noreferrer" class="hidden min-h-6 items-center transition-colors hover:text-fg sm:inline-flex">github ↗</a>
 
-      <details class="lg:hidden relative group">
-        <summary class="list-none cursor-pointer p-2 -mr-2 text-fg-muted hover:text-fg transition" aria-label="Меню">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-open:hidden">
+      <details class="group relative lg:hidden">
+        <summary class="list-none -mr-2 cursor-pointer p-2 text-fg-subtle transition hover:text-fg" aria-label="Меню">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="group-open:hidden">
             <line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/>
           </svg>
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden group-open:block">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden group-open:block">
             <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
           </svg>
         </summary>
-        <nav class="absolute right-0 top-full mt-2 w-64 bg-surface-0 border border-line rounded-lg shadow-lg p-2 z-50 flex flex-col">
+        <nav class="absolute right-0 top-full z-50 mt-3 flex w-64 flex-col border border-line bg-surface-0 p-2">
           {navLinks.map(link => (
               <a
                   href={link.href}
                   class:list={[
-                    "text-sm py-2.5 px-3 rounded-md transition-colors",
-                    currentPath === link.href ? "text-accent bg-accent/5 font-medium" : "text-fg-muted hover:text-fg hover:bg-surface-3"
+                    "px-3 py-2.5 transition-colors",
+                    isActive(link.href) ? "text-fg bg-surface-2" : "text-fg-subtle hover:bg-surface-2 hover:text-fg"
                   ]}
+                  aria-current={isActive(link.href) ? 'page' : undefined}
               >
                 {link.label}
               </a>
           ))}
-          <a href="https://github.com/Validum-Tech/validum" target="_blank" class="text-sm py-2.5 px-3 rounded-md text-fg-muted hover:text-fg hover:bg-surface-3 transition-colors border-t border-line mt-1 pt-3">
-            GitHub ↗
+          <a href="https://github.com/Validum-Tech/validum" target="_blank" rel="noopener noreferrer" class="mt-1 border-t border-line px-3 pb-2.5 pt-3 text-fg-subtle transition-colors hover:bg-surface-2 hover:text-fg">
+            github ↗
           </a>
         </nav>
       </details>

@@ -5,7 +5,7 @@ const stats = [
   { value: '4', label: 'модуля' },
   { value: '19', label: 'эндпоинтов REST' },
   { value: '10', label: 'команд CLI' },
-  { value: '906', label: 'тестов' },
+  { value: '912', label: 'тестов' },
 ];
 
 const modules = [
@@ -42,7 +42,7 @@ const cards = [
     dot: 'bg-accent/50',
     title: 'Данные и справочники',
     items: [
-      'ED807.xml: около 1,4 тыс. записей ЦБ, фильтр PtType=20 → около 370 банков',
+      'ED807.xml: 1360 участников ЦБ, фильтр PtType=20 → около 370 банков',
       'Справочник БИК обязателен: <code>VALIDUM_BIK_FILE</code> или <code>data/ED807.xml</code>; без файла — 503 <code>bik_source_missing</code>, демо-набора нет',
       'ОКВЭД-2: 3069 кодов (ОК 029-2014) у ЮЛ и ИП — код и наименование; явный код проверяется по справочнику',
       'Ресурсы: адреса из КЛАДР (90 субъектов, ~125 тыс. населённых пунктов, ~2 млн улиц), 100 + 190 имён, 310 тайных слов, 1 менеджер',
@@ -55,68 +55,123 @@ const cards = [
     items: [
       'Gradle 9.9.1 · Java 17+ (все модули) · 4 модуля · configuration-cache',
       'CI: ubuntu + Corretto 21, <code>./gradlew build</code>, отчёты тестов в артефактах',
-      '906 тестов: 660 core · 92 api · 100 cli · 21 allure',
+      '912 тестов: 682 core · 92 api · 117 cli · 21 allure',
       'Docker: multi-stage образ, порт 8080, <code>./data:/app/data:ro</code>',
     ],
   },
 ];
 ---
 
-<BaseLayout title="Архитектура">
-  <div class="max-w-[1200px] mx-auto px-6 py-16 lg:py-24">
+<BaseLayout title="Архитектура" description="Как устроен Validum: четыре модуля Gradle, 19 REST-эндпоинтов, 10 команд CLI, core без зависимостей и справочник ЦБ как единственный источник БИК.">
+  <div class="mx-auto max-w-[1280px] px-6 py-16 lg:px-10 lg:py-20">
 
-    <div class="max-w-3xl mb-12">
-      <div class="text-xs font-mono text-accent tracking-widest mb-2 uppercase">Архитектура</div>
-      <h1 class="text-4xl sm:text-5xl font-bold tracking-tight mb-4">Как устроен Validum</h1>
-      <p class="text-lg text-fg-muted leading-relaxed">
+    <div class="mb-12">
+      <p class="kicker">Архитектура</p>
+      <a href="/tools" class="mt-4 inline-flex font-mono text-[11px] uppercase tracking-[0.14em] text-fg-subtle transition-colors hover:text-accent">← Все инструменты</a>
+      <h1 class="poster mt-5">Как устроен Validum</h1>
+      <div class="rule mt-7 max-w-xl"></div>
+      <p class="mt-6 max-w-2xl text-[16px] leading-relaxed text-fg-muted">
         Четыре модуля, одно ядро без зависимостей и три входа: REST, CLI и Java-библиотека.
         Слева — QA и автотесты, справа — генераторы, сценарии, валидаторы и справочник БИК ЦБ.
       </p>
     </div>
 
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-10">
+    <div class="mb-10 grid grid-cols-2 gap-px bg-line md:grid-cols-4">
       {stats.map(s => (
-        <div class="p-4 rounded-xl border border-line bg-surface-2 text-center">
-          <div class="text-accent text-2xl font-bold font-mono mb-1">{s.value}</div>
-          <div class="text-[11px] text-fg-muted uppercase tracking-wider">{s.label}</div>
+        <div class="bg-surface-0 p-5">
+          <div class="num-xl text-fg">{s.value}</div>
+          <div class="label mt-2">{s.label}</div>
         </div>
       ))}
     </div>
 
-    <div class="group relative rounded-2xl border border-line bg-surface-1 overflow-hidden">
-      <div class="overflow-x-auto">
-        <div class="min-w-[880px] md:min-w-0">
-          <a href="/diagrams/validum-architecture.html?theme=dark" target="_blank" rel="noopener" class="block" title="Открыть интерактивную диаграмму в новой вкладке">
-            <img
-              src="/diagrams/validum-architecture.png"
-              width="2692"
-              height="1256"
-              alt="Диаграмма архитектуры Validum: QA и автотесты через REST API (19 эндпоинтов), CLI (10 команд) и Allure-расширение обращаются к validum-core на Java 17 без зависимостей; ядро использует генераторы профилей ФЛ/ИП/ЮЛ, сценарии ФЛ по seed (9 профилей), документы ДУЛ (11 видов), валидаторы контрольных сумм, счета по письму ЦБ № 515, экспорт CSV/JSON и ED807/ED808, справочник ED807.xml ЦБ РФ (около 1,4 тыс. записей; файл обязателен — встроенного демо-набора нет)"
-              class="block w-full h-auto"
-              loading="lazy"
-              decoding="async"
-            />
-          </a>
-        </div>
-      </div>
+    <div class="-mx-6 mb-4 flex items-center gap-2 overflow-x-auto px-6 pb-1 lg:mx-0 lg:flex-wrap lg:overflow-visible lg:px-0" id="diagram-chips">
+      <span class="mr-1 shrink-0 font-mono text-[10px] uppercase tracking-[0.14em] text-fg-subtle">Подсветить модуль:</span>
+      {[
+        ['qa', 'QA и автотесты'],
+        ['api', 'REST API'],
+        ['cli', 'CLI'],
+        ['allure', 'Allure'],
+        ['core', 'validum-core'],
+        ['gen', 'Генераторы'],
+        ['scen', 'Сценарии'],
+        ['val', 'Валидаторы'],
+        ['export', 'Экспорт'],
+        ['bank', 'Источник БИК'],
+        ['ed807', 'ED807.xml'],
+        ['res', 'Ресурсы'],
+      ].map(([id, label]) => (
+        <button
+          type="button"
+          data-focus={id}
+          class="shrink-0 border border-line bg-surface-0 px-3 py-2 font-mono text-[11px] uppercase tracking-[0.1em] text-fg-subtle transition-colors hover:border-fg/30 hover:text-fg aria-pressed:border-accent/60 aria-pressed:text-accent"
+        >{label}</button>
+      ))}
+      <button
+        type="button"
+        data-focus=""
+        class="border border-line bg-surface-0 px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.1em] text-fg-subtle transition-colors hover:border-accent/50 hover:text-accent"
+      >Сбросить</button>
     </div>
+
+    <div class="hairline group relative overflow-hidden">
+      <iframe
+        id="diagram-frame"
+        src="/diagrams/validum-architecture.html?theme=dark&embed=1"
+        title="Интерактивная диаграмма архитектуры Validum"
+        class="hidden h-[640px] w-full border-0 md:block lg:h-[760px]"
+        loading="lazy"
+      ></iframe>
+
+      <a href="/diagrams/validum-architecture.html?theme=dark" class="group relative block md:hidden" aria-label="Открыть схему архитектуры на весь экран">
+        <img src="/tools/thumbs/architecture.png" alt="Схема архитектуры Validum: три входа, ядро и источники данных" width="794" height="471" class="w-full" loading="lazy" />
+        <span class="absolute inset-x-0 bottom-0 flex items-center justify-between gap-3 bg-surface-0/95 px-4 py-3 font-mono text-[10px] uppercase tracking-[0.14em] text-fg-subtle">
+          открыть схему на весь экран
+          <span class="text-accent">→</span>
+        </span>
+      </a>
+    </div>
+
     <div class="mt-4 flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-fg-subtle">
-      <a href="/diagrams/validum-architecture.html?theme=dark" class="inline-flex items-center gap-1.5 text-accent hover:text-accent-light transition-colors duration-150">
-        Интерактивная версия с легендой и пояснениями
+      <a href="/diagrams/validum-architecture.html?theme=dark" class="inline-flex min-h-6 items-center gap-1.5 text-accent hover:text-accent-light transition-colors duration-150">
+        Открыть диаграмму на весь экран
         <svg class="size-3.5" viewBox="0 0 16 16" fill="none" aria-hidden="true">
           <path d="M5 11 11 5M6 5h5v5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
       </a>
-      <span>Схема отражает реальную структуру репозитория: 4 модуля Gradle, 19 эндпоинтов, 10 команд CLI, 906 тестов.</span>
+      <span>Схема отражает структуру репозитория: 4 модуля Gradle, 19 эндпоинтов, 10 команд CLI, 912 тестов.</span>
     </div>
+
+    <script>
+      (function () {
+        const frame = document.getElementById('diagram-frame') as HTMLIFrameElement | null;
+        const chips = document.querySelectorAll<HTMLButtonElement>('#diagram-chips button[data-focus]');
+        if (!frame) return;
+
+        function send(id: string) {
+          frame.contentWindow?.postMessage({ type: 'validum-diagram-focus', id }, '*');
+          chips.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.focus === id)));
+        }
+
+        chips.forEach((button) => {
+          button.addEventListener('click', () => send(button.dataset.focus ?? ''));
+        });
+
+        // если во фрейме ещё не загрузился скрипт — повторим после load
+        frame.addEventListener('load', () => {
+          const pressed = document.querySelector<HTMLButtonElement>('#diagram-chips button[aria-pressed="true"]');
+          if (pressed?.dataset.focus) send(pressed.dataset.focus);
+        });
+      })();
+    </script>
 
     <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-4">
       <p class="text-xs font-mono text-fg-muted">
-        Диаграмма · 19 эндпоинтов · 10 команд · 4 модуля · 906 тестов
+        Диаграмма · 19 эндпоинтов · 10 команд · 4 модуля · 912 тестов
       </p>
       <div class="flex flex-wrap items-center gap-3">
-        <a href="/diagrams/validum-architecture.html?theme=dark" target="_blank" rel="noopener"
-           class="inline-flex items-center gap-2 text-sm border border-line bg-surface-2 hover:bg-surface-3 px-4 py-2 rounded-lg transition-colors">
+        <a href="/diagrams/validum-architecture.html?theme=dark"
+           class="btn-hairline">
           Полная версия ↗
         </a>
         <a href="/docs#ref-generate"
@@ -131,23 +186,23 @@ const cards = [
       На узких экранах диаграмму можно прокрутить по горизонтали.
     </p>
 
-    <div class="h-px w-full bg-line my-12"></div>
+    <div class="rule my-12"></div>
 
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+    <div class="mb-12 grid grid-cols-2 gap-px bg-line md:grid-cols-4">
       {modules.map(m => (
-        <div class="p-4 rounded-xl border border-line bg-surface-2">
-          <div class="font-mono text-sm text-fg mb-1">{m.name}</div>
-          <div class="text-xs text-fg-muted">{m.note}</div>
+        <div class="bg-surface-0 p-5">
+          <div class="font-mono text-[13px] text-fg">{m.name}</div>
+          <div class="mt-1.5 text-xs text-fg-subtle">{m.note}</div>
         </div>
       ))}
     </div>
 
-    <div class="grid md:grid-cols-2 gap-5">
+    <div class="grid gap-px bg-line md:grid-cols-2">
       {cards.map(card => (
-        <div class="p-6 rounded-2xl border border-line bg-surface-2">
+        <div class="bg-surface-0 p-7">
           <div class="flex items-center gap-3 mb-4">
-            <span class={`w-2.5 h-2.5 rounded-full ${card.dot}`}></span>
-            <h2 class="font-semibold text-lg">{card.title}</h2>
+            <span class={`h-2 w-2 ${card.dot}`}></span>
+            <h2 class="text-[17px] font-semibold tracking-tight">{card.title}</h2>
           </div>
           <ul class="space-y-2 text-sm text-fg-muted leading-relaxed">
             {card.items.map(item => (
@@ -161,13 +216,13 @@ const cards = [
       ))}
     </div>
 
-    <div class="mt-12 p-6 rounded-xl border border-accent/20 bg-accent/5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div class="mt-12 flex flex-col items-start justify-between gap-4 border border-line bg-surface-0 p-7 sm:flex-row sm:items-center">
       <div>
-        <h3 class="font-semibold mb-1">Посмотреть исходники</h3>
-        <p class="text-sm text-fg-muted">Четыре Gradle-модуля, тесты и Dockerfile — в открытом репозитории.</p>
+        <h3 class="text-[17px] font-semibold tracking-tight">Посмотреть исходники</h3>
+        <p class="mt-2 text-sm text-fg-muted">Четыре Gradle-модуля, тесты и Dockerfile — в открытом репозитории.</p>
       </div>
       <a href="https://github.com/Validum-Tech/validum" target="_blank" rel="noopener"
-         class="inline-flex items-center justify-center gap-2 bg-accent hover:bg-accent-light text-accent-fg font-semibold px-6 py-3 rounded-lg transition-colors shrink-0">
+         class="btn-solid shrink-0">
         GitHub ↗
       </a>
     </div>

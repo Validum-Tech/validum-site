@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="ru" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<title>Validum · одна запись: смотрите, ломайте, проверяйте</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+:root{--surface-0:#09090b;--surface-1:rgba(255,255,255,.02);--surface-2:rgba(255,255,255,.03);
+--surface-3:rgba(255,255,255,.06);--fg:#fafafa;--fg-muted:#a1a1aa;--fg-subtle:rgba(255,255,255,.35);
+--line:rgba(255,255,255,.10);--line-strong:rgba(255,255,255,.18);--accent:#10b981;--accent-2:#34d399;
+--red:#ef4444;--amber:#f59e0b;--mono:'JetBrains Mono',ui-monospace,monospace;--sans:'Inter',system-ui,sans-serif}
+*{box-sizing:border-box}
+body{margin:0;background:var(--surface-0);color:var(--fg);font-family:var(--sans);font-size:15px;line-height:1.6}
+.wrap{max-width:1200px;margin:0 auto;padding:0 24px}
+header{padding:34px 0 4px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-2);display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.tag{border:1px solid rgba(16,185,129,.5);border-radius:6px;padding:1px 7px;font-size:10.5px;letter-spacing:.08em}
+h1{font-size:32px;line-height:1.15;margin:10px 0 8px;letter-spacing:-.02em}
+.lead{color:var(--fg-muted);max-width:72ch;margin:0}
+.steps{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0 0}
+.step{border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-family:var(--mono);font-size:11.5px;color:var(--fg-subtle);display:flex;gap:7px;align-items:center}
+.step.done{border-color:rgba(16,185,129,.5);color:var(--accent-2);background:rgba(16,185,129,.07)}
+.step b{color:var(--fg);font-weight:600}
+.bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:16px 0 0;padding:12px 0;border-block:1px solid var(--line)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius: 2px;overflow:hidden}
+.seg button{background:transparent;border:0;color:var(--fg-muted);padding:7px 13px;font-family:var(--sans);font-size:13.5px;cursor:pointer}
+.seg button[aria-pressed=true]{background:rgba(16,185,129,.12);color:var(--accent-2)}
+input[type=search]{flex:1 1 220px;min-width:180px;background:var(--surface-2);border:1px solid var(--line);border-radius: 2px;
+padding:9px 12px;color:var(--fg);font-family:var(--sans);font-size:14px;outline:none}
+input[type=search]:focus{border-color:var(--accent)}
+.btn{border:1px solid var(--accent);background:rgba(16,185,129,.12);color:var(--accent-2);border-radius: 2px;
+padding:9px 14px;font-family:var(--sans);font-size:13.5px;cursor:pointer}
+.btn.ghost{border-color:var(--line);background:transparent;color:var(--fg-muted)}
+.stage{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.95fr);gap:26px;margin:20px 0 0;align-items:start}
+.stage>*{min-width:0}
+.person{border:1px solid var(--line);border-radius: 2px;background:
+radial-gradient(520px 220px at 12% -10%, rgba(16,185,129,.12), transparent 65%),var(--surface-1);padding:18px}
+.person .top{display:flex;gap:14px;align-items:center}
+.avatar{width:50px;height:50px;border-radius: 2px;background:rgba(16,185,129,.14);border:1px solid rgba(16,185,129,.4);
+display:flex;align-items:center;justify-content:center;font-family:var(--mono);color:var(--accent-2);font-size:17px}
+.person h2{margin:0;font-size:18px;line-height:1.25}
+.person .sub{color:var(--fg-subtle);font-family:var(--mono);font-size:12px}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.pill{font-family:var(--mono);font-size:11.5px;border:1px solid var(--line);border-radius:999px;padding:3px 9px;color:var(--fg-muted)}
+.pill.ok{border-color:rgba(16,185,129,.45);color:var(--accent-2)}
+.pill.bad{border-color:rgba(239,68,68,.5);color:#fca5a5}
+.layer{border:1px solid var(--line);border-radius: 2px;background:var(--surface-1);margin-top:12px;overflow:hidden}
+.layer>button{width:100%;display:flex;align-items:center;gap:10px;padding:12px 14px;background:transparent;border:0;color:inherit;cursor:pointer;text-align:left;font-family:inherit;font-size:15px}
+.layer .num{font-family:var(--mono);font-size:11px;color:var(--accent-2);letter-spacing:.08em}
+.layer .meta{margin-left:auto;font-family:var(--mono);font-size:11.5px;color:var(--fg-subtle)}
+.layer .body{display:none;padding:0 14px 14px}
+.layer.open{background:var(--surface-2)}
+.layer.open .body{display:block}
+.fields{display:grid;grid-template-columns:repeat(auto-fill,minmax(205px,1fr));gap:8px}
+.f{border:1px solid var(--line);border-radius: 2px;padding:8px 10px;background:var(--surface-1);cursor:pointer;transition:border-color .12s}
+.f:hover{border-color:var(--line-strong)}
+.f.sel{border-color:var(--accent);background:rgba(16,185,129,.06)}
+.f.hit{outline:2px solid rgba(245,158,11,.6);outline-offset:1px}
+.f.bad{border-color:rgba(239,68,68,.55);background:rgba(239,68,68,.06)}
+.f .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--fg-subtle);display:flex;gap:6px;align-items:center}
+.f .k .warn{color:#fca5a5;font-size:12px}
+.f .v{font-family:var(--mono);font-size:12.5px;word-break:break-word}
+.f.bad .v{color:#fca5a5}
+.panel{position:sticky;top:16px;border:1px solid var(--line);border-radius: 2px;background:var(--surface-1);padding:18px;min-height:300px}
+.panel.empty{display:flex;align-items:center;justify-content:center;color:var(--fg-subtle);font-size:14px;text-align:center}
+.panel h3{margin:0 0 2px;font-size:17px}
+.panel .key{font-family:var(--mono);font-size:11.5px;color:var(--fg-subtle)}
+.row{margin-top:13px}
+.row .label{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--fg-subtle);margin-bottom:3px}
+.row .txt{font-size:14px}
+.row .txt.mono{font-family:var(--mono);font-size:12.5px}
+.who{display:inline-block;font-family:var(--mono);font-size:11.5px;border:1px solid rgba(239,68,68,.4);
+background:rgba(239,68,68,.08);color:#fca5a5;border-radius: 2px;padding:3px 8px}
+.cmdline{display:flex;gap:8px;align-items:center;margin-top:6px}
+.cmdline code{flex:1;font-family:var(--mono);font-size:12px;background:#050506;border:1px solid var(--line);border-radius: 2px;padding:8px 10px;overflow-x:auto;white-space:nowrap;color:var(--accent-2)}
+.mini{border:1px solid var(--line);background:transparent;color:var(--fg-muted);border-radius: 2px;padding:6px 9px;font-family:var(--mono);font-size:11.5px;cursor:pointer}
+.mini.danger{border-color:rgba(239,68,68,.45);color:#fca5a5}
+.panel .acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.oneres{margin-top:10px;font-family:var(--mono);font-size:12px;line-height:1.6}
+.oneres.ok{color:var(--accent-2)}.oneres.bad{color:#fca5a5}.oneres{}
+.results{margin:20px 0 0;border:1px solid var(--line);border-radius: 2px;background:var(--surface-1);padding:16px 18px;display:none}
+.results.on{display:block}
+.results h3{margin:0 0 4px;font-size:16px}
+.results .sum{font-family:var(--mono);font-size:12.5px;color:var(--fg-muted);margin-bottom:10px}
+.viol{display:grid;grid-template-columns:56px 1fr 1.2fr auto;gap:10px;padding:8px 0;border-top:1px solid var(--line);font-size:13.5px;align-items:baseline}
+.viol .ln{font-family:var(--mono);font-size:11.5px;color:var(--fg-subtle)}
+.viol .fl{font-family:var(--mono);font-size:12.5px;color:var(--accent-2)}
+.viol .why{color:var(--fg-muted)}
+.viol .st{font-family:var(--mono);font-size:11px;border:1px solid rgba(239,68,68,.45);background:rgba(239,68,68,.08);color:#fca5a5;border-radius:6px;padding:1px 7px}
+.results .clean{color:var(--accent-2);font-family:var(--mono);font-size:13px}
+details.all{margin:18px 0 0;border-top:1px solid var(--line);padding-top:14px}
+details.all summary{cursor:pointer;font-family:var(--mono);font-size:12.5px;color:var(--fg-muted)}
+details.all .list{margin-top:10px;font-family:var(--mono);font-size:12px;color:var(--fg-muted);line-height:1.9;column-count:3;column-gap:22px}
+@media(max-width:800px){details.all .list{column-count:1}}
+footer{color:var(--fg-subtle);font-size:12.5px;padding:30px 0 60px;border-top:1px solid var(--line);margin-top:26px}
+code{font-family:var(--mono);font-size:12.5px}
+.backdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:40}
+@media(max-width:900px){
+  .stage{grid-template-columns:1fr}
+  .panel{position:fixed;left:0;right:0;bottom:0;top:auto;z-index:50;border-radius: 2px 18px 0 0;
+    max-height:76vh;overflow:auto;transform:translateY(102%);transition:transform .2s;min-height:0;padding:18px 18px 26px}
+  .panel.open{transform:translateY(0)}
+  .backdrop.on{display:block}
+}
+
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:1px;border-color:var(--accent)!important}
+@media (prefers-reduced-motion: reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+
+  /* полоса прокрутки в тон фона */
+  html { scrollbar-color: #23272a #08090a; }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: #08090a; }
+  ::-webkit-scrollbar-thumb { background: #23272a; border: 2px solid #08090a; border-radius: 999px; }
+  ::-webkit-scrollbar-thumb:hover { background: #2f3437; }
+  ::-webkit-scrollbar-button { display: none; width: 0; height: 0; }
+</style>
+<link rel="stylesheet" href="/tools/_theme.css?v=1">
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Инструменты Validum<span class="tag">разбор записи</span></div>
+    <h1>Одна запись: смотрите, ломайте, проверяйте</h1>
+    <p class="lead">Не список из 69 колонок. Раскрывайте часть записи, нажимайте на поле — справа появится источник,
+    правило, команда, которая это делает, и что именно отобьёт значение. Кнопка «Проверить набор» прогоняет все
+    правила разом и показывает нарушения списком.</p>
+    <div class="steps" id="steps"></div>
+    <div class="bar">
+      <div class="seg" id="typeSeg">
+        <button data-v="individual" aria-pressed="true">Физлицо</button>
+        <button data-v="ip" aria-pressed="false">ИП</button>
+        <button data-v="org" aria-pressed="false">Юрлицо</button>
+      </div>
+      <div class="seg" id="modeSeg">
+        <button data-v="clean" aria-pressed="true">чистые</button>
+        <button data-v="broken" aria-pressed="false">испорченные</button>
+      </div>
+      <input id="q" type="search" placeholder="Найти поле: индекс, ИНН, срок…" aria-label="Поиск по полям">
+      <button class="btn" id="check">Проверить набор</button>
+      <button class="btn ghost" id="reset">Сбросить</button>
+    </div>
+  </header>
+
+  <div class="stage">
+    <div>
+      <section class="person">
+        <div class="top">
+          <div class="avatar" id="avatar">ФЛ</div>
+          <div>
+            <h2 id="pName">—</h2>
+            <div class="sub" id="pSub">—</div>
+          </div>
+        </div>
+        <div class="pills" id="pPills"></div>
+      </section>
+      <div id="layers"></div>
+      <details class="all">
+        <summary>Показать все 69 колонок плоской выдачи (для тех, кто грузит в БД)</summary>
+        <div class="list" id="allList"></div>
+      </details>
+    </div>
+    <aside class="panel empty" id="panel">Выберите поле — здесь будет источник, правило, команда и «что отобьёт».</aside>
+  </div>
+
+  <section class="results" id="results">
+    <h3>Проверка набора</h3>
+    <div class="sum" id="resSum"></div>
+    <div id="violList"></div>
+  </section>
+
+  <footer>Все проверки выполняются в браузере. Правила повторяют реальные валидаторы: <code>InnValidator</code>,
+  <code>SnilsValidator</code>, <code>OgrnValidator</code>, <code>AccountValidator</code> (ключ по письму № 515),
+  <code>DocumentRules</code>. В витрину не встроено.</footer>
+</div>
+<div class="backdrop" id="backdrop"></div>
+
+<script>
+/* контрольные суммы — как в Java */
+const W10=[2,4,10,3,5,9,4,6,8], W11=[7,2,4,10,3,5,9,4,6,8], W12=[3,7,2,4,10,3,5,9,4,6,8], W20=[7,1,3,7,1,3,7,1,3,7,1,3,7,1,3,7,1,3,7,1];
+const D=s=>s.replace(/\D/g,'').split('').map(Number);
+const okInn10=v=>/^\d{10}$/.test(v)?(d=>{let s=0;for(let i=0;i<9;i++)s+=d[i]*W10[i];return (s%11)%10===d[9];})(D(v)):false;
+const okInn12=v=>{ if(!/^\d{12}$/.test(v))return false; const d=D(v); let a=0,b=0;
+  for(let i=0;i<10;i++)a+=d[i]*W11[i]; for(let i=0;i<11;i++)b+=d[i]*W12[i];
+  return ((a%11)%10===d[10])&&((b%11)%10===d[11]); };
+const okSnils=v=>{ if(!/^\d{11}$/.test(v))return false; const d=D(v); let s=0; for(let i=0;i<9;i++)s+=d[i]*(9-i);
+  let c=s%101; if(c===100||c===101)c=0; return c===parseInt(v.slice(9,11),10); };
+const okOgrn=v=>/^\d{13}$/.test(v)?Number(BigInt(v.slice(0,12))%11n)%10===+v[12]:false;
+const okOgrnip=v=>/^\d{15}$/.test(v)?Number(BigInt(v.slice(0,14))%13n)%10===+v[14]:false;
+const okAccount=(v,bik)=>{ if(!/^\d{20}$/.test(v)||!/^\d{9}$/.test(bik))return false;
+  const d=D(v); let s=(+bik[6])*7+(+bik[7])*1+(+bik[8])*3;
+  for(let i=0;i<20;i++){ const x=(i===8)?0:d[i]; s+=x*W20[i]; } return (s*3)%10===d[8]; };
+const luhn=v=>{ if(!/^\d{16}$/.test(v))return false; let s=0;
+  for(let i=0;i<16;i++){ let x=+v[i]; if(i%2===0){ x*=2; if(x>9)x-=9; } s+=x; } return s%10===0; };
+const okCard=v=>/^\d{16}$/.test(v)&&luhn(v)&&+v.slice(0,6)>=220000&&+v.slice(0,6)<=220499;
+
+const REGION_CODE={'50':'Московская','77':'Москва','60':'Псковская','16':'Татарстан','45':'—'};
+const POSTAL_PREFIX={'Московская':['141','142','143','144'],'Москва':['10','11','12'],'Псковская':['18'],'Татарстан':['42']};
+const postalMatches=(region,postal)=>!POSTAL_PREFIX[region]||!/^\d{6}$/.test(postal)?true:POSTAL_PREFIX[region].some(x=>postal.startsWith(x));
+
+const BASE={
+ individual:{avatar:'ФЛ',name:'Иванов Иван Иванович',sub:'personId · pd-364c37 · 34 года · Московская обл.',
+  pills:[['резидент',1],['паспорт РФ',1],['счёт 40817',1],['карта «Мир»',1],['работодатель не указан',0]],
+  layers:[
+   {n:'01',name:'Идентификация',fields:[
+     {key:'personId',label:'Идентификатор',value:'pd-364c37',src:'генератор',rule:'стабильный ключ записи',breakIt:'пересчитать между прогонами',who:'describe --person',opt:''},
+     {key:'fullName',label:'ФИО',value:'Иванов Иван Иванович',src:'генератор имён',rule:'согласовано с полом',breakIt:'ФИО латиницей у резидента',who:'—',opt:''},
+     {key:'birthDate',label:'Дата рождения',value:'1992-03-14',src:'генератор + дата расчёта',rule:'не позже даты расчёта',breakIt:'дата в будущем',who:'приёмка',opt:'--as-of'},
+     {key:'age',label:'Возраст',value:'34',src:'производное',rule:'считается на дату расчёта',breakIt:'возраст 130 лет',who:'coverage',opt:'--age'}]},
+   {n:'02',name:'Реквизиты',fields:[
+     {key:'inn',label:'ИНН',value:'779370501280',broken:'779370501281',src:'алгоритм ФНС',check:'inn',rule:'12 знаков, контрольные 11-я и 12-я цифры',breakIt:'изменить последнюю цифру',who:'InnValidator · АБС',opt:'--corrupt inn'},
+     {key:'snils',label:'СНИЛС',value:'43826479516',broken:'43826479517',src:'алгоритм ПФР',check:'snils',rule:'11 знаков, контрольное число = сумма по весам mod 101',breakIt:'изменить контрольное число',who:'SnilsValidator · ПФР',opt:'--corrupt snils'}]},
+   {n:'03',name:'Паспорт',fields:[
+     {key:'passportSeries',label:'Серия и номер',value:'5012 345678',broken:'4512 345678',src:'регион + генератор',check:'series',rule:'первые две цифры серии — код региона',breakIt:'поставить серию несуществующего региона',who:'правило «серия ↔ регион»',opt:'--region 50'},
+     {key:'passportIssuedBy',label:'Кем выдан',value:'Отделением УФМС России по Московской области',src:'Region.department()',rule:'регион выдачи совпадает с серией',breakIt:'выдать «по Республике Татарстан» при серии 50',who:'Consistency',opt:'--region 50'},
+     {key:'passportExpirationDate',label:'Действителен до',value:'2026-05-12',broken:'бессрочно',src:'рубежи 20/45',check:'passportExp',rule:'в 20 и 45 лет паспорт меняется; после 45 — бессрочно',breakIt:'сделать 34-летнему «бессрочно»',who:'DocumentRules',opt:'--age'}]},
+   {n:'04',name:'Адреса',fields:[
+     {key:'registrationPostalCode',label:'Индекс регистрации',value:'143500',broken:'604831',src:'срез КЛАДР + DOMA.DBF',check:'postal',rule:'префикс индекса принадлежит субъекту',breakIt:'поставить индекс другого региона',who:'coverage · приёмка',opt:'--region 50'},
+     {key:'registrationCity',label:'Город',value:'Истра',src:'срез КЛАДР',rule:'населённый пункт есть в срезе',breakIt:'город, которого нет в КЛАДР',who:'внешняя сверка',opt:''},
+     {key:'registrationFormatted',label:'Адрес строкой',value:'143500, Московская обл, г. Истра, ул. Ленина, д. 12, кв. 34',src:'сборка',rule:'пустые части пропускаются',breakIt:'«,,1 Мая ул,31»',who:'глазами',opt:''}]},
+   {n:'05',name:'Банк и счёт',fields:[
+     {key:'bankBik',label:'БИК',value:'044525225',src:'справочник ЦБ (ED807)',rule:'9 цифр, банк есть в справочнике',breakIt:'БИК, которого нет в ED807',who:'fetch-bik',opt:''},
+     {key:'account',label:'Счёт',value:'40817810500009198787',broken:'40817810500009198788',src:'письмо Банка России № 515',check:'account',rule:'ключ = (сумма×3) mod 10, 9-й разряд',breakIt:'изменить контрольный ключ',who:'AccountValidator · АБС',opt:'--corrupt account'}]},
+   {n:'06',name:'Карты «Мир»',fields:[
+     {key:'cardPan',label:'Номер карты',value:'2201515746164839',broken:'2207515746164839',src:'BIN «Мир» 220000–220499',check:'card',rule:'16 цифр, Луна, BIN в диапазоне',breakIt:'поставить чужой BIN',who:'проверка диапазона',opt:'--cards 1'},
+     {key:'cardOutcome',label:'Исход операции',value:'успех',src:'генератор ~90%',rule:'русские названия: успех, недостаточно средств…',breakIt:'сделать отказов больше половины',who:'статистика на 1000',opt:'--cards 1'}]}
+  ]},
+ ip:{avatar:'ИП',name:'Кузнецов Артём Петрович',sub:'personId · pd-7f91ab · 41 год · Краснодарский край',
+  pills:[['ИП',1],['ОГРНИП 15',1],['ОКВЭД 62.01',1],['счёт 40802',1]],
+  layers:[
+   {n:'01',name:'Идентификация',fields:[
+     {key:'personId',label:'Идентификатор',value:'pd-7f91ab',src:'генератор',rule:'тот же ключ, что у ФЛ',breakIt:'—',who:'—',opt:''},
+     {key:'ogrnip',label:'ОГРНИП',value:'304500116000157',broken:'304500116000158',src:'алгоритм ФНС',check:'ogrnip',rule:'15 знаков, остаток по модулю 13',breakIt:'изменить последнюю цифру',who:'OgrnValidator',opt:'--corrupt ogrnip'},
+     {key:'okved',label:'ОКВЭД',value:'62.01 · разработка ПО',src:'ОКВЭД-2 (3 069 кодов)',rule:'код есть в справочнике',breakIt:'код 99.99',who:'okved.tsv',opt:'--okved 62.01'}]},
+   {n:'02',name:'Банк и счёт',fields:[
+     {key:'account',label:'Счёт ИП',value:'40802810900000001234',src:'письмо № 515',check:'account',rule:'балансовый 40802 — признак ИП',breakIt:'40817 у ИП',who:'правило «тип ↔ балансовый счёт»',opt:''}]}
+  ]},
+ org:{avatar:'ЮЛ',name:'ООО «Пойдём!»',sub:'ОГРН 1027700132195 · 2 организации в наборе',
+  pills:[['ЮЛ',1],['ОГРН 13',1],['КПП 9',1],['счёт 40702',1]],
+  layers:[
+   {n:'01',name:'Идентификация',fields:[
+     {key:'organizationName',label:'Наименование',value:'ООО «Пойдём!»',src:'генератор',rule:'форма и название согласованы',breakIt:'название без формы',who:'—',opt:''},
+     {key:'ogrn',label:'ОГРН',value:'1027700132195',broken:'1027700132194',src:'алгоритм ФНС',check:'ogrn',rule:'13 знаков, остаток по модулю 11',breakIt:'изменить последнюю цифру',who:'OgrnValidator',opt:'--corrupt ogrn'},
+     {key:'kpp',label:'КПП',value:'502501001',broken:'160501001',src:'регион + ИФНС',check:'kpp',rule:'9 знаков, префикс = регион регистрации',breakIt:'КПП чужого региона',who:'правило «регион ↔ КПП»',opt:'--region 50'}]},
+   {n:'02',name:'Связи',fields:[
+     {key:'employerOgrn',label:'ОГРН работодателя',value:'—',src:'набор type: "set"',rule:'ФЛ ссылаются на организацию по ОГРН',breakIt:'ссылка на ОГРН вне набора',who:'проверка ссылок (T-45)',opt:''}]}
+  ]}
+};
+
+const state={type:'individual',mode:'clean',open:'01',sel:null,hit:null,checked:false};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const fields=()=>BASE[state.type].layers.flatMap(l=>l.fields.map(f=>Object.assign({layer:l},f)));
+const val=f=>(state.mode==='broken'&&f.broken)?f.broken:f.value;
+
+function violations(){
+  const out=[],all=fields();
+  const find=k=>all.find(f=>f.key===k);
+  all.forEach(f=>{
+    if(!f.check)return;
+    const v=val(f);
+    if(f.check==='inn'&&!(state.type==='org'?okInn10(v):okInn12(v)))out.push({layer:f.layer.n,f,why:'контрольная сумма ИНН не сходится'});
+    if(f.check==='snils'&&!okSnils(v))out.push({layer:f.layer.n,f,why:'контрольное число СНИЛС не сходится'});
+    if(f.check==='ogrn'&&!okOgrn(v))out.push({layer:f.layer.n,f,why:'остаток ОГРН по модулю 11 не совпал'});
+    if(f.check==='ogrnip'&&!okOgrnip(v))out.push({layer:f.layer.n,f,why:'остаток ОГРНИП по модулю 13 не совпал'});
+    if(f.check==='series'&&!REGION_CODE[v.slice(0,2)])out.push({layer:f.layer.n,f,why:'кода региона '+v.slice(0,2)+' не существует'});
+    if(f.check==='postal'&&!postalMatches('Московская',v))out.push({layer:f.layer.n,f,why:'префикс индекса не принадлежит субъекту'});
+    if(f.check==='passportExp'&&v==='бессрочно')out.push({layer:f.layer.n,f,why:'до 45 лет паспорт должен меняться'});
+    if(f.check==='account'){const bik=(find('bankBik')||{value:'044525225'}).value;
+      if(!okAccount(v,bik))out.push({layer:f.layer.n,f,why:'ключ счёта по письму № 515 не совпал'});}
+    if(f.check==='card'&&!okCard(v))out.push({layer:f.layer.n,f,why:'BIN вне 220000–220499 или не сходится Луна'});
+    if(f.check==='kpp'&&v.slice(0,2)!=='50')out.push({layer:f.layer.n,f,why:'префикс КПП не совпадает с регионом'});
+  });
+  return out;
+}
+
+function renderSteps(){
+  document.getElementById('steps').innerHTML=
+    `<span class="step done"><b>1</b> смотрите</span>
+     <span class="step ${state.mode==='broken'?'done':''}"><b>2</b> ломайте</span>
+     <span class="step ${state.checked?'done':''}"><b>3</b> проверяйте</span>`;
+}
+
+function render(){
+  const d=BASE[state.type];
+  document.getElementById('avatar').textContent=d.avatar;
+  document.getElementById('pName').textContent=d.name;
+  document.getElementById('pSub').textContent=d.sub;
+  const bad=new Set(violations().map(v=>v.f.key));
+  document.getElementById('pPills').innerHTML=d.pills.map(([t,ok])=>`<span class="pill ${ok?'ok':'bad'}">${t}</span>`).join('')
+    +(state.mode==='broken'?'<span class="pill bad">данные испорчены</span>':'')
+    +(bad.size?`<span class="pill bad">нарушений: ${bad.size}</span>`:'');
+
+  const host=document.getElementById('layers');
+  host.innerHTML=d.layers.map(l=>{
+    const open=l.n===state.open;
+    return `<section class="layer ${open?'open':''}" data-n="${l.n}">
+      <button type="button"><span class="num">${l.n}</span>${l.name}<span class="meta">${l.fields.length} поля</span></button>
+      <div class="body"><div class="fields">${l.fields.map(f=>{
+        const isBad=state.mode==='broken'&&f.broken&&f.check;
+        return `<div class="f${state.sel===f.key?' sel':''}${state.hit===f.key?' hit':''}${isBad?' bad':''}"
+          data-key="${f.key}" data-layer="${l.n}" tabindex="0" role="button">
+          <div class="k">${esc(f.label)}${isBad?' <span class="warn">●</span>':''}</div>
+          <div class="v">${esc(val(f))}</div></div>`;
+      }).join('')}</div></div></section>`;
+  }).join('');
+
+  host.querySelectorAll('.layer > button').forEach(b=>b.addEventListener('click',()=>{
+    const n=b.closest('.layer').dataset.n; state.open=state.open===n?null:n; render();
+  }));
+  host.querySelectorAll('.f').forEach(el=>{
+    const pick=()=>{state.sel=el.dataset.key;state.hit=null;state.open=el.dataset.layer;render();panel();
+      if(window.innerWidth<=900)openPanel();};
+    el.addEventListener('click',pick);
+    el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();pick();}});
+  });
+  renderSteps();
+  if(state.sel)panel();
+}
+
+const findField=key=>fields().find(f=>f.key===key);
+
+function panel(){
+  const box=document.getElementById('panel'),f=findField(state.sel);
+  if(!f){box.className='panel empty';box.textContent='Выберите поле — здесь будет источник, правило, команда и «что отобьёт».';return;}
+  box.className='panel open';
+  const badNow=state.mode==='broken'&&f.broken&&f.check&&violations().some(v=>v.f.key===f.key);
+  const cmd=`validum generate ${state.type==='org'?'organization':state.type==='ip'?'ip':'individual'} --seed 42 ${f.opt||''}`.trim();
+  box.innerHTML=`
+    <h3>${esc(f.label)}${badNow?' <span class="who">нарушение</span>':''}</h3>
+    <div class="key">${esc(f.key)} · ${esc(f.layer.n)} ${esc(f.layer.name)}</div>
+    <div class="row"><div class="label">Значение</div><div class="txt mono">${esc(val(f))}</div></div>
+    <div class="row"><div class="label">Откуда</div><div class="txt">${esc(f.src)}</div></div>
+    <div class="row"><div class="label">Правило</div><div class="txt">${esc(f.rule)}</div></div>
+    <div class="row"><div class="label">${badNow?'Как это ломается':'Как сломать руками'}</div><div class="txt mono">${esc(f.breakIt)}</div></div>
+    <div class="row"><div class="label">Кто отобьёт</div><div class="txt">${esc(f.who)}</div></div>
+    <div class="row"><div class="label">Какая опция это делает</div>
+      ${f.opt?`<div class="cmdline"><code id="cmdText">${esc(cmd)}</code><button class="mini" id="copy">копировать</button></div>`
+             :'<div class="txt">— (значение неизменяемо)</div>'}</div>
+    <div class="acts">
+      ${f.broken?`<button class="mini danger" id="brk">${state.mode==='broken'?'починить все поля':'сломать все поля'}</button>`:''}
+      <button class="mini" id="chkOne">проверить значение</button>
+      <button class="mini" id="closePanel" style="display:none">закрыть</button>
+    </div>
+    <div class="oneres" id="oneRes"></div>`;
+  const copy=document.getElementById('copy');
+  if(copy)copy.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(cmd);copy.textContent='скопировано';
+    setTimeout(()=>{copy.textContent='копировать';},1200);}catch(e){}});
+  const brk=document.getElementById('brk');
+  if(brk)brk.addEventListener('click',()=>{
+    state.mode=state.mode==='broken'?'clean':'broken';state.checked=true;
+    document.querySelectorAll('#modeSeg button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.v===state.mode)));
+    render();panel();
+  });
+  document.getElementById('chkOne').addEventListener('click',()=>{
+    const one=violations().filter(v=>v.f.key===f.key);
+    state.checked=true;
+    const out=document.getElementById('oneRes');
+    if(!f.check){
+      out.className='oneres';
+      out.textContent='У этого поля нет контрольной суммы — проверять нечего. Смотрите «Правило» и «Кто отобьёт».';
+    } else if(one.length){
+      out.className='oneres bad';
+      out.textContent='✖ ' + one[0].why + ' — такое значение АБС отклонит.';
+    } else {
+      out.className='oneres ok';
+      out.textContent='✔ значение проходит проверку «' + f.label + '»';
+    }
+    renderSteps();
+  });
+  if(window.innerWidth<=900){const c=document.getElementById('closePanel');c.style.display='inline-block';c.onclick=closePanel;}
+}
+
+function showResults(list,onlyOne){
+  const box=document.getElementById('results');box.classList.add('on');
+  const all=violations(),checked=fields().filter(f=>f.check).length;
+  document.getElementById('resSum').textContent=onlyOne
+    ? `Проверено одно поле — ${list?'нарушение есть':'нарушений нет'}.`
+    : (all.length?`Нарушений: ${all.length} из ${checked} проверяемых полей.`:`Нарушений нет: все ${checked} проверяемых полей сходятся.`);
+  const rows=(onlyOne&&list)||(!onlyOne&&all)||[];
+  document.getElementById('violList').innerHTML=rows.length
+    ? rows.map(v=>`<div class="viol"><span class="ln">${v.layer}</span><span class="fl">${esc(v.f.label)}</span>
+        <span class="why">${esc(v.why)}</span><span class="st">нарушение</span></div>`).join('')
+    : '<div class="clean">✔ контрольные суммы, серия ↔ регион, индекс ↔ субъект, ключ счёта и BIN карты сошлись</div>';
+}
+
+document.getElementById('q').addEventListener('input',e=>{
+  const n=e.target.value.trim().toLowerCase();
+  if(!n){state.hit=null;render();return;}
+  const hit=fields().find(f=>f.label.toLowerCase().includes(n)||f.key.toLowerCase().includes(n));
+  if(hit){state.open=hit.layer.n;state.hit=hit.key;state.sel=hit.key;render();}
+  else{state.hit=null;render();}
+});
+
+document.querySelectorAll('#typeSeg button').forEach(b=>b.addEventListener('click',()=>{
+  state.type=b.dataset.v;state.sel=null;state.hit=null;
+  document.querySelectorAll('#typeSeg button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));
+  document.getElementById('results').classList.remove('on');render();
+}));
+document.querySelectorAll('#modeSeg button').forEach(b=>b.addEventListener('click',()=>{
+  state.mode=b.dataset.v;state.checked=true;
+  document.querySelectorAll('#modeSeg button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));
+  render();
+}));
+document.getElementById('check').addEventListener('click',()=>{state.checked=true;showResults(null);renderSteps();});
+document.getElementById('reset').addEventListener('click',()=>{
+  state.type='individual';state.mode='clean';state.open='01';state.sel=null;state.hit=null;state.checked=false;
+  document.querySelectorAll('#typeSeg button').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.v==='individual')));
+  document.querySelectorAll('#modeSeg button').forEach(x=>x.setAttribute('aria-pressed',String(x.dataset.v==='clean')));
+  document.getElementById('q').value='';document.getElementById('results').classList.remove('on');
+  closePanel();render();
+});
+function openPanel(){document.getElementById('panel').classList.add('open');document.getElementById('backdrop').classList.add('on');}
+function closePanel(){document.getElementById('panel').classList.remove('open');document.getElementById('backdrop').classList.remove('on');}
+document.getElementById('backdrop').addEventListener('click',closePanel);
+
+const ALL=['personId','employerOgrn','fullName','gender','birthDate','age','familyStatus','inn','snils',
+'passportSeries','passportNumber','passportIssuedBy','passportIssueDate','passportExpirationDate',
+'passportDepartmentCode','passportType','passportCountry','documents','mobileType','mobileValue',
+'mobileDescription','mobileStatus','emailType','emailValue','emailDescription','emailStatus',
+'bankBik','bankName','bankCorrAccount','bankCity','bankRegion','account','cardPan','cardExpiry',
+'cardOutcome','cardCount','terrorist','blocked','isResident','citizenship','asOf','secretWord',
+'categoryClient','accountPackage','personalManager','registrationRegion','registrationRegionType',
+'registrationPostalCode','registrationCity','registrationStreet','registrationBuilding','registrationApartment',
+'registrationFormatted','postRegion','postRegionType','postPostalCode','postCity','postStreet','postBuilding',
+'postApartment','postFormatted','currentRegion','currentRegionType','currentPostalCode','currentCity',
+'currentStreet','currentBuilding','currentApartment','currentFormatted'];
+document.getElementById('allList').textContent=ALL.join(' · ');
+
+/* состояние из адреса: ?type=ip&mode=broken&open=02&sel=inn&check=1 */
+(() => {
+  const q = new URLSearchParams(location.search);
+  if (q.get('type') && BASE[q.get('type')]) state.type = q.get('type');
+  if (q.get('mode') === 'broken') state.mode = 'broken';
+  if (q.get('open')) state.open = q.get('open');
+  if (q.get('sel')) state.sel = q.get('sel');
+  document.querySelectorAll('#typeSeg button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === state.type)));
+  document.querySelectorAll('#modeSeg button').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.v === state.mode)));
+  if (q.get('check')) { state.checked = true; render(); showResults(null); renderSteps(); return; }
+})();
+
+render();
+</script>
+
+<script>
+/* Сообщаем высоту родителю, чтобы iframe на сайте не обрезал раскрытые блоки. */
+(function () {
+  var last = 0;
+  function report() {
+    try {
+      var el = document.querySelector('.wrap') || document.body;
+      var h = Math.ceil(el.getBoundingClientRect().height) + 8;
+      if (h === last || h < 400 || h > 20000) return;
+      last = h;
+      if (window.parent && window.parent !== window) {
+        window.parent.postMessage({ type: 'validum-tool-height', height: h }, '*');
+      }
+    } catch (e) { /* standalone-режим */ }
+  }
+  window.addEventListener('load', report);
+  window.addEventListener('resize', report);
+  document.addEventListener('click', function () { setTimeout(report, 120); }, true);
+  document.addEventListener('toggle', function () { setTimeout(report, 120); }, true);
+  if (window.ResizeObserver) { new ResizeObserver(report).observe(document.body); }
+  setTimeout(report, 300);
+})();
+</script>
+</body>
+</html>

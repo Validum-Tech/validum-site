@@ -1,317 +1,530 @@
 ---
-// src/components/home/Hero.astro
+// src/components/home/Hero.astro — первый экран в стиле V11:
+// постерная типографика слева, «прибор» с живой генерацией справа, бегущая строка под ними.
+import { EXPECTED_REST_ENDPOINTS, EXPECTED_TEST_COUNT } from '../../lib/content-contract.mjs';
+
+// Что именно проверяется в каждой строке — эти же правила работают в ядре.
+const checks = [
+  { name: 'ИНН', rule: 'контрольные разряды ФНС' },
+  { name: 'СНИЛС', rule: 'контрольное число, mod 101' },
+  { name: 'ОГРН / ОГРНИП', rule: 'mod 11 и mod 13' },
+  { name: 'Счёт', rule: 'ключ по письму ЦБ № 515' },
+  { name: 'КПП', rule: 'серия подразделения' },
+  { name: 'Индекс', rule: 'регион из КЛАДР' },
+  { name: 'ФИО', rule: 'имя и отчество по полу' },
+];
+
+const ticker = [
+  'ИНН 779370501280',
+  'СНИЛС 43826479516',
+  'ОГРН 1027700132195',
+  'Счёт 40817810200006614153',
+  'КПП 773601001',
+  'БИК 044525225',
+  'Индекс 143500',
+];
+
+const metrics = [
+  { value: '0', label: 'зависимостей' },
+  { value: EXPECTED_TEST_COUNT, label: 'тестов' },
+  { value: EXPECTED_REST_ENDPOINTS, label: 'эндпоинтов REST' },
+  { value: '≈370', label: 'банков ЦБ' },
+];
 ---
 
-<section class="relative overflow-hidden pt-20 pb-24 lg:pt-28 lg:pb-32 w-full border-b border-line">
+<section class="relative border-b border-line">
+  <div class="mx-auto max-w-[1280px] px-6 pb-12 pt-10 lg:px-10 lg:pb-14 lg:pt-14">
+    <div class="grid gap-12 lg:grid-cols-[1.35fr_.95fr] lg:items-start lg:gap-16">
 
-  <div class="absolute inset-0 bg-gradient-to-r from-danger/10 via-surface-0 via-45% to-surface-0 to-55% to-success/10 pointer-events-none -z-10"></div>
+      <!-- Постер -->
+      <div class="flex flex-col">
+        <p class="kicker">для АБС, банков и QA-команд</p>
+        <h1 class="poster-hero mt-6">
+          Не пишите<br />
+          генераторы —<br />
+          генерируйте<span class="text-accent">.</span>
+        </h1>
+        <div class="rule mt-8"></div>
+        <p class="mt-6 max-w-[36rem] text-[16px] leading-relaxed text-fg-muted sm:text-[17px]">
+          Валидно по умолчанию. Воспроизводимо до байта: один seed — тот же набор.
+          ИНН, СНИЛС, ОГРН, БИК и счета по 809-П с контрольными суммами, без сети и без LLM.
+        </p>
 
-  <div class="relative max-w-[1000px] mx-auto px-6 text-center z-30 mb-16">
-    <div class="flex justify-center mb-6">
-      <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-accent/30 bg-surface-0/80 backdrop-blur text-accent text-xs font-medium">
-        <span class="w-2 h-2 rounded-full bg-accent animate-pulse"></span>
-        Для АБС, банков и стартапов
+        <div class="mt-9 flex flex-wrap items-center gap-x-7 gap-y-4">
+          <a href="#quickstart" class="btn-solid">Начать за 2 минуты</a>
+          <a href="/tools/check" class="link-arrow">как проверяются реквизиты →</a>
+        </div>
+        <p class="mt-4 font-mono text-[11px] uppercase tracking-[0.14em] text-fg-subtle">
+          от seed до набора — одна команда · от набора до теста — ноль правок
+        </p>
+
+        <!-- Четыре цифры продукта: подпись сверху, число крупно -->
+        <div class="mt-12"><div class="grid grid-cols-2 gap-px bg-line sm:grid-cols-4">
+          {metrics.map((metric) => (
+            <div class="bg-surface-0 pt-4">
+              <div class="label">{metric.label}</div>
+              <div class="mt-2 font-mono text-[26px] leading-none text-fg">{metric.value}</div>
+            </div>
+          ))}
+        </div></div>
       </div>
+
+      <!-- Прибор: генерация прямо в браузере, строки появляются по кнопке -->
+      <div class="flex flex-col">
+      <div class="hairline relative overflow-hidden bg-surface-1">
+        <div class="flex flex-wrap items-center justify-between gap-x-3 gap-y-2 border-b border-line px-4 py-3 font-mono text-[10px] uppercase tracking-[0.16em] text-fg-subtle">
+          <label class="flex items-center gap-2 normal-case tracking-normal">
+            <span class="tracking-[0.16em] uppercase">seed</span>
+            <input id="hero-seed" type="number" min="1" max="2147483647" step="1" value="42" inputmode="numeric"
+              class="w-16 border-b border-line bg-transparent px-1 py-0.5 text-center font-mono text-[11px] tracking-normal text-fg outline-none focus:border-accent" />
+          </label>
+          <span class="flex flex-wrap items-center gap-x-3 gap-y-1">
+            <button type="button" id="hero-verify"
+              class="text-fg-subtle underline-offset-4 transition-colors hover:text-fg hover:underline">проверить</button>
+            <button type="button" id="hero-reset"
+              class="text-fg-subtle underline-offset-4 transition-colors hover:text-fg hover:underline">сбросить</button>
+          </span>
+        </div>
+
+        <div class="px-4 pb-4 pt-4">
+          <div class="num-xl">
+            <span id="hero-counter">0</span><span class="ml-1.5 font-mono text-[13px] text-fg-subtle">профилей</span>
+          </div>
+          <div class="label mt-2" id="hero-note">пусто · нажмите кнопку выше — строки появятся здесь же</div>
+          <div class="mt-3 flex items-center gap-3">
+            <div class="h-px flex-1 bg-line">
+              <div id="hero-progress" class="h-px bg-accent transition-[width] duration-500" style="width:0%"></div>
+            </div>
+            <span class="font-mono text-[10px] tabular-nums tracking-[0.08em] text-fg-subtle">
+              <span id="hero-limit">0</span> / 100
+            </span>
+          </div>
+
+          <button type="button" id="hero-more"
+            class="btn-solid mt-3 w-full text-[12px] uppercase tracking-[0.12em]">
+            <span id="hero-more-label">сгенерировать 25 профилей</span>
+          </button>
+
+          <div id="hero-full" class="mt-3 hidden border-t border-accent/40 pt-3">
+            <p class="text-[13px] font-semibold leading-snug tracking-tight text-fg">
+              Демо кончается здесь. <span class="text-accent">Миллион строк — одна команда.</span>
+            </p>
+            <code class="mt-2 block break-all font-mono text-[10px] leading-relaxed text-fg-subtle">java -jar validum.jar generate individual -n 1000000 --seed 42</code>
+            <p class="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1">
+              <a href="#quickstart" class="link-arrow font-mono text-[10px] uppercase tracking-[0.12em] text-accent">начать за 2 минуты</a>
+              <a href="/docs/#install" class="link-arrow font-mono text-[10px] uppercase tracking-[0.12em] text-fg-subtle">документация →</a>
+            </p>
+          </div>
+          <div id="hero-badge"
+            class="mt-3 hidden items-center gap-2 border border-accent/40 bg-accent/5 px-2 py-1 font-mono text-[10px] uppercase tracking-[0.14em] text-accent">
+            <span>✓</span><span id="hero-badge-text">строка прошла все шесть проверок</span>
+          </div>
+        </div>
+
+        <div class="border-t border-line">
+          <div class="label px-4 pt-3">последние сгенерированные строки</div>
+          <ul id="hero-rows" class="mt-1 font-mono text-[11px]">
+            <li class="px-4 py-[5px] text-fg-subtle">пока пусто</li>
+          </ul>
+        </div>
+
+        <div id="hero-checks" class="border-t border-line">
+          <div class="label px-4 pt-3">что проверено в каждой строке</div>
+          <ul class="mt-1">
+            {checks.map((item) => (
+              <li class="grid grid-cols-[14px_minmax(0,1fr)_auto] items-center gap-2 border-b border-line/50 px-4 py-[5px] font-mono text-[11px] last:border-b-0">
+                <span class="text-accent">✓</span>
+                <span class="truncate text-fg">{item.name}</span>
+                <span class="text-right text-[10px] tracking-[0.04em] text-fg-subtle">{item.rule}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div id="hero-checks-compact" class="hidden border-t border-line px-4 py-2.5">
+          <div class="label">7 проверок в каждой строке</div>
+          <div class="mt-1 font-mono text-[11px] leading-relaxed text-fg-muted">
+            ИНН · СНИЛС · ОГРН · Счёт · КПП · Индекс · ФИО — <span class="text-accent">все сошлись</span>
+          </div>
+        </div>
+
+        <div class="border-t border-line px-4 py-3">
+          <div class="flex items-center justify-between gap-3">
+            <div class="label">sha-256 файла<span id="hero-meta" class="ml-2 normal-case tracking-normal text-fg-subtle"></span></div>
+            <button type="button" id="hero-copy"
+              class="font-mono text-[10px] uppercase tracking-[0.14em] text-fg-subtle transition-colors hover:text-fg">копировать хеш</button>
+          </div>
+          <div id="hero-hash" class="mt-1.5 break-all font-mono text-[12px] leading-[1.55] text-fg">—</div>
+
+          <div id="hero-download-slot">
+          <button type="button" id="hero-download" disabled
+            class="btn-solid mt-3 w-full text-[12px] uppercase tracking-[0.12em] disabled:cursor-not-allowed disabled:border-line disabled:bg-transparent disabled:text-fg-subtle disabled:opacity-70">
+            <span id="hero-download-label">скачать csv</span>
+          </button>
+          </div>
+        </div>
+      </div>
+
+      <p id="hero-hint" class="mt-5 max-w-[48ch] text-[13px] leading-relaxed text-fg-subtle lg:mt-6">
+        Строки считаются здесь при каждом нажатии: те же веса, что в ядре. Скачайте CSV, нажмите «добавить ещё 25» —
+        первые строки совпадут. Побайтную идентичность с продуктом держат golden-фикстуры.
+      </p>
+
+      </div>
+
     </div>
 
-    <h1 class="text-4xl sm:text-5xl lg:text-[64px] font-bold tracking-tight leading-[1.1] mb-6">
-      Конец рутине.<br>
-      Данные, которые <span class="text-transparent bg-clip-text bg-gradient-to-r from-accent-dark to-accent-light">проходят валидацию</span>
-    </h1>
-
-    <p class="text-base sm:text-lg text-fg-muted leading-relaxed mb-8 max-w-2xl mx-auto">
-      Забудьте про написание классов для генерации клиентов. Получайте готовые, математически валидные профили в один клик.
-    </p>
-
-    <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
-      <a href="#quickstart" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-accent hover:bg-accent-light text-accent-fg font-semibold px-8 py-3.5 rounded-lg text-sm transition-all shadow-glow-accent-md">
-        Начать работу
-      </a>
-      <a href="/docs" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 border border-line bg-surface-0/80 backdrop-blur hover:bg-surface-3 px-8 py-3.5 rounded-lg text-sm font-medium transition text-fg">
-        Документация
-      </a>
-    </div>
-  </div>
-
-  <div class="relative w-full max-w-[1400px] mx-auto h-[320px] sm:h-[400px] md:h-[500px] z-20 flex justify-between px-1 sm:px-8 md:px-24">
-
-    <!-- ЛЕВАЯ СТОРОНА: Хаос -->
-    <div class="relative w-1/2 h-full">
-
-      <!-- 1: Java -->
-      <div class="absolute top-[5%] left-[5%] w-[130px] sm:w-[200px] md:w-[260px] h-[55px] sm:h-[75px] md:h-[90px] p-1.5 sm:p-2 md:p-2.5 rounded-xl border border-danger-border bg-danger-surface shadow-glow-danger-sm animate-suck-1 origin-right -rotate-2 overflow-hidden">
-        <div class="flex items-center gap-1 text-[6px] sm:text-[8px] md:text-[10px] font-mono text-danger mb-0.5 sm:mb-1 border-b border-danger-border/50 pb-0.5 sm:pb-1">
-          <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-2 h-2 md:w-3 md:h-3"><path d="M17 8h1a4 4 0 1 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/><line x1="6" y1="2" x2="6" y2="4"/><line x1="10" y1="2" x2="10" y2="4"/><line x1="14" y1="2" x2="14" y2="4"/></svg>
-          ClientGenerator.java
-        </div>
-        <div class="text-[5px] sm:text-[7px] md:text-[9px] font-mono text-danger/80 leading-tight">
-          public Client generate() &#123;<br>
-          &nbsp;&nbsp;Client c = new Client();<br>
-          &nbsp;&nbsp;c.setInn(InnUtil.random()); <span class="text-danger">// FAIL</span><br>
-          &nbsp;&nbsp;... 200 lines of code ...
-        </div>
-      </div>
-
-      <!-- 2: CSV -->
-      <div class="absolute top-[25%] left-[15%] w-[130px] sm:w-[200px] md:w-[260px] h-[55px] sm:h-[75px] md:h-[90px] p-1.5 sm:p-2 md:p-2.5 rounded-xl border border-danger-border bg-danger-surface shadow-glow-danger-sm animate-suck-2 origin-right rotate-1 overflow-hidden">
-        <div class="flex items-center gap-1 text-[6px] sm:text-[8px] md:text-[10px] font-mono text-danger mb-0.5 sm:mb-1 border-b border-danger-border/50 pb-0.5 sm:pb-1">
-          <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-2 h-2 md:w-3 md:h-3"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
-          faker_data.csv
-        </div>
-        <div class="text-[5px] sm:text-[7px] md:text-[9px] font-mono text-danger/80 leading-tight">
-          name,inn,account<br>
-          Иван,<span class="line-through">123</span>,<span class="line-through">null</span><br>
-          Петр,<span class="line-through">456</span>,<span class="line-through">error</span>
-        </div>
-      </div>
-
-      <!-- 3: Log -->
-      <div class="absolute top-[45%] left-[8%] w-[130px] sm:w-[200px] md:w-[260px] h-[55px] sm:h-[75px] md:h-[90px] p-1.5 sm:p-2 md:p-2.5 rounded-xl border border-danger-border bg-danger-surface shadow-glow-danger-sm animate-suck-3 origin-right -rotate-3 overflow-hidden">
-        <div class="flex items-center gap-1 text-[6px] sm:text-[8px] md:text-[10px] font-mono text-danger mb-0.5 sm:mb-1 border-b border-danger-border/50 pb-0.5 sm:pb-1">
-          <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-2 h-2 md:w-3 md:h-3"><polyline points="4 17 10 11 4 5"/><line x1="12" x2="20" y1="19" y2="19"/></svg>
-          Test.log
-        </div>
-        <div class="text-[5px] sm:text-[7px] md:text-[9px] font-mono text-danger/80 leading-tight">
-          <span class="text-danger">Exception:</span> Invalid checksum<br>
-          at Abs.validate(Inn.java:42)
-        </div>
-      </div>
-
-      <!-- 4: XML -->
-      <div class="absolute top-[65%] left-[12%] w-[130px] sm:w-[200px] md:w-[260px] h-[55px] sm:h-[75px] md:h-[90px] p-1.5 sm:p-2 md:p-2.5 rounded-xl border border-danger-border bg-danger-surface shadow-glow-danger-sm animate-suck-4 origin-right rotate-2 overflow-hidden">
-        <div class="flex items-center gap-1 text-[6px] sm:text-[8px] md:text-[10px] font-mono text-danger mb-0.5 sm:mb-1 border-b border-danger-border/50 pb-0.5 sm:pb-1">
-          <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-2 h-2 md:w-3 md:h-3"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-          profile.xml
-        </div>
-        <div class="text-[5px] sm:text-[7px] md:text-[9px] font-mono text-danger/80 leading-tight">
-          &lt;client&gt;<br>
-          &nbsp;&lt;inn&gt;<span class="line-through">000</span>&lt;/inn&gt;<br>
-          &lt;/client&gt;
-        </div>
-      </div>
-
-      <!-- 5: SQL -->
-      <div class="absolute top-[85%] left-[5%] w-[130px] sm:w-[200px] md:w-[260px] h-[55px] sm:h-[75px] md:h-[90px] p-1.5 sm:p-2 md:p-2.5 rounded-xl border border-danger-border bg-danger-surface shadow-glow-danger-sm animate-suck-5 origin-right -rotate-1 overflow-hidden">
-        <div class="flex items-center gap-1 text-[6px] sm:text-[8px] md:text-[10px] font-mono text-danger mb-0.5 sm:mb-1 border-b border-danger-border/50 pb-0.5 sm:pb-1">
-          <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-2 h-2 md:w-3 md:h-3"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5V19A9 3 0 0 0 21 19V5"/><path d="M3 12A9 3 0 0 0 21 12"/></svg>
-          insert.sql
-        </div>
-        <div class="text-[5px] sm:text-[7px] md:text-[9px] font-mono text-danger/80 leading-tight">
-          INSERT INTO clients VALUES (<span class="text-danger">NULL</span>...)
-        </div>
-      </div>
-
-      <div class="absolute top-1/2 left-0 w-[200px] sm:w-[300px] md:w-[400px] h-[200px] sm:h-[300px] md:h-[400px] bg-danger/10 blur-[60px] sm:blur-[80px] md:blur-[100px] -translate-y-1/2 rounded-full pointer-events-none"></div>
-    </div>
-
-    <!-- ЦЕНТР: 3D Медальон -->
-    <div class="absolute left-1/2 top-0 bottom-0 w-px md:w-[2px] -translate-x-1/2 flex flex-col justify-center items-center z-30">
-      <div class="w-full h-full bg-gradient-to-b from-transparent via-accent to-transparent shadow-glow-accent-xl opacity-80"></div>
-
-      <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-40 perspective-1000">
-        <div class="relative w-16 h-16 sm:w-20 sm:h-20 md:w-28 md:h-28 animate-flip-coin">
-
-          <div class="absolute inset-0 backface-hidden flex items-center justify-center rounded-full bg-surface-0 border-2 border-accent shadow-glow-accent-lg">
-            <div class="absolute inset-1 rounded-full border border-accent/20"></div>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="text-accent w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" fill="currentColor" fill-opacity="0.1"/>
-              <path d="M8 11l3 3 5-5" stroke-width="2.5" stroke-linecap="square"/>
-            </svg>
-          </div>
-
-          <div class="absolute inset-0 backface-hidden flex items-center justify-center rounded-full bg-surface-0 border-2 border-accent shadow-glow-accent-lg rotate-y-180">
-            <div class="absolute inset-1.5 rounded-full border border-accent/20"></div>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="square" stroke-linejoin="miter" class="text-accent z-10 w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12">
-              <path d="M9 13l3 7 3-7" stroke-width="2.5"/>
-              <path d="M9 13L5 9" /><path d="M7 11L3 7" />
-              <path d="M5 9L5 4L7 4" /><path d="M3 7L3 3L5 3" />
-              <path d="M15 13l4-4" /><path d="M17 11l4-4" />
-              <path d="M19 9L19 4L17 4" /><path d="M21 7L21 3L19 3" />
-              <circle cx="12" cy="13" r="1" fill="currentColor" stroke="none"/>
-            </svg>
-          </div>
-
-        </div>
-        <div class="absolute inset-0 rounded-full border-2 border-accent animate-ping opacity-20 pointer-events-none"></div>
-      </div>
-    </div>
-
-    <!-- ПРАВАЯ СТОРОНА: Стопка -->
-    <div class="relative w-1/2 h-full">
-
-      <div class="absolute top-1/2 right-[10%] -translate-y-1/2 w-[130px] sm:w-[200px] md:w-[280px] h-[275px] sm:h-[375px] md:h-[400px]">
-
-        <!-- 1: Java -->
-        <div class="absolute top-0 w-full h-[55px] sm:h-[75px] md:h-[90px] p-1.5 sm:p-2 md:p-2.5 rounded-xl border border-accent/60 bg-success-surface shadow-glow-success-sm green-card animate-push-1 overflow-hidden">
-          <div class="absolute -top-1.5 -right-1.5 md:-top-2 md:-right-2 w-4 h-4 md:w-6 md:h-6 rounded-full bg-accent flex items-center justify-center shadow-lg">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="var(--accent-fg)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" class="w-2 h-2 md:w-3 md:h-3"><polyline points="20 6 9 17 4 12"/></svg>
-          </div>
-          <div class="flex items-center gap-1 text-[6px] sm:text-[8px] md:text-[10px] font-mono text-accent mb-0.5 sm:mb-1 border-b border-accent/20 pb-0.5 sm:pb-1">
-            <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-2 h-2 md:w-3 md:h-3"><path d="M17 8h1a4 4 0 1 1 0 8h-1"/><path d="M3 8h14v9a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4Z"/><line x1="6" y1="2" x2="6" y2="4"/><line x1="10" y1="2" x2="10" y2="4"/><line x1="14" y1="2" x2="14" y2="4"/></svg>
-            IndividualProfile.java
-          </div>
-          <div class="text-[5px] sm:text-[7px] md:text-[9px] font-mono text-accent/90 leading-tight">
-            IndividualProfile p = Validum<br>
-            &nbsp;&nbsp;.generate(Individual.class);<br>
-            <span class="text-fg-muted">// p.getInn() → "427624447300"</span>
-          </div>
-        </div>
-
-        <!-- 2: JSON -->
-        <div class="absolute top-0 w-full h-[55px] sm:h-[75px] md:h-[90px] p-1.5 sm:p-2 md:p-2.5 rounded-xl border border-accent/40 bg-success-surface shadow-glow-success-sm green-card animate-push-2 overflow-hidden">
-          <div class="flex items-center gap-1 text-[6px] sm:text-[8px] md:text-[10px] font-mono text-accent mb-0.5 sm:mb-1 border-b border-accent/20 pb-0.5 sm:pb-1">
-            <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-2 h-2 md:w-3 md:h-3"><path d="M8 3H7a2 2 0 0 0-2 2v5a2 2 0 0 1-2 2 2 2 0 0 1 2 2v5c0 1.1.9 2 2 2h1"/><path d="M16 21h1a2 2 0 0 0 2-2v-5c0-1.1.9-2 2-2a2 2 0 0 1-2-2V5a2 2 0 0 0-2-2h-1"/></svg>
-            response.json
-          </div>
-          <div class="text-[5px] sm:text-[7px] md:text-[9px] font-mono text-fg/90 leading-tight">
-            &#123;<br>
-            &nbsp;&nbsp;"inn": "427624447300",<br>
-            &nbsp;&nbsp;"snils": "112-233-445 95"<br>
-            &#125;
-          </div>
-        </div>
-
-        <!-- 3: CSV -->
-        <div class="absolute top-0 w-full h-[55px] sm:h-[75px] md:h-[90px] p-1.5 sm:p-2 md:p-2.5 rounded-xl border border-accent/30 bg-success-surface shadow-glow-success-sm green-card animate-push-3 overflow-hidden">
-          <div class="flex items-center gap-1 text-[6px] sm:text-[8px] md:text-[10px] font-mono text-accent mb-0.5 sm:mb-1 border-b border-accent/20 pb-0.5 sm:pb-1">
-            <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-2 h-2 md:w-3 md:h-3"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
-            export.csv
-          </div>
-          <div class="text-[5px] sm:text-[7px] md:text-[9px] font-mono text-fg-muted leading-tight">
-            fullName,inn,snils<br>
-            Зайцев Г.,427624447300,...
-          </div>
-        </div>
-
-        <!-- 4: XML -->
-        <div class="absolute top-0 w-full h-[55px] sm:h-[75px] md:h-[90px] p-1.5 sm:p-2 md:p-2.5 rounded-xl border border-accent/20 bg-success-surface shadow-glow-success-sm green-card animate-push-4 overflow-hidden">
-          <div class="flex items-center gap-1 text-[6px] sm:text-[8px] md:text-[10px] font-mono text-accent mb-0.5 sm:mb-1 border-b border-accent/20 pb-0.5 sm:pb-1">
-            <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-2 h-2 md:w-3 md:h-3"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-            profile.xml
-          </div>
-          <div class="text-[5px] sm:text-[7px] md:text-[9px] font-mono text-fg-muted leading-tight">
-            &lt;client&gt;<br>
-            &nbsp;&lt;inn&gt;427624447300&lt;/inn&gt;<br>
-            &lt;/client&gt;
-          </div>
-        </div>
-
-        <!-- 5: SQL -->
-        <div class="absolute top-0 w-full h-[55px] sm:h-[75px] md:h-[90px] p-1.5 sm:p-2 md:p-2.5 rounded-xl border border-accent/10 bg-success-surface shadow-glow-success-sm green-card animate-push-5 overflow-hidden">
-          <div class="flex items-center gap-1 text-[6px] sm:text-[8px] md:text-[10px] font-mono text-accent mb-0.5 sm:mb-1 border-b border-accent/20 pb-0.5 sm:pb-1">
-            <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-2 h-2 md:w-3 md:h-3"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5V19A9 3 0 0 0 21 19V5"/><path d="M3 12A9 3 0 0 0 21 12"/></svg>
-            insert.sql
-          </div>
-          <div class="text-[5px] sm:text-[7px] md:text-[9px] font-mono text-fg-subtle leading-tight">
-            INSERT INTO clients VALUES<br>
-            ('427624447300', '112233...');
-          </div>
-        </div>
-
-      </div>
-
-      <div class="absolute top-1/2 right-0 w-[200px] sm:w-[300px] md:w-[400px] h-[200px] sm:h-[300px] md:h-[400px] bg-success/10 blur-[60px] sm:blur-[80px] md:blur-[100px] -translate-y-1/2 rounded-full pointer-events-none"></div>
-    </div>
-
-  </div>
-
-  <div class="relative z-30 text-center mt-6 mb-16">
-    <p class="inline-flex flex-col sm:flex-row items-center gap-2 sm:gap-4 text-xs sm:text-sm font-mono text-fg-muted bg-surface-2 border border-line px-4 py-2 rounded-full backdrop-blur">
-      <span class="text-danger">Битые данные</span>
-      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden sm:block opacity-50"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-      <span class="text-accent font-bold">Validum исправляет</span>
-      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden sm:block opacity-50"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-      <span class="text-success">Валидный профиль</span>
-    </p>
-  </div>
-
-  <div class="relative max-w-[1000px] mx-auto px-6 z-30">
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-      <div class="p-4 rounded-xl border border-line bg-surface-2 text-center backdrop-blur hover:border-accent/30 transition">
-        <div class="text-accent text-2xl font-bold font-mono mb-1">906</div>
-        <div class="text-[11px] text-fg-muted uppercase tracking-wider">тестов</div>
-      </div>
-      <div class="p-4 rounded-xl border border-line bg-surface-2 text-center backdrop-blur hover:border-accent/30 transition">
-        <div class="text-accent text-2xl font-bold font-mono mb-1">~370</div>
-        <div class="text-[11px] text-fg-muted uppercase tracking-wider">банков ЦБ</div>
-      </div>
-      <div class="p-4 rounded-xl border border-line bg-surface-2 text-center backdrop-blur hover:border-accent/30 transition">
-        <div class="text-accent text-2xl font-bold font-mono mb-1">19</div>
-        <div class="text-[11px] text-fg-muted uppercase tracking-wider">эндпоинтов</div>
-      </div>
-      <div class="p-4 rounded-xl border border-line bg-surface-2 text-center backdrop-blur hover:border-accent/30 transition">
-        <div class="text-accent text-2xl font-bold font-mono mb-1">0</div>
-        <div class="text-[11px] text-fg-muted uppercase tracking-wider">зависимостей</div>
+    <!-- Бегущая строка: те же реквизиты, что в продукте -->
+    <div class="relative mt-12 overflow-hidden border-y border-line py-3">
+      <div class="hero-ticker flex w-max gap-8 whitespace-nowrap font-mono text-[11px] text-fg-subtle">
+        {[...ticker, ...ticker].map((item) => (
+          <span>{item} <span class="text-accent">✓</span></span>
+        ))}
       </div>
     </div>
   </div>
 
-  <div class="absolute bottom-6 left-1/2 -translate-x-1/2 animate-bounce z-30">
-    <a href="#quickstart" aria-label="Прокрутить вниз">
-      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-fg-muted hover:text-accent transition cursor-pointer">
-        <path d="m6 9 6 6 6-6"/>
-      </svg>
-    </a>
-  </div>
+  <style>
+    .hero-live {
+      animation: heroPulse 2.4s ease-in-out infinite;
+    }
+    @keyframes heroPulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
 
+    .hero-flow {
+      animation: heroFlow 26s linear infinite;
+      will-change: transform;
+    }
+    @keyframes heroFlow {
+      from { transform: translateY(0); }
+      to { transform: translateY(-50%); }
+    }
+
+    .hero-ticker {
+      animation: heroTicker 34s linear infinite;
+    }
+    @keyframes heroTicker {
+      to { transform: translateX(-50%); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hero-flow, .hero-ticker, .hero-live {
+        animation: none !important;
+      }
+    }
+  </style>
+
+  <script>
+    const counter = document.getElementById('hero-counter');
+    const note = document.getElementById('hero-note');
+    const rowsEl = document.getElementById('hero-rows');
+    const hashEl = document.getElementById('hero-hash');
+    const metaEl = document.getElementById('hero-meta');
+    const badge = document.getElementById('hero-badge');
+    const badgeText = document.getElementById('hero-badge-text');
+    const copyBtn = document.getElementById('hero-copy');
+    const downloadBtn = document.getElementById('hero-download');
+    const downloadLabel = document.getElementById('hero-download-label');
+    const moreBtn = document.getElementById('hero-more');
+    const moreLabel = document.getElementById('hero-more-label');
+    const verifyBtn = document.getElementById('hero-verify');
+    const resetBtn = document.getElementById('hero-reset');
+    const seedInput = document.getElementById('hero-seed');
+    const progressEl = document.getElementById('hero-progress');
+    const limitEl = document.getElementById('hero-limit');
+    const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const STEP = 25;
+    const MAX = 100; // лимит одного набора в демо
+    let seed = 42;
+    let stream = null; // создаётся ниже, после объявления rng
+
+    const fmt = (n) => n.toLocaleString('ru-RU').replace(/\u00A0/g, ' ');
+    const rng = (seed) => () => {
+      seed |= 0; seed = (seed + 0x6d2b79f5) | 0;
+      let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+    stream = rng(seed * 7919 + 13);
+    const digits = (r, n) => Array.from({ length: n }, () => Math.floor(r() * 10));
+    const ctrl = (a, w) => (a.reduce((s, x, i) => s + x * w[i], 0) % 11) % 10;
+    const W11 = [7, 2, 4, 10, 3, 5, 9, 4, 6, 8];
+    const W12 = [3, 7, 2, 4, 10, 3, 5, 9, 4, 6, 8];
+
+    const inn = (r) => {
+      const b = digits(r, 10);
+      const c1 = ctrl(b, W11);
+      const c2 = ctrl([...b, c1], W12);
+      return `${b.join('')}${c1}${c2}`;
+    };
+    const snils = (r) => {
+      const b = digits(r, 9);
+      let sum = b.reduce((a, x, i) => a + x * (9 - i), 0);
+      if (sum > 101) { sum %= 101; if (sum === 100) sum = 0; }
+      if (sum === 100 || sum === 101) sum = 0;
+      return `${b.join('')}${String(sum).padStart(2, '0')}`;
+    };
+    const ogrn = (r) => {
+      const b = digits(r, 12);
+      b[0] = 1;
+      const c = Number(BigInt(b.join('')) % 11n) % 10;
+      return `${b.join('')}${c}`;
+    };
+    const kpp = (r) => `77${String(Math.floor(r() * 90) + 10)}01${String(Math.floor(r() * 1000)).padStart(3, '0')}`;
+
+    const LAST = ['Иванов', 'Петров', 'Смирнов', 'Кузнецов', 'Соколов', 'Попов', 'Лебедев', 'Морозов'];
+    const MALE_NAME = ['Иван', 'Пётр', 'Сергей', 'Алексей', 'Дмитрий', 'Николай'];
+    const MALE_MID = ['Иванович', 'Петрович', 'Сергеевич', 'Алексеевич', 'Дмитриевич', 'Николаевич'];
+    const FEMALE_NAME = ['Мария', 'Анна', 'Ирина', 'Ольга', 'Татьяна', 'Елена'];
+    const FEMALE_MID = ['Ивановна', 'Петровна', 'Сергеевна', 'Алексеевна', 'Дмитриевна', 'Николаевна'];
+
+    const pick = (r, arr) => arr[Math.floor(r() * arr.length)];
+    const fullName = (r) => {
+      const male = r() < 0.5;
+      const last = pick(r, LAST) + (male ? '' : 'а');
+      return male
+        ? `${last} ${pick(r, MALE_NAME)} ${pick(r, MALE_MID)}`
+        : `${last} ${pick(r, FEMALE_NAME)} ${pick(r, FEMALE_MID)}`;
+    };
+
+    // 20-значный счёт: 40817 + 810 + ключ (9-й разряд) + 11 цифр; ключ по письму ЦБ № 515
+    const W20 = [7, 1, 3, 7, 1, 3, 7, 1, 3, 7, 1, 3, 7, 1, 3, 7, 1, 3, 7, 1];
+    const account = (r) => {
+      const body = [4, 0, 8, 1, 7, 8, 1, 0, 0, ...digits(r, 11)];
+      const sum = body.reduce((acc, d, i) => acc + d * W20[i], 0);
+      body[8] = (sum * 3) % 10;
+      return body.join('');
+    };
+    const index = (r) => `77${String(Math.floor(r() * 9000) + 1000)}`;
+    const passport = (r) => `45${String(Math.floor(r() * 90) + 10)} ${String(Math.floor(r() * 900000) + 100000)}`;
+
+    const rows = [];
+
+    const makeRow = () => {
+      const id = `pd-${Math.floor(stream() * 0xffffff).toString(16).padStart(6, '0')}`;
+      return [id, fullName(stream), inn(stream), snils(stream), ogrn(stream), kpp(stream), account(stream), index(stream)];
+    };
+
+    // эталон по текущему seed: те же 25 строк, посчитанные независимо
+    const expected = (sd, n) => {
+      const local = rng(sd * 7919 + 13);
+      const out = [];
+      for (let i = 0; i < n; i++) {
+        const id = `pd-${Math.floor(local() * 0xffffff).toString(16).padStart(6, '0')}`;
+        out.push([id, fullName(local), inn(local), snils(local), ogrn(local), kpp(local), account(local), index(local)]);
+      }
+      return out;
+    };
+
+    const useSeed = (sd) => {
+      seed = sd;
+      stream = rng(sd * 7919 + 13);
+      rows.length = 0;
+      if (seedInput) seedInput.value = String(sd);
+      refresh();
+    };
+
+    const header = 'personId;fullName;inn;snils;ogrn;kpp;account;index';
+    const csv = () => '\uFEFF' + [header, ...rows.map((r) => r.map((v) => (/^\d{11,}$/.test(v) ? `="${v}"` : v)).join(';'))].join('\r\n');
+
+    const sha256 = async (text) => {
+      if (!globalThis.crypto?.subtle) return null;
+      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+      return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, '0')).join('');
+    };
+
+    const paintRows = () => {
+      const last = rows.slice(-3).reverse();
+      if (!last.length) {
+        rowsEl.innerHTML = '<li class="px-4 py-[5px] text-fg-subtle">пока пусто</li>';
+        return;
+      }
+      rowsEl.innerHTML = last
+        .map((r) => `<li class="grid grid-cols-[minmax(0,1fr)_118px_12px] items-center gap-2 border-b border-line/50 px-4 py-[5px] last:border-b-0">
+          <span class="truncate text-fg">${r[1]}</span>
+          <span class="text-right text-[10px] text-fg-subtle">ИНН ${r[2].slice(0, 6)}…</span>
+          <span class="text-accent">✓</span>
+        </li>`)
+        .join('');
+    };
+
+    let data = '';
+
+    const syncControls = () => {
+      const n = rows.length;
+      if (downloadBtn) downloadBtn.disabled = n === 0;
+      if (downloadLabel) {
+        downloadLabel.textContent = n === 0
+          ? 'скачать csv'
+          : `скачать csv · ${n} ${n === 1 ? 'строка' : n < 5 ? 'строки' : 'строк'} ↓`;
+      }
+      if (progressEl) progressEl.style.width = `${Math.round((n / MAX) * 100)}%`;
+      if (limitEl) limitEl.textContent = String(n);
+      const hintEl = document.getElementById('hero-hint');
+      const fullEl = document.getElementById('hero-full');
+      if (hintEl) hintEl.classList.toggle('hidden', n >= MAX);
+      if (badge && n >= MAX) { badge.classList.add('hidden'); badge.classList.remove('flex'); }
+      const dlSlot = document.getElementById('hero-download-slot');
+      if (dlSlot && downloadBtn) {
+        const home = document.getElementById('hero-download-slot');
+        if (n >= MAX && fullEl && downloadBtn.parentElement !== fullEl) {
+          fullEl.insertBefore(downloadBtn, fullEl.querySelector('p:last-of-type'));
+        } else if (n < MAX && downloadBtn.parentElement !== home) {
+          home.appendChild(downloadBtn);
+        }
+      }
+      const checksEl = document.getElementById('hero-checks');
+      const checksCompact = document.getElementById('hero-checks-compact');
+      if (checksEl) checksEl.classList.toggle('hidden', n >= MAX);
+      if (checksCompact) checksCompact.classList.toggle('hidden', n < MAX);
+      if (fullEl) fullEl.classList.toggle('hidden', n < MAX);
+      if (moreBtn) {
+        const full = n >= MAX;
+        moreBtn.disabled = full;
+        moreBtn.classList.toggle('opacity-40', full);
+        moreBtn.classList.toggle('cursor-not-allowed', full);
+        if (moreLabel) {
+          moreLabel.textContent = n === 0
+            ? 'сгенерировать 25 профилей'
+            : full
+              ? 'набор собран · 100 строк'
+              : `добавить ещё ${Math.min(STEP, MAX - n)}`;
+        }
+      }
+    };
+
+    const refresh = async () => {
+      data = csv();
+      paintRows();
+      counter.textContent = fmt(rows.length);
+      syncControls();
+      if (!rows.length) {
+        hashEl.textContent = '—';
+        hashEl.dataset.hash = '';
+        if (metaEl) metaEl.textContent = '';
+        return;
+      }
+      const bytes = new Blob([data]).size;
+      const kb = Math.max(1, Math.round(bytes / 1024));
+      const time = new Date().toLocaleTimeString('ru-RU');
+      if (metaEl) metaEl.textContent = `· ${rows.length} строк · ${kb} КБ · ${time}`;
+      hashEl.textContent = (await sha256(data)) ?? 'недоступно в этом браузере';
+      hashEl.dataset.hash = hashEl.textContent;
+    };
+
+    const animateTo = async (target) => {
+      const from = rows.length - STEP < 0 ? 0 : rows.length - STEP;
+      if (reduced) { counter.textContent = fmt(target); return; }
+      const started = performance.now();
+      await new Promise((resolve) => {
+        const tick = (now) => {
+          const p = Math.min(1, (now - started) / 420);
+          counter.textContent = fmt(Math.round(from + (target - from) * p));
+          if (p < 1) requestAnimationFrame(tick); else resolve();
+        };
+        requestAnimationFrame(tick);
+      });
+    };
+
+    const addRows = async () => {
+      if (rows.length >= MAX) {
+        badge.classList.remove('hidden');
+        badge.classList.add('flex');
+        badgeText.textContent = `набор заполнен: ${MAX} строк — скачайте CSV и начните новый`;
+        return;
+      }
+      const portion = Math.min(STEP, MAX - rows.length);
+      for (let i = 0; i < portion; i += 1) rows.push(makeRow());
+      await animateTo(rows.length);
+      await refresh();
+      note.textContent = `${rows.length} строк · rng в браузере · без сети`;
+      badge.classList.remove('hidden');
+      badge.classList.add('flex');
+      badgeText.textContent = `+${portion} строк: ФИО, ИНН, СНИЛС, ОГРН, КПП, счёт и индекс проверены`;
+      syncControls(); // на 100/100 бейдж уступает место призыву
+    };
+
+    moreBtn?.addEventListener('click', addRows);
+
+    resetBtn?.addEventListener('click', () => {
+      useSeed(seed);
+      badge.classList.add('hidden');
+      badge.classList.remove('flex');
+      note.textContent = 'нажмите «сгенерировать» — строки появятся здесь же';
+      if (downloadBtn) downloadBtn.disabled = true;
+    });
+
+    // смена seed: старый набор выбрасываем, поток начинается заново
+    seedInput?.addEventListener('change', () => {
+      const next = Math.max(1, Math.min(2147483647, Number(seedInput.value) || 42));
+      useSeed(next);
+      badge.classList.add('hidden');
+      badge.classList.remove('flex');
+      note.textContent = `seed ${next} · нажмите «сгенерировать»`;
+      if (downloadBtn) downloadBtn.disabled = true;
+    });
+
+    // сверка с независимым эталоном по тому же seed
+    verifyBtn?.addEventListener('click', () => {
+      badge.classList.remove('hidden');
+      badge.classList.add('flex');
+      if (!rows.length) {
+        badgeText.textContent = 'сначала сгенерируйте строки: «+25»';
+        return;
+      }
+      // сверяем весь набор, а не только первую порцию
+      const full = expected(seed, rows.length);
+      const fields = ['personId', 'ФИО', 'ИНН', 'СНИЛС', 'ОГРН', 'КПП', 'счёт', 'индекс'];
+      let badRow = -1;
+      let badField = '';
+      for (let i = 0; i < rows.length; i += 1) {
+        for (let f = 0; f < fields.length; f += 1) {
+          if (rows[i][f] !== full[i][f]) { badRow = i; badField = fields[f]; break; }
+        }
+        if (badRow >= 0) break;
+      }
+      badgeText.textContent = badRow < 0
+        ? `все ${rows.length} строк совпали с эталоном — seed ${seed} воспроизводим`
+        : `расхождение: строка ${badRow + 1}, поле ${badField}`;
+    });
+
+    let downloadFlash = 0;
+    downloadBtn?.addEventListener('click', () => {
+      if (!data) return;
+      const url = URL.createObjectURL(new Blob([data], { type: 'text/csv;charset=utf-8' }));
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `validum-seed${seed}-${rows.length}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+
+      // отклик прямо в панели: «скачано ✓» на полторы секунды
+      if (downloadLabel) {
+        clearTimeout(downloadFlash);
+        const before = downloadLabel.textContent;
+        downloadLabel.textContent = 'скачано ✓';
+        downloadBtn.classList.add('ring-1', 'ring-accent/40');
+        downloadFlash = window.setTimeout(() => {
+          downloadLabel.textContent = before;
+          downloadBtn.classList.remove('ring-1', 'ring-accent/40');
+        }, 1500);
+      }
+    });
+
+    copyBtn?.addEventListener('click', async () => {
+      if (!hashEl.dataset.hash) return;
+      try {
+        await navigator.clipboard.writeText(hashEl.dataset.hash);
+        copyBtn.textContent = 'скопировано';
+        setTimeout(() => { copyBtn.textContent = 'копировать'; }, 1600);
+      } catch {
+        copyBtn.textContent = 'выделите вручную';
+      }
+    });
+
+    refresh();
+  </script>
 </section>
-
-<style>
-  @keyframes red-loop {
-    0%    { opacity: 1; transform: translateX(0) scale(1); }
-    4%    { opacity: 0; transform: translateX(200px) scale(0.3); }
-    5%    { opacity: 0; transform: translateX(0) scale(1); }
-    7%, 100% { opacity: 1; transform: translateX(0) scale(1); }
-  }
-
-  .animate-suck-1 { animation: red-loop 15s ease-in-out infinite; animation-delay: 0s; animation-fill-mode: both; }
-  .animate-suck-2 { animation: red-loop 15s ease-in-out infinite; animation-delay: 3s; animation-fill-mode: both; }
-  .animate-suck-3 { animation: red-loop 15s ease-in-out infinite; animation-delay: 6s; animation-fill-mode: both; }
-  .animate-suck-4 { animation: red-loop 15s ease-in-out infinite; animation-delay: 9s; animation-fill-mode: both; }
-  .animate-suck-5 { animation: red-loop 15s ease-in-out infinite; animation-delay: 12s; animation-fill-mode: both; }
-
-  .green-card {
-    opacity: 0;
-    animation-duration: 15s;
-    animation-timing-function: ease-in-out;
-    animation-iteration-count: infinite;
-    animation-fill-mode: both;
-  }
-
-  @keyframes push-stack {
-    0%   { opacity: 0; transform: translate(-50px, 0) scale(0.8); }
-    2%   { opacity: 1; transform: translate(0, 0) scale(1); }
-    20%  { opacity: 1; transform: translate(0, 0) scale(1); }
-    22%  { opacity: 1; transform: translate(0, 100px) scale(1); }
-    40%  { opacity: 1; transform: translate(0, 100px) scale(1); }
-    42%  { opacity: 1; transform: translate(0, 200px) scale(1); }
-    60%  { opacity: 1; transform: translate(0, 200px) scale(1); }
-    62%  { opacity: 1; transform: translate(0, 300px) scale(1); }
-    80%  { opacity: 1; transform: translate(0, 300px) scale(1); }
-    82%  { opacity: 0; transform: translate(0, 400px) scale(0.8); }
-    100% { opacity: 0; transform: translate(0, 400px) scale(0.8); }
-  }
-
-  .animate-push-1 { animation-name: push-stack; animation-delay: 0.3s; z-index: 50; }
-  .animate-push-2 { animation-name: push-stack; animation-delay: 3.3s; z-index: 40; }
-  .animate-push-3 { animation-name: push-stack; animation-delay: 6.3s; z-index: 30; }
-  .animate-push-4 { animation-name: push-stack; animation-delay: 9.3s; z-index: 20; }
-  .animate-push-5 { animation-name: push-stack; animation-delay: 12.3s; z-index: 10; }
-
-  .perspective-1000 { perspective: 1000px; }
-  .backface-hidden { backface-visibility: hidden; }
-  .rotate-y-180 { transform: rotateY(180deg); }
-
-  @keyframes flip-coin {
-    0% { transform: rotateY(0deg); }
-    40% { transform: rotateY(180deg); }
-    50% { transform: rotateY(180deg); }
-    90% { transform: rotateY(360deg); }
-    100% { transform: rotateY(360deg); }
-  }
-
-  .animate-flip-coin {
-    animation: flip-coin 8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-    transform-style: preserve-3d;
-  }
-</style>
